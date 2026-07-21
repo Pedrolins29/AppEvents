@@ -1,0 +1,15 @@
+# Backend (.NET) — see frontend/.gitignore for the Next.js-specific rules
+backend/**/bin/
+backend/**/obj/
+backend/**/logs/
+*.user
+*.suo
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
