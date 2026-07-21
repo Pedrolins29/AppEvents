@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AppEvents.Api/AppEvents.Api.csproj" />
+    <Project Path="src/AppEvents.Application/AppEvents.Application.csproj" />
+    <Project Path="src/AppEvents.Domain/AppEvents.Domain.csproj" />
+    <Project Path="src/AppEvents.Infrastructure/AppEvents.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AppEvents.IntegrationTests/AppEvents.IntegrationTests.csproj" />
+    <Project Path="tests/AppEvents.UnitTests/AppEvents.UnitTests.csproj" />
+  </Folder>
+</Solution>
