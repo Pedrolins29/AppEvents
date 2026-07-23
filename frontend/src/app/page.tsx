@@ -56,6 +56,24 @@ function MapIcon() {
   );
 }
 
+const STEPS = [
+  {
+    number: "01",
+    title: "Choose a theme",
+    body: "Elegant, Minimalist, Floral, or Modern — pick the one that feels like your event.",
+  },
+  {
+    number: "02",
+    title: "Add your details",
+    body: "Name, date, story, cover photo, and a gallery — all on your own invitation page.",
+  },
+  {
+    number: "03",
+    title: "Share the link",
+    body: "Publish when you're ready and send one link. Everyone sees the same page.",
+  },
+];
+
 const FEATURES = [
   {
     icon: ThemesIcon,
@@ -148,6 +166,31 @@ export default function Home() {
                 <p className="text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{body}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section className="px-6 pb-20 sm:pb-28">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+              How it works
+            </h2>
+            <div className="grid grid-cols-1 divide-y divide-[#E2DFD3] border-t border-b border-[#E2DFD3] sm:grid-cols-3 sm:divide-x sm:divide-y-0 dark:divide-[#2A3532] dark:border-[#2A3532]">
+              {STEPS.map(({ number, title, body }) => (
+                <div key={number} className="px-6 py-8 text-center sm:px-8">
+                  <span
+                    className="font-serif text-3xl text-[#A16207] dark:text-[#D4A017]"
+                    style={{ fontWeight: 600 }}
+                  >
+                    {number}
+                  </span>
+                  <h3 className="mt-3 text-sm font-semibold text-[#14211D] dark:text-[#F3F1EA]">
+                    {title}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{body}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
