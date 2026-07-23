@@ -33,12 +33,15 @@ function NewEventForm() {
 
 export default function NewEventPage() {
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-6 py-16 dark:bg-black">
+    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
       <div className="w-full max-w-sm">
-        <h1 className="mb-6 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h1
+          className="mb-6 font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
+          style={{ fontWeight: 600 }}
+        >
           Create an event
         </h1>
-        <Suspense fallback={<p className="text-zinc-500">Loading...</p>}>
+        <Suspense fallback={<p className="text-[#5B6B67] dark:text-[#9CA9A5]">Loading...</p>}>
           <NewEventForm />
         </Suspense>
       </div>

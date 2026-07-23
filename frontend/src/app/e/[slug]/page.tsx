@@ -18,7 +18,21 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const event = await publicEventsApi.get(slug);
-  return { title: event ? event.name : "Invitation not found" };
+
+  if (!event) {
+    return { title: "Invitation not found" };
+  }
+
+  const description = event.description
+    ? event.description.slice(0, 160)
+    : `You're invited — ${EVENT_TYPE_LABELS[event.eventType]} on ${new Date(event.eventDate).toLocaleDateString()}.`;
+
+  return {
+    title: event.name,
+    description,
+    openGraph: { title: event.name, description, type: "website" },
+    twitter: { title: event.name, description },
+  };
 }
 
 function formatEventDate(iso: string) {

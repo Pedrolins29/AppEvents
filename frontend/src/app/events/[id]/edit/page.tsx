@@ -134,7 +134,7 @@ export default function EditEventPage() {
 
   if (error) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
+      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] dark:bg-[#0F1714]">
         <p className="text-red-600">{error}</p>
       </div>
     );
@@ -142,21 +142,26 @@ export default function EditEventPage() {
 
   if (!initialValues) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 dark:bg-black">
-        <p className="text-zinc-500">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] dark:bg-[#0F1714]">
+        <p className="text-[#5B6B67] dark:text-[#9CA9A5]">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-6 py-16 dark:bg-black">
+    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
       <div className="w-full max-w-sm">
-        <h1 className="mb-6 text-2xl font-semibold text-zinc-900 dark:text-zinc-50">Edit event</h1>
+        <h1
+          className="mb-6 font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
+          style={{ fontWeight: 600 }}
+        >
+          Edit event
+        </h1>
 
-        <div className="mb-6 rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="font-medium text-zinc-900 dark:text-zinc-50">
+              <p className="font-medium text-[#14211D] dark:text-[#F3F1EA]">
                 {isPublished ? "Published" : "Draft"}
               </p>
               {isPublished && initialValues && (
@@ -164,7 +169,7 @@ export default function EditEventPage() {
                   href={`/e/${initialValues.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-zinc-500 underline"
+                  className="text-sm text-[#0F766E] underline dark:text-[#14B8A6]"
                 >
                   /e/{initialValues.slug}
                 </a>
@@ -174,7 +179,7 @@ export default function EditEventPage() {
               type="button"
               onClick={handleTogglePublish}
               disabled={isPublishToggling}
-              className="rounded-full bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-50 dark:text-black dark:hover:bg-zinc-200"
+              className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
             >
               {isPublishToggling ? "Saving..." : isPublished ? "Unpublish" : "Publish"}
             </button>
@@ -183,7 +188,7 @@ export default function EditEventPage() {
         </div>
 
         <div className="mb-6">
-          <span className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
             Gallery
           </span>
           {galleryImages.length > 0 && (
@@ -213,14 +218,14 @@ export default function EditEventPage() {
             accept="image/jpeg,image/png,image/webp"
             disabled={isGalleryUploading || galleryImages.length >= 10}
             onChange={(e) => handleGalleryImagesChange(e.target.files)}
-            className="w-full text-sm text-zinc-600 dark:text-zinc-400"
+            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
           />
-          {isGalleryUploading && <p className="mt-1 text-xs text-zinc-500">Uploading...</p>}
+          {isGalleryUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
           {galleryError && <p className="mt-1 text-xs text-red-600">{galleryError}</p>}
         </div>
 
         <div className="mb-6">
-          <span className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
             Cover image
           </span>
           {coverImageUrl && (
@@ -236,9 +241,9 @@ export default function EditEventPage() {
             accept="image/jpeg,image/png,image/webp"
             disabled={isUploading}
             onChange={(e) => handleCoverImageChange(e.target.files)}
-            className="w-full text-sm text-zinc-600 dark:text-zinc-400"
+            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
           />
-          {isUploading && <p className="mt-1 text-xs text-zinc-500">Uploading...</p>}
+          {isUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
           {uploadError && <p className="mt-1 text-xs text-red-600">{uploadError}</p>}
         </div>
 

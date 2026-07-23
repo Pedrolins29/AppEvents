@@ -14,9 +14,24 @@ const playfair = Playfair_Display({
   weight: ["500", "600", "700"],
 });
 
+const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "AppEvents",
-  description: "Digital invitations for your events",
+  metadataBase: new URL(APP_BASE_URL),
+  title: {
+    default: "AppEvents — Digital Invitations",
+    template: "%s | AppEvents",
+  },
+  description:
+    "Create a beautifully designed invitation page for your wedding, birthday, graduation, or celebration, and share it as one link with a live countdown, gallery, and map built in.",
+  openGraph: {
+    siteName: "AppEvents",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
