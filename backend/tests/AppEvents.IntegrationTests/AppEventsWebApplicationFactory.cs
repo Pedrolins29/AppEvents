@@ -15,6 +15,8 @@ namespace AppEvents.IntegrationTests;
 /// </summary>
 public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    private readonly string _uploadsPath = Path.Combine(Path.GetTempPath(), $"appevents-test-uploads-{Guid.NewGuid():N}");
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
@@ -22,6 +24,11 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
         builder.ConfigureAppConfiguration((_, configBuilder) =>
         {
             configBuilder.AddUserSecrets<AppEventsWebApplicationFactory>(optional: true);
+            // Keeps uploaded test files out of the real dev App_Data folder.
+            configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Storage:LocalPath"] = _uploadsPath,
+            });
         });
     }
 
@@ -32,5 +39,12 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
         await dbContext.Database.MigrateAsync();
     }
 
-    async Task IAsyncLifetime.DisposeAsync() => await base.DisposeAsync();
+    async Task IAsyncLifetime.DisposeAsync()
+    {
+        await base.DisposeAsync();
+        if (Directory.Exists(_uploadsPath))
+        {
+            Directory.Delete(_uploadsPath, recursive: true);
+        }
+    }
 }
