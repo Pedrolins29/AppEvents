@@ -3,6 +3,7 @@ using System;
 using AppEvents.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AppEvents.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppEventsDbContext))]
-    partial class AppEventsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260722211009_AddTemplates")]
+    partial class AddTemplates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,11 +54,6 @@ namespace AppEvents.Infrastructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<bool>("IsPublished")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -85,36 +83,6 @@ namespace AppEvents.Infrastructure.Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Events", (string)null);
-                });
-
-            modelBuilder.Entity("AppEvents.Domain.Events.EventImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("UpdatedAtUtc")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.ToTable("EventImages", (string)null);
                 });
 
             modelBuilder.Entity("AppEvents.Domain.Identity.RefreshToken", b =>
@@ -342,17 +310,6 @@ namespace AppEvents.Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("AppEvents.Domain.Events.EventImage", b =>
-                {
-                    b.HasOne("AppEvents.Domain.Events.Event", "Event")
-                        .WithMany("GalleryImages")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-                });
-
             modelBuilder.Entity("AppEvents.Domain.Identity.RefreshToken", b =>
                 {
                     b.HasOne("AppEvents.Domain.Identity.User", "User")
@@ -373,11 +330,6 @@ namespace AppEvents.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("AppEvents.Domain.Events.Event", b =>
-                {
-                    b.Navigation("GalleryImages");
                 });
 
             modelBuilder.Entity("AppEvents.Domain.Identity.Role", b =>

@@ -1,0 +1,57 @@
+using AppEvents.Domain.Events;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace AppEvents.Infrastructure.Persistence.Configurations;
+
+public class EventConfiguration : IEntityTypeConfiguration<Event>
+{
+    public void Configure(EntityTypeBuilder<Event> builder)
+    {
+        builder.ToTable("Events");
+
+        builder.HasKey(e => e.Id);
+
+        builder.Property(e => e.Name)
+            .IsRequired()
+            .HasMaxLength(200);
+
+        builder.Property(e => e.Slug)
+            .IsRequired()
+            .HasMaxLength(100);
+
+        builder.HasIndex(e => e.Slug).IsUnique();
+
+        builder.Property(e => e.EventType)
+            .IsRequired()
+            .HasConversion<string>()
+            .HasMaxLength(50);
+
+        builder.Property(e => e.Description)
+            .HasMaxLength(2000);
+
+        builder.Property(e => e.Address)
+            .HasMaxLength(300);
+
+        builder.Property(e => e.CoverImageUrl)
+            .HasMaxLength(500);
+
+        builder.Property(e => e.IsPublished)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.HasOne(e => e.User)
+            .WithMany()
+            .HasForeignKey(e => e.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(e => e.UserId);
+
+        builder.HasOne(e => e.Template)
+            .WithMany()
+            .HasForeignKey(e => e.TemplateId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasIndex(e => e.TemplateId);
+    }
+}
