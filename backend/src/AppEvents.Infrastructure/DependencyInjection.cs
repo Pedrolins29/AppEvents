@@ -1,8 +1,16 @@
+using AppEvents.Application.Common.Interfaces;
+using AppEvents.Application.Events.Interfaces;
+using AppEvents.Application.Events.Services;
 using AppEvents.Application.Identity.Interfaces;
 using AppEvents.Application.Identity.Services;
+using AppEvents.Application.Templates.Interfaces;
+using AppEvents.Application.Templates.Services;
 using AppEvents.Infrastructure.Common;
+using AppEvents.Infrastructure.Events;
 using AppEvents.Infrastructure.Identity;
 using AppEvents.Infrastructure.Persistence;
+using AppEvents.Infrastructure.Storage;
+using AppEvents.Infrastructure.Templates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +30,14 @@ public static class DependencyInjection
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
         services.AddSingleton<IDateTimeProvider, SystemDateTimeProvider>();
         services.AddScoped<IAuthService, AuthService>();
+
+        services.AddScoped<IEventRepository, EventRepository>();
+        services.AddScoped<IEventService, EventService>();
+        services.AddScoped<IPublicEventService, PublicEventService>();
+
+        services.AddScoped<ITemplateRepository, TemplateRepository>();
+        services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<IImageStorageService, LocalImageStorageService>();
 
         return services;
     }

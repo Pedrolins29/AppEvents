@@ -1,4 +1,6 @@
+using AppEvents.Domain.Events;
 using AppEvents.Domain.Identity;
+using AppEvents.Domain.Templates;
 using Microsoft.EntityFrameworkCore;
 
 namespace AppEvents.Infrastructure.Persistence;
@@ -14,6 +16,12 @@ public class AppEventsDbContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    public DbSet<Event> Events => Set<Event>();
+
+    public DbSet<EventImage> EventImages => Set<EventImage>();
+
+    public DbSet<Template> Templates => Set<Template>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
