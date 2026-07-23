@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
@@ -33,9 +34,21 @@ export default function DashboardPage() {
         Welcome, {user.fullName}
       </h1>
       <p className="text-zinc-600 dark:text-zinc-400">{user.email}</p>
+      <Link
+        href="/events"
+        className="mt-4 rounded-full bg-zinc-900 px-5 py-2 font-medium text-white hover:bg-zinc-800 dark:bg-zinc-50 dark:text-black dark:hover:bg-zinc-200"
+      >
+        Manage events
+      </Link>
+      <Link
+        href="/templates"
+        className="rounded-full border border-zinc-300 px-5 py-2 font-medium text-zinc-900 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
+      >
+        Browse templates
+      </Link>
       <button
         onClick={handleLogout}
-        className="mt-4 rounded-full border border-zinc-300 px-5 py-2 font-medium text-zinc-900 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
+        className="rounded-full border border-zinc-300 px-5 py-2 font-medium text-zinc-900 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-900"
       >
         Log out
       </button>
