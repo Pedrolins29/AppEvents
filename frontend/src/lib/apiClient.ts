@@ -35,7 +35,9 @@ async function parseProblem(response: Response): Promise<ApiProblem | null> {
 async function request<T>(path: string, init: RequestInit, retryOn401 = true): Promise<T> {
   const token = getAccessToken();
   const headers = new Headers(init.headers);
-  if (init.body) {
+  // FormData bodies must keep the browser-generated multipart boundary — only force JSON
+  // for plain string bodies (produced by JSON.stringify in the helpers below).
+  if (typeof init.body === "string") {
     headers.set("Content-Type", "application/json");
   }
   if (token) {
@@ -74,4 +76,8 @@ export const apiClient = {
       { method: "POST", body: body ? JSON.stringify(body) : undefined },
       options?.retryOn401 ?? true,
     ),
+  put: <T>(path: string, body?: unknown) =>
+    request<T>(path, { method: "PUT", body: body ? JSON.stringify(body) : undefined }),
+  delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
+  upload: <T>(path: string, formData: FormData) => request<T>(path, { method: "POST", body: formData }),
 };
