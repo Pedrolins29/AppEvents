@@ -3,6 +3,8 @@ using AppEvents.Application.Common.Exceptions;
 using AppEvents.Application.Common.Interfaces;
 using AppEvents.Application.Events.Dtos;
 using AppEvents.Application.Events.Services;
+using AppEvents.Application.Rsvp.Dtos;
+using AppEvents.Application.Rsvp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +17,13 @@ public class EventsController : ControllerBase
 {
     private readonly IEventService _eventService;
     private readonly IImageStorageService _imageStorageService;
+    private readonly IRsvpService _rsvpService;
 
-    public EventsController(IEventService eventService, IImageStorageService imageStorageService)
+    public EventsController(IEventService eventService, IImageStorageService imageStorageService, IRsvpService rsvpService)
     {
         _eventService = eventService;
         _imageStorageService = imageStorageService;
+        _rsvpService = rsvpService;
     }
 
     [HttpPost]
@@ -124,6 +128,13 @@ public class EventsController : ControllerBase
     public async Task<ActionResult<EventResponse>> RemoveGalleryImage(Guid id, Guid imageId, CancellationToken cancellationToken)
     {
         var response = await _eventService.RemoveGalleryImageAsync(GetUserId(), id, imageId, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("{id:guid}/rsvps")]
+    public async Task<ActionResult<AttendanceResponse>> GetAttendance(Guid id, CancellationToken cancellationToken)
+    {
+        var response = await _rsvpService.GetAttendanceAsync(GetUserId(), id, cancellationToken);
         return Ok(response);
     }
 

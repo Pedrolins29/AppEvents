@@ -6,6 +6,7 @@ namespace AppEvents.Api.Extensions;
 public static class RateLimitingExtensions
 {
     public const string AuthPolicy = "auth";
+    public const string RsvpPolicy = "rsvp";
 
     /// <summary>
     /// The "Testing" environment (used by AppEventsWebApplicationFactory) gets much higher
@@ -14,7 +15,7 @@ public static class RateLimitingExtensions
     /// actually being tested. Rate-limiting behavior itself is verified manually (see
     /// Sprints/sprints01.md verification plan), not via automated tests.
     /// </summary>
-    public static IServiceCollection AddAuthRateLimiting(this IServiceCollection services, IHostEnvironment environment)
+    public static IServiceCollection AddRateLimiting(this IServiceCollection services, IHostEnvironment environment)
     {
         var isTesting = environment.IsEnvironment("Testing");
 
@@ -38,6 +39,19 @@ public static class RateLimitingExtensions
                     factory: _ => new FixedWindowRateLimiterOptions
                     {
                         PermitLimit = isTesting ? 10_000 : 5,
+                        Window = TimeSpan.FromSeconds(60),
+                        QueueLimit = 0,
+                    }));
+
+            // Looser than auth's 5/60s — guests legitimately retry (typo in name, changed their
+            // mind) more often than login attempts, but this is still a bounded, public,
+            // unauthenticated endpoint that needs its own spam-mitigation limit.
+            options.AddPolicy(RsvpPolicy, httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetClientIp(httpContext),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = isTesting ? 10_000 : 10,
                         Window = TimeSpan.FromSeconds(60),
                         QueueLimit = 0,
                     }));

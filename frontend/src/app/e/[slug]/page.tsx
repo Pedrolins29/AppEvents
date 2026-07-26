@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Countdown } from "@/components/Countdown";
 import { DEFAULT_THEME_STYLE, InvitationHero, THEME_STYLES } from "@/components/InvitationHero";
+import { RsvpForm } from "@/components/RsvpForm";
 import { publicEventsApi } from "@/lib/publicEventsApi";
 import { EVENT_TYPE_LABELS } from "@/types/event";
 
@@ -149,6 +150,16 @@ export default async function PublicEventPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      <section className="px-6 py-16" style={{ backgroundColor: theme.pageBg }}>
+        <h2
+          className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
+          style={{ color: theme.accent }}
+        >
+          RSVP
+        </h2>
+        <RsvpForm slug={event.slug} theme={theme} />
+      </section>
     </div>
   );
 }

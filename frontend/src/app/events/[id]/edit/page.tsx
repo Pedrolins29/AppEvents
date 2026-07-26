@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
+import { rsvpApi } from "@/lib/rsvpApi";
 import type { CreateEventRequest, EventImageRecord, EventRecord } from "@/types/event";
+import type { AttendanceResponse } from "@/types/rsvp";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://localhost:5001";
 
@@ -23,6 +25,7 @@ export default function EditEventPage() {
   const [galleryImages, setGalleryImages] = useState<EventImageRecord[]>([]);
   const [galleryError, setGalleryError] = useState<string | null>(null);
   const [isGalleryUploading, setIsGalleryUploading] = useState(false);
+  const [attendance, setAttendance] = useState<AttendanceResponse | null>(null);
 
   function applyEvent(event: EventRecord) {
     setInitialValues({
@@ -50,6 +53,10 @@ export default function EditEventPage() {
           setError("Could not load this event.");
         }
       });
+  }, [params.id]);
+
+  useEffect(() => {
+    rsvpApi.getAttendance(params.id).then(setAttendance).catch(() => setAttendance(null));
   }, [params.id]);
 
   async function handleSubmit(request: CreateEventRequest) {
@@ -186,6 +193,41 @@ export default function EditEventPage() {
           </div>
           {publishError && <p className="mt-2 text-xs text-red-600">{publishError}</p>}
         </div>
+
+        {attendance && (
+          <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
+            <p className="mb-3 font-medium text-[#14211D] dark:text-[#F3F1EA]">Attendance</p>
+            <div className="mb-3 flex gap-4 text-sm">
+              <span className="text-[#14211D] dark:text-[#F3F1EA]">
+                <strong>{attendance.summary.total}</strong> total
+              </span>
+              <span className="text-emerald-700 dark:text-emerald-400">
+                <strong>{attendance.summary.confirmed}</strong> confirmed
+              </span>
+              <span className="text-[#5B6B67] dark:text-[#9CA9A5]">
+                <strong>{attendance.summary.declined}</strong> declined
+              </span>
+            </div>
+            {attendance.responses.length > 0 && (
+              <ul className="flex max-h-40 flex-col gap-1 overflow-y-auto text-sm">
+                {attendance.responses.map((response) => (
+                  <li key={response.id} className="flex items-center justify-between">
+                    <span className="text-[#14211D] dark:text-[#F3F1EA]">{response.guestName}</span>
+                    <span
+                      className={
+                        response.status === "Confirmed"
+                          ? "text-emerald-700 dark:text-emerald-400"
+                          : "text-[#5B6B67] dark:text-[#9CA9A5]"
+                      }
+                    >
+                      {response.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         <div className="mb-6">
           <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">

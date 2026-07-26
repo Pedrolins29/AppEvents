@@ -1,5 +1,6 @@
 using AppEvents.Domain.Events;
 using AppEvents.Domain.Identity;
+using AppEvents.Domain.Rsvp;
 using AppEvents.Domain.Templates;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,8 @@ public class AppEventsDbContext : DbContext
     public DbSet<EventImage> EventImages => Set<EventImage>();
 
     public DbSet<Template> Templates => Set<Template>();
+
+    public DbSet<RsvpResponse> RsvpResponses => Set<RsvpResponse>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
