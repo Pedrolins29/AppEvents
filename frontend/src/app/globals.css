@@ -45,3 +45,20 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Landing-page phone mockup: slowly scrolls through the example invitation, then back. */
+@keyframes phone-scroll {
+  0%, 12% { transform: translateY(0); }
+  50%, 62% { transform: translateY(var(--phone-scroll-distance, -180px)); }
+  100% { transform: translateY(0); }
+}
+
+.phone-scroll {
+  animation: phone-scroll 14s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-scroll {
+    animation: none;
+  }
+}

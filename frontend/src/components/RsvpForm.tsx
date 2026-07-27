@@ -8,9 +8,11 @@ import type { RsvpStatus } from "@/types/rsvp";
 interface RsvpFormProps {
   slug: string;
   theme: ThemeStyle;
+  /** Preview-page use only: skips the real network call, going straight to the success state. */
+  demoMode?: boolean;
 }
 
-export function RsvpForm({ slug, theme }: RsvpFormProps) {
+export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
   const [guestName, setGuestName] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("Confirmed");
   const [honeypotField, setHoneypotField] = useState("");
@@ -23,7 +25,9 @@ export function RsvpForm({ slug, theme }: RsvpFormProps) {
     setError(null);
     setIsSubmitting(true);
     try {
-      await rsvpApi.submit(slug, { guestName, status, honeypotField: honeypotField || null });
+      if (!demoMode) {
+        await rsvpApi.submit(slug, { guestName, status, honeypotField: honeypotField || null });
+      }
       setSubmitted(true);
     } catch {
       setError("Could not submit your RSVP. Please try again.");

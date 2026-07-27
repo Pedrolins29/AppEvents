@@ -13,6 +13,8 @@ namespace AppEvents.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private const string RefreshTokenCookieName = "appevents_rt";
+    private const string CsrfHeaderName = "X-Requested-With";
+    private const string CsrfHeaderValue = "AppEventsFrontend";
 
     private readonly IAuthService _authService;
 
@@ -39,6 +41,8 @@ public class AuthController : ControllerBase
     [HttpPost("refresh")]
     public async Task<ActionResult<LoginResponse>> Refresh(CancellationToken cancellationToken)
     {
+        RequireCsrfHeader();
+
         var rawToken = Request.Cookies[RefreshTokenCookieName];
         if (string.IsNullOrEmpty(rawToken))
         {
@@ -53,6 +57,8 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {
+        RequireCsrfHeader();
+
         var rawToken = Request.Cookies[RefreshTokenCookieName];
         if (!string.IsNullOrEmpty(rawToken))
         {
@@ -82,4 +88,19 @@ public class AuthController : ControllerBase
     }
 
     private string? GetClientIp() => HttpContext.Connection.RemoteIpAddress?.ToString();
+
+    // The refresh cookie is SameSite=None (required cross-origin, see SetRefreshTokenCookie),
+    // so it rides along on a forged cross-site request too — a plain HTML form can trigger
+    // these two cookie-authenticated actions with zero JS. A form can't set custom headers, and
+    // a script-based attempt from another origin fails our CORS allowlist before it's even
+    // sent. Only these two actions need this: every other endpoint is bearer-JWT-authenticated
+    // and structurally immune (a forged request can't carry an Authorization header it doesn't
+    // have).
+    private void RequireCsrfHeader()
+    {
+        if (Request.Headers[CsrfHeaderName] != CsrfHeaderValue)
+        {
+            throw new UnauthorizedAppException("Missing or invalid anti-forgery header.");
+        }
+    }
 }

@@ -43,6 +43,9 @@ async function request<T>(path: string, init: RequestInit, retryOn401 = true): P
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
+  // Required by the backend's CSRF check on the cookie-authenticated refresh/logout actions
+  // (see AuthController.RequireCsrfHeader); harmless on every other, bearer-authenticated call.
+  headers.set("X-Requested-With", "AppEventsFrontend");
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...init,

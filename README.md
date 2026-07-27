@@ -22,7 +22,11 @@ stack-specific setup.
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Node.js 24+](https://nodejs.org/) and npm
-- [PostgreSQL 16+](https://www.postgresql.org/download/), running locally
+- PostgreSQL, running locally — recommended via [Docker](https://www.docker.com/) inside WSL2
+  (e.g. Ubuntu 24.04) using the `docker-compose.yaml` at the repo root (`docker compose up -d`),
+  or a native [PostgreSQL 16+](https://www.postgresql.org/download/) install. See
+  [backend/README.md](backend/README.md) for details on all options, including GUI/IDE
+  connection settings.
 
 ## Running locally
 

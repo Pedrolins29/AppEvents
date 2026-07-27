@@ -5,8 +5,10 @@ using AppEvents.Application.Events.Dtos;
 using AppEvents.Application.Events.Services;
 using AppEvents.Application.Rsvp.Dtos;
 using AppEvents.Application.Rsvp.Services;
+using AppEvents.Api.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AppEvents.Api.Controllers;
 
@@ -63,6 +65,7 @@ public class EventsController : ControllerBase
 
     [HttpPost("{id:guid}/cover-image")]
     [RequestSizeLimit(5 * 1024 * 1024)]
+    [EnableRateLimiting(RateLimitingExtensions.UploadPolicy)]
     public async Task<ActionResult<EventResponse>> UploadCoverImage(Guid id, IFormFile? file, CancellationToken cancellationToken)
     {
         if (file is null || file.Length == 0)
@@ -102,6 +105,7 @@ public class EventsController : ControllerBase
 
     [HttpPost("{id:guid}/gallery-images")]
     [RequestSizeLimit(5 * 1024 * 1024)]
+    [EnableRateLimiting(RateLimitingExtensions.UploadPolicy)]
     public async Task<ActionResult<EventResponse>> AddGalleryImage(Guid id, IFormFile? file, CancellationToken cancellationToken)
     {
         if (file is null || file.Length == 0)

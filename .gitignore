@@ -6,6 +6,9 @@ backend/**/App_Data/
 *.user
 *.suo
 
+# Docker (local dev Postgres override — see .env.example)
+.env
+
 # IDE
 .vs/
 .vscode/

@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { PhoneMockup } from "@/components/PhoneMockup";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TemplateCard } from "@/components/TemplateCard";
+import { EVENT_TYPE_LABELS, EVENT_TYPES } from "@/types/event";
+import type { ThemeKey } from "@/types/template";
 
 function Diamond({ className }: { className?: string }) {
   return (
@@ -56,6 +59,13 @@ function MapIcon() {
   );
 }
 
+const TEMPLATE_THEMES: { theme: ThemeKey; name: string }[] = [
+  { theme: "elegant", name: "Elegant" },
+  { theme: "minimalist", name: "Minimalist" },
+  { theme: "floral", name: "Floral" },
+  { theme: "modern", name: "Modern" },
+];
+
 const STEPS = [
   {
     number: "01",
@@ -94,6 +104,30 @@ const FEATURES = [
     icon: MapIcon,
     title: "Maps built in",
     body: "One tap opens Google Maps or Waze with your venue address already filled in.",
+  },
+];
+
+const FAQS = [
+  {
+    question: "Is AppEvents free?",
+    answer: "Yes — it's free to create and publish your invitation right now.",
+  },
+  {
+    question: "What kinds of events can I create?",
+    answer: `${EVENT_TYPES.map((type) => EVENT_TYPE_LABELS[type]).join(", ")}, and more.`,
+  },
+  {
+    question: "Can guests RSVP?",
+    answer:
+      "Yes — every published invitation has a built-in RSVP form, and you can see who's confirmed or declined from your dashboard.",
+  },
+  {
+    question: "Can I edit my invitation after publishing?",
+    answer: "Yes, anytime. Changes go live immediately at the same link.",
+  },
+  {
+    question: "Is there a limit on guests?",
+    answer: "No — share your one link with as many guests as you like.",
   },
 ];
 
@@ -140,10 +174,19 @@ export default function Home() {
                 built in
               </p>
 
+              <div className="mt-6 flex flex-wrap justify-center gap-2">
+                {EVENT_TYPES.map((type) => (
+                  <span
+                    key={type}
+                    className="rounded-full border border-[#E2DFD3] px-3 py-1 text-xs text-[#5B6B67] dark:border-[#2A3532] dark:text-[#9CA9A5]"
+                  >
+                    {EVENT_TYPE_LABELS[type]}
+                  </span>
+                ))}
+              </div>
+
               <div className="mt-12 flex justify-center">
-                <div className="w-44 -rotate-3 shadow-[0_18px_40px_-12px_rgba(15,23,20,0.35)] sm:w-52">
-                  <TemplateCard theme="elegant" name="Elegant" />
-                </div>
+                <PhoneMockup />
               </div>
             </div>
           </div>
@@ -169,6 +212,30 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Choose your style */}
+        <section className="px-6 pb-20 sm:pb-28">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+              Choose your style
+            </h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {TEMPLATE_THEMES.map(({ theme, name }) => (
+                <Link key={theme} href={`/templates/${theme}`} className="block">
+                  <TemplateCard theme={theme} name={name} />
+                </Link>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/templates"
+                className="text-sm font-medium text-[#0F766E] hover:underline dark:text-[#14B8A6]"
+              >
+                See all templates &rarr;
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* How it works */}
         <section className="px-6 pb-20 sm:pb-28">
           <div className="mx-auto max-w-3xl">
@@ -188,6 +255,28 @@ export default function Home() {
                     {title}
                   </h3>
                   <p className="mt-1.5 text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="px-6 pb-20 sm:pb-28">
+          <div className="mx-auto max-w-2xl">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+              Questions
+            </h2>
+            <div className="flex flex-col gap-4">
+              {FAQS.map(({ question, answer }) => (
+                <div
+                  key={question}
+                  className="border border-[#E2DFD3] p-6 dark:border-[#2A3532]"
+                >
+                  <h3 className="mb-1.5 text-sm font-semibold text-[#14211D] dark:text-[#F3F1EA]">
+                    {question}
+                  </h3>
+                  <p className="text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{answer}</p>
                 </div>
               ))}
             </div>

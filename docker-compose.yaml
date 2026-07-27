@@ -1,0 +1,24 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: appevents-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_dev_password}
+      # Only the first (default) database is created from POSTGRES_DB - appevents_test is
+      # created by the init script below, since the app needs both (dev + integration tests).
+      POSTGRES_DB: appevents_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - appevents_pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  appevents_pgdata:

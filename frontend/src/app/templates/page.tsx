@@ -58,12 +58,20 @@ export default function TemplatesPage() {
                   <span className="font-medium text-[#14211D] dark:text-[#F3F1EA]">
                     {template.name}
                   </span>
-                  <Link
-                    href={`/events/new?templateId=${template.id}`}
-                    className="rounded-full bg-[#0F766E] px-4 py-1.5 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
-                  >
-                    Use this template
-                  </Link>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      href={`/templates/${template.theme}`}
+                      className="text-sm font-medium text-[#5B6B67] hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
+                    >
+                      Preview
+                    </Link>
+                    <Link
+                      href={`/events/new?templateId=${template.id}`}
+                      className="rounded-full bg-[#0F766E] px-4 py-1.5 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+                    >
+                      Use this template
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

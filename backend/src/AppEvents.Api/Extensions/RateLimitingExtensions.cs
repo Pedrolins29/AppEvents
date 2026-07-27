@@ -7,6 +7,7 @@ public static class RateLimitingExtensions
 {
     public const string AuthPolicy = "auth";
     public const string RsvpPolicy = "rsvp";
+    public const string UploadPolicy = "upload";
 
     /// <summary>
     /// The "Testing" environment (used by AppEventsWebApplicationFactory) gets much higher
@@ -47,6 +48,18 @@ public static class RateLimitingExtensions
             // mind) more often than login attempts, but this is still a bounded, public,
             // unauthenticated endpoint that needs its own spam-mitigation limit.
             options.AddPolicy(RsvpPolicy, httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetClientIp(httpContext),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = isTesting ? 10_000 : 10,
+                        Window = TimeSpan.FromSeconds(60),
+                        QueueLimit = 0,
+                    }));
+
+            // Disk I/O per request — bounded separately from the general authenticated-CRUD
+            // traffic that only falls under the 100/60s global default.
+            options.AddPolicy(UploadPolicy, httpContext =>
                 RateLimitPartition.GetFixedWindowLimiter(
                     partitionKey: GetClientIp(httpContext),
                     factory: _ => new FixedWindowRateLimiterOptions
