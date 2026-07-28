@@ -68,12 +68,13 @@ public class RsvpEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
 
         var response = await anonymous.PostAsJsonAsync(
             $"/api/public/events/{slug}/rsvp",
-            new CreateRsvpRequest("Jane Doe", RsvpStatus.Confirmed, null),
+            new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null),
             JsonOptions);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         var body = await response.Content.ReadFromJsonAsync<RsvpResponseDto>(JsonOptions);
         body!.GuestName.Should().Be("Jane Doe");
+        body.GuestEmail.Should().Be("jane@example.com");
         body.Status.Should().Be(RsvpStatus.Confirmed);
     }
 
@@ -87,7 +88,7 @@ public class RsvpEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
 
         var response = await anonymous.PostAsJsonAsync(
             $"/api/public/events/{slug}/rsvp",
-            new CreateRsvpRequest("Jane Doe", RsvpStatus.Confirmed, null),
+            new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null),
             JsonOptions);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -101,7 +102,21 @@ public class RsvpEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
 
         var response = await anonymous.PostAsJsonAsync(
             $"/api/public/events/{slug}/rsvp",
-            new CreateRsvpRequest("Jane Doe", RsvpStatus.Confirmed, "I am a bot"),
+            new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, "I am a bot"),
+            JsonOptions);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task SubmitRsvp_WithMissingGuestEmail_Returns400()
+    {
+        var (_, slug, _) = await CreatePublishedEventAsync();
+        var anonymous = _factory.CreateClient();
+
+        var response = await anonymous.PostAsJsonAsync(
+            $"/api/public/events/{slug}/rsvp",
+            new CreateRsvpRequest("Jane Doe", "", null, RsvpStatus.Confirmed, null),
             JsonOptions);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -112,8 +127,8 @@ public class RsvpEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
     {
         var (owner, slug, eventId) = await CreatePublishedEventAsync();
         var anonymous = _factory.CreateClient();
-        await anonymous.PostAsJsonAsync($"/api/public/events/{slug}/rsvp", new CreateRsvpRequest("Guest A", RsvpStatus.Confirmed, null), JsonOptions);
-        await anonymous.PostAsJsonAsync($"/api/public/events/{slug}/rsvp", new CreateRsvpRequest("Guest B", RsvpStatus.Declined, null), JsonOptions);
+        await anonymous.PostAsJsonAsync($"/api/public/events/{slug}/rsvp", new CreateRsvpRequest("Guest A", "guesta@example.com", null, RsvpStatus.Confirmed, null), JsonOptions);
+        await anonymous.PostAsJsonAsync($"/api/public/events/{slug}/rsvp", new CreateRsvpRequest("Guest B", "guestb@example.com", null, RsvpStatus.Declined, null), JsonOptions);
 
         var response = await owner.GetAsync($"/api/events/{eventId}/rsvps");
 

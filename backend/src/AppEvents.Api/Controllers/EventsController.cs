@@ -89,6 +89,31 @@ public class EventsController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("{id:guid}/featured-photo")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    [EnableRateLimiting(RateLimitingExtensions.UploadPolicy)]
+    public async Task<ActionResult<EventResponse>> UploadFeaturedPhoto(Guid id, IFormFile? file, CancellationToken cancellationToken)
+    {
+        if (file is null || file.Length == 0)
+        {
+            throw new ValidationAppException(new Dictionary<string, string[]>
+            {
+                ["File"] = ["A file is required."],
+            });
+        }
+
+        var userId = GetUserId();
+
+        // Ownership check happens before touching the file — same pattern as cover-image.
+        await _eventService.GetByIdAsync(userId, id, cancellationToken);
+
+        await using var stream = file.OpenReadStream();
+        var url = await _imageStorageService.SaveAsync(stream, file.FileName, file.ContentType, cancellationToken);
+
+        var response = await _eventService.SetFeaturedPhotoAsync(userId, id, url, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPost("{id:guid}/publish")]
     public async Task<ActionResult<EventResponse>> Publish(Guid id, CancellationToken cancellationToken)
     {

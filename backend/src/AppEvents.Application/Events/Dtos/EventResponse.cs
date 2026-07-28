@@ -11,6 +11,7 @@ public record EventResponse(
     string? Description,
     string? Address,
     string? CoverImageUrl,
+    string? FeaturedPhotoUrl,
     bool IsPublished,
     IReadOnlyList<EventImageResponse> GalleryImages,
     Guid UserId,

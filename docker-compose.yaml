@@ -20,5 +20,13 @@ services:
       timeout: 5s
       retries: 5
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: appevents-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025" # SMTP - matches Email:Host/Port in appsettings.Development.json, no auth needed
+      - "8025:8025" # Web UI - open http://localhost:8025 to see emails sent by the app
+
 volumes:
   appevents_pgdata:

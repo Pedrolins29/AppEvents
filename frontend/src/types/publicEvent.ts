@@ -9,6 +9,7 @@ export interface PublicEventRecord {
   description: string | null;
   address: string | null;
   coverImageUrl: string | null;
+  featuredPhotoUrl: string | null;
   galleryImageUrls: string[];
   themeKey: ThemeKey | null;
 }

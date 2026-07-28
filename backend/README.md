@@ -102,7 +102,31 @@ dotnet user-secrets set "ConnectionStrings:AppEventsDb" "Host=localhost;Port=543
 dotnet user-secrets set "Jwt:SigningKey" "<any test signing key>"
 ```
 
-### 3. Migrations
+### 3. Email (local dev)
+
+RSVP confirmations and organizer notifications are sent via generic SMTP (`IEmailSender` /
+`SmtpEmailSender`, MailKit) — no vendor-specific SDK, so any real provider's SMTP relay
+(Resend/SendGrid/Postmark/Mailgun/SES/etc.) or a plain Gmail app password works via config alone.
+
+Locally, `docker-compose.yaml` also runs [Mailpit](https://github.com/axllent/mailpit), an SMTP
+catcher: every email the app sends lands in its web UI instead of a real inbox, no credentials
+needed. `appsettings.Development.json` already points at it (`localhost:1025`) —
+`docker compose up -d` (per the Postgres section above) starts it alongside Postgres. View
+captured emails at **http://localhost:8025**.
+
+For production, set real credentials via environment variables or a secrets manager (never
+committed — same pattern as `Jwt:SigningKey` below):
+
+```
+Email__Host=<your provider's SMTP host>
+Email__Port=587
+Email__Username=<provider username/API key>
+Email__Password=<provider password/API key secret>
+Email__FromAddress=<a verified sending address>
+Email__FromName=AppEvents
+```
+
+### 4. Migrations
 
 `dotnet-ef` is pinned via a local tool manifest — no global install needed.
 
@@ -113,7 +137,7 @@ dotnet ef database update -p src/AppEvents.Infrastructure -s src/AppEvents.Api
 
 This also seeds the `Admin` and `Customer` roles.
 
-### 4. Run
+### 5. Run
 
 ```
 dotnet dev-certs https --trust   # once, for local HTTPS

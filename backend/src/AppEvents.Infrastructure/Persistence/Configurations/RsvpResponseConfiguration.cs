@@ -16,6 +16,13 @@ public class RsvpResponseConfiguration : IEntityTypeConfiguration<RsvpResponse>
             .IsRequired()
             .HasMaxLength(200);
 
+        builder.Property(r => r.GuestEmail)
+            .IsRequired()
+            .HasMaxLength(320);
+
+        builder.Property(r => r.GuestPhone)
+            .HasMaxLength(30);
+
         builder.Property(r => r.Status)
             .IsRequired()
             .HasConversion<string>()

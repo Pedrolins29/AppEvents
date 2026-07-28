@@ -38,6 +38,7 @@ export interface EventRecord {
   description: string | null;
   address: string | null;
   coverImageUrl: string | null;
+  featuredPhotoUrl: string | null;
   isPublished: boolean;
   galleryImages: EventImageRecord[];
   userId: string;

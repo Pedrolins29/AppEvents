@@ -1,8 +1,9 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
+import { Skeleton } from "@/components/Skeleton";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { rsvpApi } from "@/lib/rsvpApi";
@@ -16,16 +17,24 @@ export default function EditEventPage() {
   const params = useParams<{ id: string }>();
   const [initialValues, setInitialValues] = useState<EventFormValues | null>(null);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
+  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [featuredPhotoUrl, setFeaturedPhotoUrl] = useState<string | null>(null);
+  const [featuredPhotoPreviewUrl, setFeaturedPhotoPreviewUrl] = useState<string | null>(null);
+  const [featuredPhotoError, setFeaturedPhotoError] = useState<string | null>(null);
+  const [isFeaturedPhotoUploading, setIsFeaturedPhotoUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isPublished, setIsPublished] = useState(false);
   const [isPublishToggling, setIsPublishToggling] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
   const [galleryImages, setGalleryImages] = useState<EventImageRecord[]>([]);
+  const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
   const [galleryError, setGalleryError] = useState<string | null>(null);
   const [isGalleryUploading, setIsGalleryUploading] = useState(false);
   const [attendance, setAttendance] = useState<AttendanceResponse | null>(null);
+  const coverPreviewRef = useRef<string | null>(null);
+  const featuredPhotoPreviewRef = useRef<string | null>(null);
 
   function applyEvent(event: EventRecord) {
     setInitialValues({
@@ -38,6 +47,7 @@ export default function EditEventPage() {
       templateId: event.templateId,
     });
     setCoverImageUrl(event.coverImageUrl);
+    setFeaturedPhotoUrl(event.featuredPhotoUrl);
     setIsPublished(event.isPublished);
     setGalleryImages(event.galleryImages);
   }
@@ -59,6 +69,17 @@ export default function EditEventPage() {
     rsvpApi.getAttendance(params.id).then(setAttendance).catch(() => setAttendance(null));
   }, [params.id]);
 
+  useEffect(() => {
+    return () => {
+      if (coverPreviewRef.current) {
+        URL.revokeObjectURL(coverPreviewRef.current);
+      }
+      if (featuredPhotoPreviewRef.current) {
+        URL.revokeObjectURL(featuredPhotoPreviewRef.current);
+      }
+    };
+  }, []);
+
   async function handleSubmit(request: CreateEventRequest) {
     await eventsApi.update(params.id, request);
     router.push("/events");
@@ -69,6 +90,14 @@ export default function EditEventPage() {
     if (!file) {
       return;
     }
+    // Show the picked file immediately — no need to wait on the network round-trip to see it.
+    if (coverPreviewRef.current) {
+      URL.revokeObjectURL(coverPreviewRef.current);
+    }
+    const previewUrl = URL.createObjectURL(file);
+    coverPreviewRef.current = previewUrl;
+    setCoverPreviewUrl(previewUrl);
+
     setUploadError(null);
     setIsUploading(true);
     try {
@@ -85,6 +114,38 @@ export default function EditEventPage() {
       }
     } finally {
       setIsUploading(false);
+    }
+  }
+
+  async function handleFeaturedPhotoChange(fileList: FileList | null) {
+    const file = fileList?.[0];
+    if (!file) {
+      return;
+    }
+    // Show the picked file immediately — no need to wait on the network round-trip to see it.
+    if (featuredPhotoPreviewRef.current) {
+      URL.revokeObjectURL(featuredPhotoPreviewRef.current);
+    }
+    const previewUrl = URL.createObjectURL(file);
+    featuredPhotoPreviewRef.current = previewUrl;
+    setFeaturedPhotoPreviewUrl(previewUrl);
+
+    setFeaturedPhotoError(null);
+    setIsFeaturedPhotoUploading(true);
+    try {
+      const updated = await eventsApi.uploadFeaturedPhoto(params.id, file);
+      setFeaturedPhotoUrl(updated.featuredPhotoUrl);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        const fieldErrors = err.problem?.errors
+          ? Object.values(err.problem.errors).flat().join(" ")
+          : null;
+        setFeaturedPhotoError(fieldErrors || err.message);
+      } else {
+        setFeaturedPhotoError("Could not upload the image.");
+      }
+    } finally {
+      setIsFeaturedPhotoUploading(false);
     }
   }
 
@@ -108,6 +169,10 @@ export default function EditEventPage() {
     if (files.length === 0) {
       return;
     }
+    // Show all picked files immediately, while they upload one by one in the background.
+    const previewUrls = files.map((file) => URL.createObjectURL(file));
+    setGalleryPreviewUrls(previewUrls);
+
     setGalleryError(null);
     setIsGalleryUploading(true);
     try {
@@ -126,10 +191,15 @@ export default function EditEventPage() {
       }
     } finally {
       setIsGalleryUploading(false);
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+      setGalleryPreviewUrls([]);
     }
   }
 
   async function handleRemoveGalleryImage(imageId: string) {
+    if (!confirm("Remove this image?")) {
+      return;
+    }
     setGalleryError(null);
     try {
       const updated = await eventsApi.removeGalleryImage(params.id, imageId);
@@ -149,15 +219,20 @@ export default function EditEventPage() {
 
   if (!initialValues) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] dark:bg-[#0F1714]">
-        <p className="text-[#5B6B67] dark:text-[#9CA9A5]">Loading...</p>
+      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
+        <div className="w-full max-w-2xl">
+          <Skeleton className="mb-6 h-8 w-40" />
+          <Skeleton className="mb-6 h-20 w-full" />
+          <Skeleton className="mb-6 h-32 w-full" />
+          <Skeleton className="h-64 w-full" />
+        </div>
       </div>
     );
   }
 
   return (
     <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-2xl">
         <h1
           className="mb-6 font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
           style={{ fontWeight: 600 }}
@@ -176,7 +251,7 @@ export default function EditEventPage() {
                   href={`/e/${initialValues.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#0F766E] underline dark:text-[#14B8A6]"
+                  className="text-sm text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]"
                 >
                   /e/{initialValues.slug}
                 </a>
@@ -186,7 +261,7 @@ export default function EditEventPage() {
               type="button"
               onClick={handleTogglePublish}
               disabled={isPublishToggling}
-              className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
             >
               {isPublishToggling ? "Saving..." : isPublished ? "Unpublish" : "Publish"}
             </button>
@@ -209,10 +284,16 @@ export default function EditEventPage() {
               </span>
             </div>
             {attendance.responses.length > 0 && (
-              <ul className="flex max-h-40 flex-col gap-1 overflow-y-auto text-sm">
+              <ul className="flex max-h-56 flex-col gap-2 overflow-y-auto text-sm">
                 {attendance.responses.map((response) => (
-                  <li key={response.id} className="flex items-center justify-between">
-                    <span className="text-[#14211D] dark:text-[#F3F1EA]">{response.guestName}</span>
+                  <li key={response.id} className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-[#14211D] dark:text-[#F3F1EA]">{response.guestName}</p>
+                      <p className="text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
+                        {response.guestEmail}
+                        {response.guestPhone && <> &middot; {response.guestPhone}</>}
+                      </p>
+                    </div>
                     <span
                       className={
                         response.status === "Confirmed"
@@ -229,28 +310,40 @@ export default function EditEventPage() {
           </div>
         )}
 
-        <div className="mb-6">
-          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
-            Gallery
-          </span>
-          {galleryImages.length > 0 && (
-            <div className="mb-2 grid grid-cols-3 gap-2">
+        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
+          <div className="mb-1 flex items-center justify-between">
+            <span className="text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">Gallery</span>
+            <span className="text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
+              {galleryImages.length}/10 images
+            </span>
+          </div>
+          {(galleryImages.length > 0 || galleryPreviewUrls.length > 0) && (
+            <div className="mb-2 grid grid-cols-3 gap-2 sm:grid-cols-4">
               {galleryImages.map((image) => (
                 <div key={image.id} className="relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`${API_BASE_URL}${image.imageUrl}`}
                     alt="Gallery"
-                    className="h-20 w-full rounded-md object-cover"
+                    className="h-24 w-full rounded-md object-cover"
                   />
                   <button
                     type="button"
                     onClick={() => handleRemoveGalleryImage(image.id)}
-                    className="absolute right-1 top-1 rounded-full bg-black/60 px-1.5 text-xs text-white"
+                    className="absolute right-1 top-1 rounded-full bg-black/60 px-1.5 text-xs text-white transition-colors duration-150 hover:bg-black/80"
                   >
                     &times;
                   </button>
                 </div>
+              ))}
+              {galleryPreviewUrls.map((url) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={url}
+                  src={url}
+                  alt="Uploading"
+                  className="h-24 w-full rounded-md object-cover opacity-60"
+                />
               ))}
             </div>
           )}
@@ -266,16 +359,16 @@ export default function EditEventPage() {
           {galleryError && <p className="mt-1 text-xs text-red-600">{galleryError}</p>}
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
           <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
             Cover image
           </span>
-          {coverImageUrl && (
+          {(coverPreviewUrl || coverImageUrl) && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={`${API_BASE_URL}${coverImageUrl}`}
+              src={coverPreviewUrl ?? `${API_BASE_URL}${coverImageUrl}`}
               alt="Event cover"
-              className="mb-2 h-32 w-full rounded-md object-cover"
+              className="mb-2 h-40 w-full rounded-md object-cover"
             />
           )}
           <input
@@ -287,6 +380,32 @@ export default function EditEventPage() {
           />
           {isUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
           {uploadError && <p className="mt-1 text-xs text-red-600">{uploadError}</p>}
+        </div>
+
+        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
+          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+            Featured photo
+          </span>
+          <p className="mb-2 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
+            Shown near the end of your invitation, after guests RSVP.
+          </p>
+          {(featuredPhotoPreviewUrl || featuredPhotoUrl) && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={featuredPhotoPreviewUrl ?? `${API_BASE_URL}${featuredPhotoUrl}`}
+              alt="Featured"
+              className="mb-2 h-40 w-full rounded-md object-cover"
+            />
+          )}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            disabled={isFeaturedPhotoUploading}
+            onChange={(e) => handleFeaturedPhotoChange(e.target.files)}
+            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
+          />
+          {isFeaturedPhotoUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
+          {featuredPhotoError && <p className="mt-1 text-xs text-red-600">{featuredPhotoError}</p>}
         </div>
 
         <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel="Save changes" />

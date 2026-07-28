@@ -315,6 +315,61 @@ public class EventsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory
     }
 
     [Fact]
+    public async Task UploadFeaturedPhoto_WithValidJpeg_SetsFeaturedPhotoUrl()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var createResponse = await client.PostAsJsonAsync("/api/events", ValidCreateRequest());
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new ByteArrayContent(MinimalJpegBytes());
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+        content.Add(fileContent, "file", "featured.jpg");
+
+        var response = await client.PostAsync($"/api/events/{created!.Id}/featured-photo", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var updated = await response.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+        updated!.FeaturedPhotoUrl.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task UploadFeaturedPhoto_WithSpoofedExtension_Returns400()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var createResponse = await client.PostAsJsonAsync("/api/events", ValidCreateRequest());
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+
+        using var content = new MultipartFormDataContent();
+        var notActuallyAnImage = System.Text.Encoding.UTF8.GetBytes("just some plain text");
+        using var fileContent = new ByteArrayContent(notActuallyAnImage);
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/png");
+        content.Add(fileContent, "file", "innocent.png");
+
+        var response = await client.PostAsync($"/api/events/{created!.Id}/featured-photo", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task UploadFeaturedPhoto_AsAnotherUser_Returns404()
+    {
+        var ownerClient = await CreateAuthenticatedClientAsync();
+        var otherClient = await CreateAuthenticatedClientAsync();
+        var createResponse = await ownerClient.PostAsJsonAsync("/api/events", ValidCreateRequest());
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+
+        using var content = new MultipartFormDataContent();
+        using var fileContent = new ByteArrayContent(MinimalJpegBytes());
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+        content.Add(fileContent, "file", "featured.jpg");
+
+        var response = await otherClient.PostAsync($"/api/events/{created!.Id}/featured-photo", content);
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
     public async Task Publish_AsOwner_SetsIsPublishedTrue()
     {
         var client = await CreateAuthenticatedClientAsync();

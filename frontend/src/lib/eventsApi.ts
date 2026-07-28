@@ -13,6 +13,11 @@ export const eventsApi = {
     formData.append("file", file);
     return apiClient.upload<EventRecord>(`/api/events/${id}/cover-image`, formData);
   },
+  uploadFeaturedPhoto: (id: string, file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return apiClient.upload<EventRecord>(`/api/events/${id}/featured-photo`, formData);
+  },
   publish: (id: string) => apiClient.post<EventRecord>(`/api/events/${id}/publish`),
   unpublish: (id: string) => apiClient.post<EventRecord>(`/api/events/${id}/unpublish`),
   uploadGalleryImage: (id: string, file: File) => {

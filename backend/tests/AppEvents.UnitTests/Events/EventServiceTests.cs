@@ -269,6 +269,31 @@ public class EventServiceTests
     }
 
     [Fact]
+    public async Task SetFeaturedPhotoAsync_WhenNotOwner_ThrowsNotFoundException()
+    {
+        var sut = CreateSut();
+        var @event = OwnedEvent();
+        _eventRepository.GetByIdAsync(@event.Id, Arg.Any<CancellationToken>()).Returns(@event);
+
+        var act = () => sut.SetFeaturedPhotoAsync(_otherUserId, @event.Id, "/uploads/events/xyz.jpg");
+
+        await act.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task SetFeaturedPhotoAsync_WhenOwner_SetsFeaturedPhotoUrl()
+    {
+        var sut = CreateSut();
+        var @event = OwnedEvent();
+        _eventRepository.GetByIdAsync(@event.Id, Arg.Any<CancellationToken>()).Returns(@event);
+
+        var response = await sut.SetFeaturedPhotoAsync(_ownerId, @event.Id, "/uploads/events/xyz.jpg");
+
+        response.FeaturedPhotoUrl.Should().Be("/uploads/events/xyz.jpg");
+        await _eventRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task PublishAsync_WhenNotOwner_ThrowsNotFoundException()
     {
         var sut = CreateSut();

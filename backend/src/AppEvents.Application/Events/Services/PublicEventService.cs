@@ -31,6 +31,7 @@ public class PublicEventService : IPublicEventService
             @event.Description,
             @event.Address,
             @event.CoverImageUrl,
+            @event.FeaturedPhotoUrl,
             @event.GalleryImages.OrderBy(i => i.SortOrder).Select(i => i.ImageUrl).ToList(),
             @event.Template?.Theme);
     }

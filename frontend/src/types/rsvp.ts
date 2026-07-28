@@ -2,6 +2,8 @@ export type RsvpStatus = "Confirmed" | "Declined";
 
 export interface CreateRsvpRequest {
   guestName: string;
+  guestEmail: string;
+  guestPhone: string | null;
   status: RsvpStatus;
   honeypotField: string | null;
 }
@@ -9,6 +11,8 @@ export interface CreateRsvpRequest {
 export interface RsvpRecord {
   id: string;
   guestName: string;
+  guestEmail: string;
+  guestPhone: string | null;
   status: RsvpStatus;
   createdAtUtc: string;
 }

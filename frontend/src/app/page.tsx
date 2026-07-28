@@ -158,13 +158,13 @@ export default function Home() {
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href="/register"
-                  className="rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+                  className="rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
                 >
                   Create your invitation
                 </Link>
                 <Link
                   href="/templates"
-                  className="rounded-full border border-[#0F766E]/40 px-6 py-3 text-sm font-medium text-[#14211D] hover:bg-[#0F766E]/5 dark:border-[#14B8A6]/40 dark:text-[#F3F1EA] dark:hover:bg-[#14B8A6]/10"
+                  className="rounded-full border border-[#0F766E]/40 px-6 py-3 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5 dark:border-[#14B8A6]/40 dark:text-[#F3F1EA] dark:hover:bg-[#14B8A6]/10"
                 >
                   Browse themes
                 </Link>
@@ -297,7 +297,7 @@ export default function Home() {
             </p>
             <Link
               href="/register"
-              className="mt-6 inline-block rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="mt-6 inline-block rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
             >
               Create your invitation
             </Link>

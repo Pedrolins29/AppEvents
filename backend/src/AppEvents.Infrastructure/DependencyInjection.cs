@@ -8,6 +8,7 @@ using AppEvents.Application.Rsvp.Services;
 using AppEvents.Application.Templates.Interfaces;
 using AppEvents.Application.Templates.Services;
 using AppEvents.Infrastructure.Common;
+using AppEvents.Infrastructure.Email;
 using AppEvents.Infrastructure.Events;
 using AppEvents.Infrastructure.Identity;
 using AppEvents.Infrastructure.Persistence;
@@ -44,6 +45,8 @@ public static class DependencyInjection
 
         services.AddScoped<IRsvpRepository, RsvpRepository>();
         services.AddScoped<IRsvpService, RsvpService>();
+
+        services.AddScoped<IEmailSender, SmtpEmailSender>();
 
         return services;
     }

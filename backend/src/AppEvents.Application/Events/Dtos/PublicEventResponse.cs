@@ -10,5 +10,6 @@ public record PublicEventResponse(
     string? Description,
     string? Address,
     string? CoverImageUrl,
+    string? FeaturedPhotoUrl,
     IReadOnlyList<string> GalleryImageUrls,
     string? ThemeKey);

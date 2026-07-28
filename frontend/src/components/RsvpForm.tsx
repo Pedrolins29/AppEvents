@@ -14,6 +14,8 @@ interface RsvpFormProps {
 
 export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
   const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("Confirmed");
   const [honeypotField, setHoneypotField] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,7 +28,13 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
     setIsSubmitting(true);
     try {
       if (!demoMode) {
-        await rsvpApi.submit(slug, { guestName, status, honeypotField: honeypotField || null });
+        await rsvpApi.submit(slug, {
+          guestName,
+          guestEmail,
+          guestPhone: guestPhone || null,
+          status,
+          honeypotField: honeypotField || null,
+        });
       }
       setSubmitted(true);
     } catch {
@@ -74,6 +82,38 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
           required
           value={guestName}
           onChange={(e) => setGuestName(e.target.value)}
+          className="w-full border bg-transparent px-3 py-2 text-sm"
+          style={{ borderColor: theme.accent, color: theme.heading }}
+        />
+      </div>
+
+      <div>
+        <label htmlFor="rsvp-email" className="mb-1 block text-sm" style={{ color: theme.body }}>
+          Your email
+        </label>
+        <input
+          id="rsvp-email"
+          type="email"
+          required
+          value={guestEmail}
+          onChange={(e) => setGuestEmail(e.target.value)}
+          className="w-full border bg-transparent px-3 py-2 text-sm"
+          style={{ borderColor: theme.accent, color: theme.heading }}
+        />
+        <p className="mt-1 text-xs" style={{ color: theme.body }}>
+          We&apos;ll send the event details and location here.
+        </p>
+      </div>
+
+      <div>
+        <label htmlFor="rsvp-phone" className="mb-1 block text-sm" style={{ color: theme.body }}>
+          Phone (optional)
+        </label>
+        <input
+          id="rsvp-phone"
+          type="tel"
+          value={guestPhone}
+          onChange={(e) => setGuestPhone(e.target.value)}
           className="w-full border bg-transparent px-3 py-2 text-sm"
           style={{ borderColor: theme.accent, color: theme.heading }}
         />

@@ -36,6 +36,9 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
         builder.Property(e => e.CoverImageUrl)
             .HasMaxLength(500);
 
+        builder.Property(e => e.FeaturedPhotoUrl)
+            .HasMaxLength(500);
+
         builder.Property(e => e.IsPublished)
             .IsRequired()
             .HasDefaultValue(false);

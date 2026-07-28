@@ -57,6 +57,41 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
 
 export const DEFAULT_THEME_STYLE: ThemeStyle = THEME_STYLES.minimalist;
 
+// Small per-theme decorative accents for the public page (e.g. the featured-photo closing
+// section) — visually consistent with, but independently defined from, TemplateCard.tsx's own
+// motifs (that file is theme-picker-specific output and stays untouched).
+function Sprig({ className, color }: { className?: string; color: string }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" className={className} aria-hidden style={{ color }}>
+      <path d="M4 60C10 40 16 24 32 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <ellipse cx="14" cy="46" rx="7" ry="3.2" transform="rotate(-40 14 46)" fill="currentColor" opacity="0.55" />
+      <ellipse cx="22" cy="32" rx="7" ry="3.2" transform="rotate(-30 22 32)" fill="currentColor" opacity="0.7" />
+      <ellipse cx="29" cy="17" rx="6" ry="2.8" transform="rotate(-15 29 17)" fill="currentColor" opacity="0.85" />
+    </svg>
+  );
+}
+
+export function ThemeMotif({ theme, accentColor }: { theme: ThemeKey; accentColor: string }) {
+  if (theme === "elegant") {
+    return (
+      <div className="flex items-center gap-3" aria-hidden>
+        <span className="h-px w-8" style={{ backgroundColor: accentColor }} />
+        <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden>
+          <path d="M5 0L10 5L5 10L0 5Z" fill={accentColor} />
+        </svg>
+        <span className="h-px w-8" style={{ backgroundColor: accentColor }} />
+      </div>
+    );
+  }
+  if (theme === "floral") {
+    return <Sprig className="h-10 w-10" color={accentColor} />;
+  }
+  if (theme === "modern") {
+    return <div className="h-8 w-8 rounded-full" style={{ border: `4px solid ${accentColor}` }} aria-hidden />;
+  }
+  return <span className="h-px w-10" style={{ backgroundColor: accentColor }} aria-hidden />;
+}
+
 interface InvitationHeroProps {
   name: string;
   eventTypeLabel: string;

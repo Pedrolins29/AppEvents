@@ -20,6 +20,10 @@ public class Event : BaseEntity
 
     public string? CoverImageUrl { get; set; }
 
+    // Shown as a dedicated closing section on the public page, after RSVP - a distinct
+    // narrative slot from CoverImageUrl (hero background) and GalleryImages (generic grid).
+    public string? FeaturedPhotoUrl { get; set; }
+
     public bool IsPublished { get; set; }
 
     public Guid UserId { get; set; }

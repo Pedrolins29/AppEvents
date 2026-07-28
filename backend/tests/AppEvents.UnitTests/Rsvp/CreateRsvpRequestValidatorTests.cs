@@ -9,7 +9,7 @@ public class CreateRsvpRequestValidatorTests
 {
     private readonly CreateRsvpRequestValidator _sut = new();
 
-    private static CreateRsvpRequest ValidRequest() => new("Jane Doe", RsvpStatus.Confirmed, null);
+    private static CreateRsvpRequest ValidRequest() => new("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null);
 
     [Fact]
     public void Validate_WithValidRequest_HasNoErrors()
@@ -41,6 +41,40 @@ public class CreateRsvpRequestValidatorTests
 
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateRsvpRequest.GuestName));
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("not-an-email")]
+    public void Validate_WithInvalidGuestEmail_HasError(string invalidEmail)
+    {
+        var request = ValidRequest() with { GuestEmail = invalidEmail };
+
+        var result = _sut.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateRsvpRequest.GuestEmail));
+    }
+
+    [Fact]
+    public void Validate_WithNullGuestPhone_HasNoError()
+    {
+        var request = ValidRequest() with { GuestPhone = null };
+
+        var result = _sut.Validate(request);
+
+        result.IsValid.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Validate_WithHtmlInGuestPhone_HasError()
+    {
+        var request = ValidRequest() with { GuestPhone = "<script>alert(1)</script>" };
+
+        var result = _sut.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateRsvpRequest.GuestPhone));
     }
 
     [Fact]

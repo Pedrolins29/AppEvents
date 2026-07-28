@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
+import { Skeleton } from "@/components/Skeleton";
 import { EVENT_TYPE_LABELS, type EventRecord } from "@/types/event";
 
 export default function EventsPage() {
@@ -56,8 +57,15 @@ export default function EventsPage() {
 
   if (isAuthLoading || !user) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] dark:bg-[#0F1714]">
-        <p className="text-[#5B6B67] dark:text-[#9CA9A5]">Loading...</p>
+      <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12 dark:bg-[#0F1714]">
+        <div className="mx-auto w-full max-w-2xl">
+          <Skeleton className="mb-6 h-8 w-40" />
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -74,7 +82,7 @@ export default function EventsPage() {
           </h1>
           <Link
             href="/events/new"
-            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
           >
             New event
           </Link>
@@ -83,7 +91,11 @@ export default function EventsPage() {
         {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
         {isLoading ? (
-          <p className="text-[#5B6B67] dark:text-[#9CA9A5]">Loading events...</p>
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+            <Skeleton className="h-16 w-full" />
+          </div>
         ) : events.length === 0 ? (
           <p className="text-[#5B6B67] dark:text-[#9CA9A5]">
             You haven&apos;t created any events yet.{" "}
@@ -118,13 +130,13 @@ export default function EventsPage() {
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
-                  <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline dark:text-[#14B8A6]">
+                  <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]">
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(event.id)}
                     disabled={deletingId === event.id}
-                    className="font-medium text-red-600 underline disabled:opacity-50"
+                    className="font-medium text-red-600 underline transition-colors duration-150 disabled:opacity-50"
                   >
                     {deletingId === event.id ? "Deleting..." : "Delete"}
                   </button>

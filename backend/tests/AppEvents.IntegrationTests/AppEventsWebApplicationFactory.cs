@@ -1,9 +1,12 @@
+using AppEvents.Application.Common.Interfaces;
 using AppEvents.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace AppEvents.IntegrationTests;
 
@@ -30,6 +33,21 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
                 ["Storage:LocalPath"] = _uploadsPath,
             });
         });
+
+        // Real SmtpEmailSender would otherwise try to actually connect to whatever Email:Host
+        // is configured on every RSVP-submitting test - slow (blocks on the send timeout) and
+        // flaky (depends on Mailpit happening to be running). Swap in a no-op fake instead.
+        builder.ConfigureTestServices(services =>
+        {
+            services.RemoveAll<IEmailSender>();
+            services.AddScoped<IEmailSender, NoOpEmailSender>();
+        });
+    }
+
+    private class NoOpEmailSender : IEmailSender
+    {
+        public Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default) =>
+            Task.CompletedTask;
     }
 
     public async Task InitializeAsync()

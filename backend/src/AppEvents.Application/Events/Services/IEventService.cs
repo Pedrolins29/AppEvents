@@ -16,6 +16,8 @@ public interface IEventService
 
     Task<EventResponse> SetCoverImageAsync(Guid userId, Guid eventId, string coverImageUrl, CancellationToken cancellationToken = default);
 
+    Task<EventResponse> SetFeaturedPhotoAsync(Guid userId, Guid eventId, string featuredPhotoUrl, CancellationToken cancellationToken = default);
+
     Task<EventResponse> PublishAsync(Guid userId, Guid eventId, CancellationToken cancellationToken = default);
 
     Task<EventResponse> UnpublishAsync(Guid userId, Guid eventId, CancellationToken cancellationToken = default);

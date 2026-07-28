@@ -2,7 +2,7 @@ using AppEvents.Domain.Rsvp;
 
 namespace AppEvents.Application.Rsvp.Dtos;
 
-public record RsvpResponseDto(Guid Id, string GuestName, RsvpStatus Status, DateTime CreatedAtUtc);
+public record RsvpResponseDto(Guid Id, string GuestName, string GuestEmail, string? GuestPhone, RsvpStatus Status, DateTime CreatedAtUtc);
 
 public record AttendanceSummary(int Total, int Confirmed, int Declined);
 

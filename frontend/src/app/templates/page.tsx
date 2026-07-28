@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Skeleton } from "@/components/Skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TemplateCard } from "@/components/TemplateCard";
@@ -43,10 +44,15 @@ export default function TemplatesPage() {
           </div>
 
           {error && <p className="text-center text-sm text-red-600">{error}</p>}
-          {isLoading && (
-            <p className="text-center text-[#5B6B67] dark:text-[#9CA9A5]">Loading templates...</p>
-          )}
 
+          {isLoading ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+            </div>
+          ) : (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             {templates.map((template) => (
               <div
@@ -61,13 +67,13 @@ export default function TemplatesPage() {
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/templates/${template.theme}`}
-                      className="text-sm font-medium text-[#5B6B67] hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
+                      className="text-sm font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
                     >
                       Preview
                     </Link>
                     <Link
                       href={`/events/new?templateId=${template.id}`}
-                      className="rounded-full bg-[#0F766E] px-4 py-1.5 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+                      className="rounded-full bg-[#0F766E] px-4 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
                     >
                       Use this template
                     </Link>
@@ -76,6 +82,7 @@ export default function TemplatesPage() {
               </div>
             ))}
           </div>
+          )}
 
           <div className="mt-12 text-center">
             <Link

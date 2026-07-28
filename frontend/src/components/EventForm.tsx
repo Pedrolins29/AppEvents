@@ -168,7 +168,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
             <button
               type="button"
               onClick={() => update("templateId", null)}
-              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] dark:text-[#9CA9A5] ${
+              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-colors duration-150 dark:text-[#9CA9A5] ${
                 values.templateId === null ? "border-[#0F766E] dark:border-[#14B8A6]" : "border-transparent bg-[#F2EFE7] dark:bg-[#1B2422]"
               }`}
             >
@@ -179,7 +179,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
                 type="button"
                 key={template.id}
                 onClick={() => update("templateId", template.id)}
-                className={`overflow-hidden border-2 ${
+                className={`overflow-hidden border-2 transition-colors duration-150 ${
                   values.templateId === template.id ? "border-[#0F766E] dark:border-[#14B8A6]" : "border-transparent"
                 }`}
               >
@@ -193,7 +193,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
       >
         {isSubmitting ? "Saving..." : submitLabel}
       </button>

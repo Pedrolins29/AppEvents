@@ -133,6 +133,20 @@ public class EventService : IEventService
         return ToResponse(@event);
     }
 
+    public async Task<EventResponse> SetFeaturedPhotoAsync(Guid userId, Guid eventId, string featuredPhotoUrl, CancellationToken cancellationToken = default)
+    {
+        var @event = await GetOwnedEventAsync(userId, eventId, cancellationToken);
+
+        @event.FeaturedPhotoUrl = featuredPhotoUrl;
+        @event.UpdatedAtUtc = _dateTimeProvider.UtcNow;
+
+        await _eventRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Audit: featured photo set for event {EventId} by user {UserId}", eventId, userId);
+
+        return ToResponse(@event);
+    }
+
     public async Task<EventResponse> PublishAsync(Guid userId, Guid eventId, CancellationToken cancellationToken = default)
     {
         var @event = await GetOwnedEventAsync(userId, eventId, cancellationToken);
@@ -247,6 +261,7 @@ public class EventService : IEventService
         @event.Description,
         @event.Address,
         @event.CoverImageUrl,
+        @event.FeaturedPhotoUrl,
         @event.IsPublished,
         @event.GalleryImages
             .OrderBy(i => i.SortOrder)

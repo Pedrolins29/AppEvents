@@ -75,14 +75,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
             >
               {isSubmitting ? "Logging in..." : "Log in"}
             </button>
           </form>
           <p className="mt-4 text-sm text-[#5B6B67] dark:text-[#9CA9A5]">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="font-medium text-[#0F766E] underline dark:text-[#14B8A6]">
+            <Link href="/register" className="font-medium text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]">
               Create one
             </Link>
           </p>

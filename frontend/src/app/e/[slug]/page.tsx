@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Countdown } from "@/components/Countdown";
-import { DEFAULT_THEME_STYLE, InvitationHero, THEME_STYLES } from "@/components/InvitationHero";
+import { DEFAULT_THEME_STYLE, InvitationHero, THEME_STYLES, ThemeMotif } from "@/components/InvitationHero";
 import { RsvpForm } from "@/components/RsvpForm";
 import { publicEventsApi } from "@/lib/publicEventsApi";
 import { EVENT_TYPE_LABELS } from "@/types/event";
@@ -160,6 +160,26 @@ export default async function PublicEventPage({ params }: PageProps) {
         </h2>
         <RsvpForm slug={event.slug} theme={theme} />
       </section>
+
+      {event.featuredPhotoUrl && (
+        <section className="px-6 py-16 text-center" style={{ backgroundColor: theme.sectionBg }}>
+          <div className="mx-auto flex max-w-md flex-col items-center gap-4">
+            <ThemeMotif theme={event.themeKey ?? "minimalist"} accentColor={theme.accent} />
+            <p
+              className={theme.fontClassName}
+              style={{ color: theme.heading, fontStyle: theme.fontStyle, fontSize: "1.5rem" }}
+            >
+              We can&apos;t wait to celebrate with you
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={absoluteImageUrl(event.featuredPhotoUrl)}
+              alt=""
+              className="mt-2 aspect-[4/5] w-full rounded-md object-cover"
+            />
+          </div>
+        </section>
+      )}
     </div>
   );
 }
