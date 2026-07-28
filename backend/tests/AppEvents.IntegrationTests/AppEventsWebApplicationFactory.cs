@@ -50,11 +50,31 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
             Task.CompletedTask;
     }
 
+    // xUnit creates a separate factory instance per test class under IClassFixture, and runs
+    // classes in parallel - against a genuinely fresh database (every CI run; only ever once
+    // locally, since the dev Postgres volume persists) every instance races to apply the same
+    // pending migrations, and all but the first fail with "column already exists". Guard so the
+    // migration only actually runs once per process, regardless of how many factories start it.
+    private static readonly SemaphoreSlim MigrationLock = new(1, 1);
+    private static bool _migrated;
+
     public async Task InitializeAsync()
     {
-        using var scope = Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<AppEventsDbContext>();
-        await dbContext.Database.MigrateAsync();
+        await MigrationLock.WaitAsync();
+        try
+        {
+            if (!_migrated)
+            {
+                using var scope = Services.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppEventsDbContext>();
+                await dbContext.Database.MigrateAsync();
+                _migrated = true;
+            }
+        }
+        finally
+        {
+            MigrationLock.Release();
+        }
     }
 
     async Task IAsyncLifetime.DisposeAsync()
