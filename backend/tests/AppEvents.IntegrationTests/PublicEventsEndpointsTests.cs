@@ -39,13 +39,18 @@ public class PublicEventsEndpointsTests : IClassFixture<AppEventsWebApplicationF
         return client;
     }
 
-    private static CreateEventRequest ValidCreateRequest(string? slug = null) => new(
+    private static CreateEventRequest ValidCreateRequest(
+        string? slug = null,
+        string? dressCode = null,
+        IReadOnlyList<TimelineItemDto>? timelineItems = null) => new(
         "John and Mary Wedding",
         slug ?? UniqueSlug(),
         EventType.Wedding,
         DateTime.UtcNow.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        dressCode,
+        timelineItems,
         null);
 
     [Fact]
@@ -68,6 +73,25 @@ public class PublicEventsEndpointsTests : IClassFixture<AppEventsWebApplicationF
         var body = await response.Content.ReadFromJsonAsync<PublicEventResponse>(JsonOptions);
         body!.Slug.Should().Be(slug);
         body.Name.Should().Be("John and Mary Wedding");
+    }
+
+    [Fact]
+    public async Task GetBySlug_WhenPublished_ReturnsDressCodeAndTimelineItems()
+    {
+        var owner = await CreateAuthenticatedClientAsync();
+        var slug = UniqueSlug();
+        var timelineItems = new List<TimelineItemDto> { new("12:00", "Ceremony"), new("13:30", "Cocktail hour") };
+        var createResponse = await owner.PostAsJsonAsync(
+            "/api/events",
+            ValidCreateRequest(slug, dressCode: "Garden formal", timelineItems: timelineItems));
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+        await owner.PostAsync($"/api/events/{created!.Id}/publish", null);
+
+        var anonymous = _factory.CreateClient();
+        var body = await anonymous.GetFromJsonAsync<PublicEventResponse>($"/api/public/events/{slug}", JsonOptions);
+
+        body!.DressCode.Should().Be("Garden formal");
+        body.TimelineItems.Should().BeEquivalentTo(timelineItems, options => options.WithStrictOrdering());
     }
 
     [Fact]

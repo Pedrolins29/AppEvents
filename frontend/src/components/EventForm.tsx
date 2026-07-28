@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 import { ApiError } from "@/lib/auth-context";
 import { templatesApi } from "@/lib/templatesApi";
 import { TemplateCard } from "@/components/TemplateCard";
-import { EVENT_TYPE_LABELS, EVENT_TYPES, type CreateEventRequest, type EventType } from "@/types/event";
+import { TimelineItemsEditor } from "@/components/TimelineItemsEditor";
+import {
+  EVENT_TYPE_LABELS,
+  EVENT_TYPES,
+  type CreateEventRequest,
+  type EventType,
+  type TimelineItemRecord,
+} from "@/types/event";
 import type { TemplateRecord } from "@/types/template";
 
 export interface EventFormValues {
@@ -14,6 +21,8 @@ export interface EventFormValues {
   eventDate: string;
   description: string;
   address: string;
+  dressCode: string;
+  timelineItems: TimelineItemRecord[];
   templateId: string | null;
 }
 
@@ -24,6 +33,8 @@ const EMPTY_VALUES: EventFormValues = {
   eventDate: "",
   description: "",
   address: "",
+  dressCode: "",
+  timelineItems: [],
   templateId: null,
 };
 
@@ -59,6 +70,8 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
         eventDate: new Date(values.eventDate).toISOString(),
         description: values.description || null,
         address: values.address || null,
+        dressCode: values.dressCode || null,
+        timelineItems: values.timelineItems,
         templateId: values.templateId,
       });
     } catch (err) {
@@ -159,6 +172,23 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
+      <div>
+        <label htmlFor="dressCode" className="mb-1 block text-sm font-medium text-[#14211D]">
+          Dress code (optional)
+        </label>
+        <input
+          id="dressCode"
+          type="text"
+          placeholder="Black tie optional"
+          value={values.dressCode}
+          onChange={(e) => update("dressCode", e.target.value)}
+          className="w-full border border-[#E2DFD3] px-3 py-2"
+        />
+      </div>
+      <TimelineItemsEditor
+        items={values.timelineItems}
+        onChange={(timelineItems) => update("timelineItems", timelineItems)}
+      />
       {templates.length > 0 && (
         <div>
           <span className="mb-1 block text-sm font-medium text-[#14211D]">

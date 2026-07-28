@@ -29,22 +29,32 @@ public class EventServiceTests
         return new EventService(_eventRepository, _templateRepository, _dateTimeProvider, _logger);
     }
 
-    private CreateEventRequest ValidCreateRequest(Guid? templateId = null) => new(
+    private CreateEventRequest ValidCreateRequest(
+        Guid? templateId = null,
+        string? dressCode = null,
+        IReadOnlyList<TimelineItemDto>? timelineItems = null) => new(
         "John and Mary Wedding",
         "john-and-mary",
         EventType.Wedding,
         _now.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        dressCode,
+        timelineItems,
         templateId);
 
-    private UpdateEventRequest ValidCreateRequestAsUpdate(Guid? templateId = null) => new(
+    private UpdateEventRequest ValidCreateRequestAsUpdate(
+        Guid? templateId = null,
+        string? dressCode = null,
+        IReadOnlyList<TimelineItemDto>? timelineItems = null) => new(
         "John and Mary Wedding",
         "john-and-mary",
         EventType.Wedding,
         _now.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        dressCode,
+        timelineItems,
         templateId);
 
     private Event OwnedEvent() => new()
@@ -111,6 +121,34 @@ public class EventServiceTests
 
         await act.Should().ThrowAsync<ValidationAppException>();
         await _eventRepository.DidNotReceive().AddAsync(Arg.Any<Event>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task CreateAsync_WithDressCodeAndTimeline_PersistsBothOnEvent()
+    {
+        var sut = CreateSut();
+        _eventRepository.SlugExistsAsync("john-and-mary", null, Arg.Any<CancellationToken>()).Returns(false);
+        var timelineItems = new List<TimelineItemDto> { new("12:00", "Ceremony"), new("13:30", "Cocktail hour") };
+
+        var response = await sut.CreateAsync(_ownerId, ValidCreateRequest(dressCode: "Black tie", timelineItems: timelineItems));
+
+        response.DressCode.Should().Be("Black tie");
+        response.TimelineItems.Should().BeEquivalentTo(timelineItems, options => options.WithStrictOrdering());
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ReplacesTimelineItemsEntirely()
+    {
+        var sut = CreateSut();
+        var @event = OwnedEvent();
+        @event.TimelineItems = [new TimelineItem { Time = "10:00", Label = "Old item" }, new TimelineItem { Time = "11:00", Label = "Also old" }];
+        _eventRepository.GetByIdAsync(@event.Id, Arg.Any<CancellationToken>()).Returns(@event);
+        _eventRepository.SlugExistsAsync("john-and-mary", @event.Id, Arg.Any<CancellationToken>()).Returns(false);
+        var newItems = new List<TimelineItemDto> { new("14:00", "New item") };
+
+        var response = await sut.UpdateAsync(_ownerId, @event.Id, ValidCreateRequestAsUpdate(timelineItems: newItems));
+
+        response.TimelineItems.Should().BeEquivalentTo(newItems);
     }
 
     [Fact]

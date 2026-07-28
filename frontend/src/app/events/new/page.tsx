@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { AppHeader } from "@/components/AppHeader";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
 import { eventsApi } from "@/lib/eventsApi";
 import type { CreateEventRequest } from "@/types/event";
@@ -19,6 +20,8 @@ function NewEventForm() {
         eventDate: "",
         description: "",
         address: "",
+        dressCode: "",
+        timelineItems: [],
         templateId,
       }
     : undefined;
@@ -33,17 +36,20 @@ function NewEventForm() {
 
 export default function NewEventPage() {
   return (
-    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16">
-      <div className="w-full max-w-sm">
-        <h1
-          className="mb-6 font-serif text-2xl text-[#14211D]"
-          style={{ fontWeight: 600 }}
-        >
-          Create an event
-        </h1>
-        <Suspense fallback={<p className="text-[#5B6B67]">Loading...</p>}>
-          <NewEventForm />
-        </Suspense>
+    <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+      <AppHeader />
+      <div className="flex flex-1 items-center justify-center px-6 py-16">
+        <div className="w-full max-w-sm">
+          <h1
+            className="mb-6 font-serif text-2xl text-[#14211D]"
+            style={{ fontWeight: 600 }}
+          >
+            Create an event
+          </h1>
+          <Suspense fallback={<p className="text-[#5B6B67]">Loading...</p>}>
+            <NewEventForm />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

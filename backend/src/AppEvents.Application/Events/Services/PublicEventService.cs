@@ -30,6 +30,8 @@ public class PublicEventService : IPublicEventService
             @event.EventDate,
             @event.Description,
             @event.Address,
+            @event.DressCode,
+            @event.TimelineItems.Select(i => new TimelineItemDto(i.Time, i.Label)).ToList(),
             @event.CoverImageUrl,
             @event.FeaturedPhotoUrl,
             @event.GalleryImages.OrderBy(i => i.SortOrder).Select(i => i.ImageUrl).ToList(),

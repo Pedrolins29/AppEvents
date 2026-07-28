@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { AppHeader } from "@/components/AppHeader";
 import { useAuth } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { Skeleton } from "@/components/Skeleton";
@@ -57,13 +58,16 @@ export default function EventsPage() {
 
   if (isAuthLoading || !user) {
     return (
-      <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12">
-        <div className="mx-auto w-full max-w-2xl">
-          <Skeleton className="mb-6 h-8 w-40" />
-          <div className="flex flex-col gap-3">
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-16 w-full" />
+      <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+        <AppHeader />
+        <div className="px-6 py-12">
+          <div className="mx-auto w-full max-w-2xl">
+            <Skeleton className="mb-6 h-8 w-40" />
+            <div className="flex flex-col gap-3">
+              <Skeleton className="h-16 w-full" />
+              <Skeleton className="h-16 w-full" />
+              <Skeleton className="h-16 w-full" />
+            </div>
           </div>
         </div>
       </div>
@@ -71,7 +75,9 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12">
+    <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+      <AppHeader />
+      <div className="px-6 py-12">
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-6 flex items-center justify-between">
           <h1
@@ -126,10 +132,28 @@ export default function EventsPage() {
                   </p>
                   <p className="text-sm text-[#5B6B67]">
                     {EVENT_TYPE_LABELS[event.eventType]} &middot;{" "}
-                    {new Date(event.eventDate).toLocaleDateString()} &middot; /{event.slug}
+                    {new Date(event.eventDate).toLocaleDateString()} &middot;{" "}
+                    {event.isPublished ? (
+                      <a
+                        href={`/e/${event.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline transition-colors duration-150 hover:text-[#14211D]"
+                      >
+                        /{event.slug}
+                      </a>
+                    ) : (
+                      <span>/{event.slug}</span>
+                    )}
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
+                  <Link
+                    href={`/events/${event.id}/preview`}
+                    className="font-medium text-[#0F766E] underline transition-colors duration-150"
+                  >
+                    Preview
+                  </Link>
                   <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline transition-colors duration-150">
                     Edit
                   </Link>
@@ -145,13 +169,7 @@ export default function EventsPage() {
             ))}
           </ul>
         )}
-
-        <Link
-          href="/dashboard"
-          className="mt-8 inline-block text-sm text-[#5B6B67] underline"
-        >
-          Back to dashboard
-        </Link>
+      </div>
       </div>
     </div>
   );

@@ -147,7 +147,7 @@ public class RsvpServiceTests
         var sut = CreateSut();
         var eventId = Guid.NewGuid();
         _eventService.GetByIdAsync(_ownerId, eventId, Arg.Any<CancellationToken>())
-            .Returns(new EventResponse(eventId, "Event", "slug", EventType.Wedding, _now, null, null, null, null,
+            .Returns(new EventResponse(eventId, "Event", "slug", EventType.Wedding, _now, null, null, null, [], null, null,
                 true, [], _ownerId, null, _now, _now));
         _rsvpRepository.GetByEventIdAsync(eventId, Arg.Any<CancellationToken>()).Returns(
         [

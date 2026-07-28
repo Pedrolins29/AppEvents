@@ -9,4 +9,6 @@ public record CreateEventRequest(
     DateTime EventDate,
     string? Description,
     string? Address,
+    string? DressCode,
+    IReadOnlyList<TimelineItemDto>? TimelineItems,
     Guid? TemplateId);

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InvitationPhoneMockup, type MockupScreen } from "@/components/InvitationPhoneMockup";
 import { PhoneMockup } from "@/components/PhoneMockup";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -64,6 +65,114 @@ const TEMPLATE_THEMES: { theme: ThemeKey; name: string }[] = [
   { theme: "minimalist", name: "Minimalist" },
   { theme: "floral", name: "Floral" },
   { theme: "modern", name: "Modern" },
+];
+
+interface ShowcaseEntry {
+  theme: ThemeKey;
+  eventTypeLabel: string;
+  name: string;
+  dateLabel: string;
+  screens: [MockupScreen, MockupScreen];
+  address?: string;
+  dressCode?: string;
+  timelineItems?: { time: string; label: string }[];
+  photoUrl?: string;
+}
+
+// One illustrative sample per card — real product features (countdown, maps, gallery, RSVP are
+// all shipped; Timeline/Dress Code below are real Event fields too), never fabricated content.
+// Two examples each for Wedding, Graduation, a "Party" bucket, and Baby Shower, spread across
+// all 4 real themes, so every screen type appears more than once without any card repeating.
+const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
+  {
+    theme: "elegant",
+    eventTypeLabel: EVENT_TYPE_LABELS.Wedding,
+    name: "Isabella & Marco",
+    dateLabel: "September 14, 2026",
+    screens: ["countdown", "map"],
+    address: "The Grand Pavilion, Lisbon",
+    photoUrl: "/showcase/wedding-rose.jpg",
+  },
+  {
+    theme: "floral",
+    eventTypeLabel: EVENT_TYPE_LABELS.Wedding,
+    name: "Sofia & Daniel",
+    dateLabel: "June 6, 2026",
+    screens: ["timeline", "dressCode"],
+    dressCode: "Garden formal — soft pastels",
+    timelineItems: [
+      { time: "16:00", label: "Ceremony" },
+      { time: "17:00", label: "Cocktail hour" },
+      { time: "18:30", label: "Dinner" },
+    ],
+    photoUrl: "/showcase/wedding-beach.jpg",
+  },
+  {
+    theme: "minimalist",
+    eventTypeLabel: EVENT_TYPE_LABELS.Graduation,
+    name: "Maya's Graduation",
+    dateLabel: "May 22, 2026",
+    screens: ["countdown", "timeline"],
+    timelineItems: [
+      { time: "10:00", label: "Processional" },
+      { time: "10:30", label: "Ceremony" },
+      { time: "12:00", label: "Reception" },
+    ],
+    photoUrl: "/showcase/graduation.jpg",
+  },
+  {
+    theme: "modern",
+    eventTypeLabel: EVENT_TYPE_LABELS.Graduation,
+    name: "Jordan's Grad Night",
+    dateLabel: "May 30, 2026",
+    screens: ["map", "dressCode"],
+    address: "Skyline Loft, Chicago",
+    dressCode: "Black tie, no exceptions",
+    photoUrl: "/showcase/graduation.jpg",
+  },
+  {
+    theme: "modern",
+    eventTypeLabel: EVENT_TYPE_LABELS.Birthday,
+    name: "Alex's 30th Birthday",
+    dateLabel: "August 8, 2026",
+    screens: ["countdown", "photo"],
+  },
+  {
+    theme: "elegant",
+    eventTypeLabel: EVENT_TYPE_LABELS.FifteenYearsParty,
+    name: "Camila's Quinceañera",
+    dateLabel: "November 1, 2026",
+    screens: ["timeline", "map"],
+    address: "Grand Ballroom, Miami",
+    timelineItems: [
+      { time: "17:00", label: "Mass" },
+      { time: "19:00", label: "Waltz" },
+      { time: "20:00", label: "Dinner" },
+    ],
+    photoUrl: "/showcase/quinceanera.jpg",
+  },
+  {
+    theme: "floral",
+    eventTypeLabel: EVENT_TYPE_LABELS.BabyShower,
+    name: "Welcome, Baby Rose",
+    dateLabel: "April 12, 2026",
+    screens: ["countdown", "dressCode"],
+    dressCode: "Garden pastels",
+    photoUrl: "/showcase/babyshower-farm.jpg",
+  },
+  {
+    theme: "minimalist",
+    eventTypeLabel: EVENT_TYPE_LABELS.BabyShower,
+    name: "Baby Chen's Shower",
+    dateLabel: "March 3, 2026",
+    screens: ["timeline", "photo"],
+    timelineItems: [
+      { time: "13:00", label: "Arrival" },
+      { time: "13:30", label: "Games" },
+      { time: "14:30", label: "Lunch" },
+    ],
+    photoUrl: "/showcase/babyshower-minimalist.jpg",
+  },
 ];
 
 const STEPS = [
@@ -267,6 +376,43 @@ export default function Home() {
               >
                 See all templates &rarr;
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* See it in action */}
+        <section className="px-6 pb-14 sm:pb-28">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="mb-2 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
+              See it in action
+            </h2>
+            <p className="mx-auto mb-10 max-w-md text-center text-sm text-[#5B6B67]">
+              Weddings, graduations, parties, baby showers — a look at the countdown, maps,
+              timeline, dress code, and photo features on real AppEvents themes.
+            </p>
+            <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+              {SHOWCASE_ENTRIES.map((entry) => (
+                <div key={entry.name} className="flex flex-col items-center gap-3">
+                  <InvitationPhoneMockup
+                    theme={entry.theme}
+                    eventTypeLabel={entry.eventTypeLabel}
+                    name={entry.name}
+                    dateLabel={entry.dateLabel}
+                    screens={entry.screens}
+                    address={entry.address}
+                    dressCode={entry.dressCode}
+                    timelineItems={entry.timelineItems}
+                    photoUrl={entry.photoUrl}
+                    size="sm"
+                  />
+                  <div className="text-center">
+                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#0F766E]">
+                      {entry.eventTypeLabel}
+                    </p>
+                    <p className="text-xs font-medium text-[#14211D]">{entry.name}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

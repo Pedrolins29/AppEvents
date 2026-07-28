@@ -1,6 +1,9 @@
+using System.Text.Json;
 using AppEvents.Domain.Events;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AppEvents.Infrastructure.Persistence.Configurations;
 
@@ -32,6 +35,24 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
 
         builder.Property(e => e.Address)
             .HasMaxLength(300);
+
+        builder.Property(e => e.DressCode)
+            .HasMaxLength(150);
+
+        var timelineItemsConverter = new ValueConverter<List<TimelineItem>, string>(
+            v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+            v => JsonSerializer.Deserialize<List<TimelineItem>>(v, (JsonSerializerOptions?)null) ?? new List<TimelineItem>());
+        var timelineItemsComparer = new ValueComparer<List<TimelineItem>>(
+            (a, b) => (a ?? new List<TimelineItem>()).SequenceEqual(b ?? new List<TimelineItem>()),
+            v => v.Aggregate(0, (hash, item) => HashCode.Combine(hash, item.Time, item.Label)),
+            v => v.ToList());
+
+        builder.Property(e => e.TimelineItems)
+            .HasConversion(timelineItemsConverter, timelineItemsComparer)
+            .HasColumnType("jsonb")
+            .HasColumnName("TimelineItems")
+            .HasDefaultValueSql("'[]'::jsonb")
+            .IsRequired();
 
         builder.Property(e => e.CoverImageUrl)
             .HasMaxLength(500);

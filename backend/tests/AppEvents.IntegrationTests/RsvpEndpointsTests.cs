@@ -48,6 +48,8 @@ public class RsvpEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
         DateTime.UtcNow.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        null,
+        null,
         null);
 
     private async Task<(HttpClient owner, string slug, System.Guid eventId)> CreatePublishedEventAsync()

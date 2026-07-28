@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { AppHeader } from "@/components/AppHeader";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { Skeleton } from "@/components/Skeleton";
@@ -45,6 +46,8 @@ export default function EditEventPage() {
       eventDate: event.eventDate.slice(0, 10),
       description: event.description ?? "",
       address: event.address ?? "",
+      dressCode: event.dressCode ?? "",
+      timelineItems: event.timelineItems,
       templateId: event.templateId,
     });
     setCoverImageUrl(event.coverImageUrl);
@@ -212,27 +215,35 @@ export default function EditEventPage() {
 
   if (error) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7]">
-        <p className="text-red-600">{error}</p>
+      <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+        <AppHeader />
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-red-600">{error}</p>
+        </div>
       </div>
     );
   }
 
   if (!initialValues) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16">
-        <div className="w-full max-w-2xl">
-          <Skeleton className="mb-6 h-8 w-40" />
-          <Skeleton className="mb-6 h-20 w-full" />
-          <Skeleton className="mb-6 h-32 w-full" />
-          <Skeleton className="h-64 w-full" />
+      <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+        <AppHeader />
+        <div className="flex flex-1 items-center justify-center px-6 py-16">
+          <div className="w-full max-w-2xl">
+            <Skeleton className="mb-6 h-8 w-40" />
+            <Skeleton className="mb-6 h-20 w-full" />
+            <Skeleton className="mb-6 h-32 w-full" />
+            <Skeleton className="h-64 w-full" />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16">
+    <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+      <AppHeader />
+      <div className="flex flex-1 items-center justify-center px-6 py-16">
       <div className="w-full max-w-2xl">
         <h1
           className="mb-6 font-serif text-2xl text-[#14211D]"
@@ -386,6 +397,7 @@ export default function EditEventPage() {
         </PhotoUpload>
 
         <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel="Save changes" />
+      </div>
       </div>
     </div>
   );

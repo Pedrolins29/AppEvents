@@ -29,6 +29,11 @@ export interface EventImageRecord {
   imageUrl: string;
 }
 
+export interface TimelineItemRecord {
+  time: string;
+  label: string;
+}
+
 export interface EventRecord {
   id: string;
   name: string;
@@ -37,6 +42,8 @@ export interface EventRecord {
   eventDate: string;
   description: string | null;
   address: string | null;
+  dressCode: string | null;
+  timelineItems: TimelineItemRecord[];
   coverImageUrl: string | null;
   featuredPhotoUrl: string | null;
   isPublished: boolean;
@@ -54,6 +61,8 @@ export interface CreateEventRequest {
   eventDate: string;
   description: string | null;
   address: string | null;
+  dressCode: string | null;
+  timelineItems: TimelineItemRecord[];
   templateId: string | null;
 }
 

@@ -1,4 +1,4 @@
-import type { EventType } from "@/types/event";
+import type { EventType, TimelineItemRecord } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
 
 export interface PublicEventRecord {
@@ -8,6 +8,8 @@ export interface PublicEventRecord {
   eventDate: string;
   description: string | null;
   address: string | null;
+  dressCode: string | null;
+  timelineItems: TimelineItemRecord[];
   coverImageUrl: string | null;
   featuredPhotoUrl: string | null;
   galleryImageUrls: string[];

@@ -42,13 +42,18 @@ public class EventsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory
         return client;
     }
 
-    private static CreateEventRequest ValidCreateRequest(string? slug = null) => new(
+    private static CreateEventRequest ValidCreateRequest(
+        string? slug = null,
+        string? dressCode = null,
+        IReadOnlyList<TimelineItemDto>? timelineItems = null) => new(
         "John and Mary's Wedding",
         slug ?? UniqueSlug(),
         EventType.Wedding,
         DateTime.UtcNow.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        dressCode,
+        timelineItems,
         null);
 
     [Fact]
@@ -88,6 +93,45 @@ public class EventsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory
     {
         var client = await CreateAuthenticatedClientAsync();
         var request = ValidCreateRequest() with { Name = "<script>alert(document.cookie)</script>" };
+
+        var response = await client.PostAsJsonAsync("/api/events", request);
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Create_WithDressCodeAndTimeline_Returns201AndRoundTripsFields()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var timelineItems = new List<TimelineItemDto> { new("12:00", "Ceremony"), new("13:30", "Cocktail hour") };
+
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/events",
+            ValidCreateRequest(dressCode: "Black tie optional", timelineItems: timelineItems));
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+
+        var getResponse = await client.GetFromJsonAsync<EventResponse>($"/api/events/{created!.Id}", JsonOptions);
+
+        getResponse!.DressCode.Should().Be("Black tie optional");
+        getResponse.TimelineItems.Should().BeEquivalentTo(timelineItems, options => options.WithStrictOrdering());
+    }
+
+    [Fact]
+    public async Task Create_WithTooManyTimelineItems_Returns400()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var items = Enumerable.Range(0, 16).Select(i => new TimelineItemDto($"{i}:00", $"Item {i}")).ToList();
+
+        var response = await client.PostAsJsonAsync("/api/events", ValidCreateRequest(timelineItems: items));
+
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+    }
+
+    [Fact]
+    public async Task Create_WithXssPayloadInDressCode_Returns400()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var request = ValidCreateRequest(dressCode: "<script>alert(1)</script>");
 
         var response = await client.PostAsJsonAsync("/api/events", request);
 
@@ -157,7 +201,7 @@ public class EventsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory
         var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
 
         var updateRequest = new UpdateEventRequest(
-            "Hijacked Name", created!.Slug, EventType.Birthday, DateTime.UtcNow.AddDays(1), null, null, null);
+            "Hijacked Name", created!.Slug, EventType.Birthday, DateTime.UtcNow.AddDays(1), null, null, null, null, null);
         var response = await otherClient.PutAsJsonAsync($"/api/events/{created.Id}", updateRequest);
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -173,13 +217,32 @@ public class EventsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory
         var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
 
         var updateRequest = new UpdateEventRequest(
-            "Updated Name", created!.Slug, EventType.Birthday, DateTime.UtcNow.AddDays(5), "Updated", "New Addr", null);
+            "Updated Name", created!.Slug, EventType.Birthday, DateTime.UtcNow.AddDays(5), "Updated", "New Addr", null, null, null);
         var response = await client.PutAsJsonAsync($"/api/events/{created.Id}", updateRequest);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var updated = await response.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
         updated!.Name.Should().Be("Updated Name");
         updated.EventType.Should().Be(EventType.Birthday);
+    }
+
+    [Fact]
+    public async Task Update_ReplacesTimelineItems_Returns200WithNewList()
+    {
+        var client = await CreateAuthenticatedClientAsync();
+        var initialItems = new List<TimelineItemDto> { new("10:00", "Old"), new("11:00", "Also old"), new("12:00", "Still old") };
+        var createResponse = await client.PostAsJsonAsync("/api/events", ValidCreateRequest(timelineItems: initialItems));
+        var created = await createResponse.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+        var newItems = new List<TimelineItemDto> { new("14:00", "New item") };
+
+        var updateRequest = new UpdateEventRequest(
+            created!.Name, created.Slug, created.EventType, created.EventDate, created.Description, created.Address,
+            created.DressCode, newItems, created.TemplateId);
+        var response = await client.PutAsJsonAsync($"/api/events/{created.Id}", updateRequest);
+        var updated = await response.Content.ReadFromJsonAsync<EventResponse>(JsonOptions);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        updated!.TimelineItems.Should().BeEquivalentTo(newItems);
     }
 
     [Fact]

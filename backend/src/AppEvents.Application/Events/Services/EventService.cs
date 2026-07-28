@@ -54,6 +54,8 @@ public class EventService : IEventService
             EventDate = request.EventDate,
             Description = request.Description?.Trim(),
             Address = request.Address?.Trim(),
+            DressCode = request.DressCode?.Trim(),
+            TimelineItems = ToTimelineItems(request.TimelineItems),
             TemplateId = request.TemplateId,
             UserId = userId,
             CreatedAtUtc = now,
@@ -99,6 +101,8 @@ public class EventService : IEventService
         @event.EventDate = request.EventDate;
         @event.Description = request.Description?.Trim();
         @event.Address = request.Address?.Trim();
+        @event.DressCode = request.DressCode?.Trim();
+        @event.TimelineItems = ToTimelineItems(request.TimelineItems);
         @event.TemplateId = request.TemplateId;
         @event.UpdatedAtUtc = _dateTimeProvider.UtcNow;
 
@@ -252,6 +256,10 @@ public class EventService : IEventService
 
     private static string NormalizeSlug(string slug) => slug.Trim().ToLowerInvariant();
 
+    private static List<TimelineItem> ToTimelineItems(IReadOnlyList<TimelineItemDto>? items) =>
+        items?.Select(i => new TimelineItem { Time = i.Time.Trim(), Label = i.Label.Trim() }).ToList()
+            ?? new List<TimelineItem>();
+
     private static EventResponse ToResponse(Event @event) => new(
         @event.Id,
         @event.Name,
@@ -260,6 +268,8 @@ public class EventService : IEventService
         @event.EventDate,
         @event.Description,
         @event.Address,
+        @event.DressCode,
+        @event.TimelineItems.Select(i => new TimelineItemDto(i.Time, i.Label)).ToList(),
         @event.CoverImageUrl,
         @event.FeaturedPhotoUrl,
         @event.IsPublished,

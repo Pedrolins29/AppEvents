@@ -10,6 +10,8 @@ public record EventResponse(
     DateTime EventDate,
     string? Description,
     string? Address,
+    string? DressCode,
+    IReadOnlyList<TimelineItemDto> TimelineItems,
     string? CoverImageUrl,
     string? FeaturedPhotoUrl,
     bool IsPublished,

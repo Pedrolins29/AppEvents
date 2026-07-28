@@ -83,15 +83,6 @@ export default function TemplatesPage() {
             ))}
           </div>
           )}
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/dashboard"
-              className="text-sm text-[#5B6B67] underline hover:text-[#14211D]"
-            >
-              Back to dashboard
-            </Link>
-          </div>
         </div>
       </main>
 

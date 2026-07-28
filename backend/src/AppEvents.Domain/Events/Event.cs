@@ -18,6 +18,10 @@ public class Event : BaseEntity
 
     public string? Address { get; set; }
 
+    public string? DressCode { get; set; }
+
+    public List<TimelineItem> TimelineItems { get; set; } = new();
+
     public string? CoverImageUrl { get; set; }
 
     // Shown as a dedicated closing section on the public page, after RSVP - a distinct

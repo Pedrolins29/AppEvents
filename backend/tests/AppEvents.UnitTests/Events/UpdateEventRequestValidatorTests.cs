@@ -25,6 +25,8 @@ public class UpdateEventRequestValidatorTests
         _now.AddDays(30),
         "A celebration of love",
         "123 Main St",
+        null,
+        null,
         null);
 
     [Fact]

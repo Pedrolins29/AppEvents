@@ -9,6 +9,8 @@ public record PublicEventResponse(
     DateTime EventDate,
     string? Description,
     string? Address,
+    string? DressCode,
+    IReadOnlyList<TimelineItemDto> TimelineItems,
     string? CoverImageUrl,
     string? FeaturedPhotoUrl,
     IReadOnlyList<string> GalleryImageUrls,

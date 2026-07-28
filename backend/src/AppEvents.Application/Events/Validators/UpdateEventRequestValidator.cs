@@ -33,5 +33,28 @@ public class UpdateEventRequestValidator : AbstractValidator<UpdateEventRequest>
         RuleFor(x => x.Address)
             .MaximumLength(300)
             .NoHtmlTags();
+
+        RuleFor(x => x.DressCode)
+            .MaximumLength(150)
+            .NoHtmlTags();
+
+        RuleFor(x => x.TimelineItems)
+            .Must(items => items == null || items.Count <= MaxTimelineItems)
+            .WithMessage($"An event can have at most {MaxTimelineItems} timeline items.");
+
+        RuleForEach(x => x.TimelineItems).ChildRules(item =>
+        {
+            item.RuleFor(i => i.Time)
+                .NotEmpty()
+                .MaximumLength(20)
+                .NoHtmlTags();
+
+            item.RuleFor(i => i.Label)
+                .NotEmpty()
+                .MaximumLength(100)
+                .NoHtmlTags();
+        });
     }
+
+    private const int MaxTimelineItems = 15;
 }
