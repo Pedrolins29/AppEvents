@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
+import { PhotoUpload } from "@/components/PhotoUpload";
 import { Skeleton } from "@/components/Skeleton";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
@@ -211,7 +212,7 @@ export default function EditEventPage() {
 
   if (error) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] dark:bg-[#0F1714]">
+      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7]">
         <p className="text-red-600">{error}</p>
       </div>
     );
@@ -219,7 +220,7 @@ export default function EditEventPage() {
 
   if (!initialValues) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
+      <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16">
         <div className="w-full max-w-2xl">
           <Skeleton className="mb-6 h-8 w-40" />
           <Skeleton className="mb-6 h-20 w-full" />
@@ -231,19 +232,19 @@ export default function EditEventPage() {
   }
 
   return (
-    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16 dark:bg-[#0F1714]">
+    <div className="flex flex-1 items-center justify-center bg-[#FDFBF7] px-6 py-16">
       <div className="w-full max-w-2xl">
         <h1
-          className="mb-6 font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
+          className="mb-6 font-serif text-2xl text-[#14211D]"
           style={{ fontWeight: 600 }}
         >
           Edit event
         </h1>
 
-        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
+        <div className="mb-6 border border-[#E2DFD3] p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="font-medium text-[#14211D] dark:text-[#F3F1EA]">
+              <p className="font-medium text-[#14211D]">
                 {isPublished ? "Published" : "Draft"}
               </p>
               {isPublished && initialValues && (
@@ -251,7 +252,7 @@ export default function EditEventPage() {
                   href={`/e/${initialValues.slug}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]"
+                  className="text-sm text-[#0F766E] underline transition-colors duration-150"
                 >
                   /e/{initialValues.slug}
                 </a>
@@ -261,7 +262,7 @@ export default function EditEventPage() {
               type="button"
               onClick={handleTogglePublish}
               disabled={isPublishToggling}
-              className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
             >
               {isPublishToggling ? "Saving..." : isPublished ? "Unpublish" : "Publish"}
             </button>
@@ -270,16 +271,16 @@ export default function EditEventPage() {
         </div>
 
         {attendance && (
-          <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
-            <p className="mb-3 font-medium text-[#14211D] dark:text-[#F3F1EA]">Attendance</p>
+          <div className="mb-6 border border-[#E2DFD3] p-4">
+            <p className="mb-3 font-medium text-[#14211D]">Attendance</p>
             <div className="mb-3 flex gap-4 text-sm">
-              <span className="text-[#14211D] dark:text-[#F3F1EA]">
+              <span className="text-[#14211D]">
                 <strong>{attendance.summary.total}</strong> total
               </span>
-              <span className="text-emerald-700 dark:text-emerald-400">
+              <span className="text-emerald-700">
                 <strong>{attendance.summary.confirmed}</strong> confirmed
               </span>
-              <span className="text-[#5B6B67] dark:text-[#9CA9A5]">
+              <span className="text-[#5B6B67]">
                 <strong>{attendance.summary.declined}</strong> declined
               </span>
             </div>
@@ -288,8 +289,8 @@ export default function EditEventPage() {
                 {attendance.responses.map((response) => (
                   <li key={response.id} className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="text-[#14211D] dark:text-[#F3F1EA]">{response.guestName}</p>
-                      <p className="text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
+                      <p className="text-[#14211D]">{response.guestName}</p>
+                      <p className="text-xs text-[#5B6B67]">
                         {response.guestEmail}
                         {response.guestPhone && <> &middot; {response.guestPhone}</>}
                       </p>
@@ -297,8 +298,8 @@ export default function EditEventPage() {
                     <span
                       className={
                         response.status === "Confirmed"
-                          ? "text-emerald-700 dark:text-emerald-400"
-                          : "text-[#5B6B67] dark:text-[#9CA9A5]"
+                          ? "text-emerald-700"
+                          : "text-[#5B6B67]"
                       }
                     >
                       {response.status}
@@ -310,13 +311,15 @@ export default function EditEventPage() {
           </div>
         )}
 
-        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
-          <div className="mb-1 flex items-center justify-between">
-            <span className="text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">Gallery</span>
-            <span className="text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
-              {galleryImages.length}/10 images
-            </span>
-          </div>
+        <PhotoUpload
+          label="Gallery"
+          hint={`${galleryImages.length}/10 images`}
+          multiple
+          disabled={galleryImages.length >= 10}
+          isUploading={isGalleryUploading}
+          error={galleryError}
+          onFilesSelected={handleGalleryImagesChange}
+        >
           {(galleryImages.length > 0 || galleryPreviewUrls.length > 0) && (
             <div className="mb-2 grid grid-cols-3 gap-2 sm:grid-cols-4">
               {galleryImages.map((image) => (
@@ -347,22 +350,14 @@ export default function EditEventPage() {
               ))}
             </div>
           )}
-          <input
-            type="file"
-            multiple
-            accept="image/jpeg,image/png,image/webp"
-            disabled={isGalleryUploading || galleryImages.length >= 10}
-            onChange={(e) => handleGalleryImagesChange(e.target.files)}
-            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
-          />
-          {isGalleryUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
-          {galleryError && <p className="mt-1 text-xs text-red-600">{galleryError}</p>}
-        </div>
+        </PhotoUpload>
 
-        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
-          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
-            Cover image
-          </span>
+        <PhotoUpload
+          label="Cover image"
+          isUploading={isUploading}
+          error={uploadError}
+          onFilesSelected={handleCoverImageChange}
+        >
           {(coverPreviewUrl || coverImageUrl) && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -371,24 +366,15 @@ export default function EditEventPage() {
               className="mb-2 h-40 w-full rounded-md object-cover"
             />
           )}
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            disabled={isUploading}
-            onChange={(e) => handleCoverImageChange(e.target.files)}
-            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
-          />
-          {isUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
-          {uploadError && <p className="mt-1 text-xs text-red-600">{uploadError}</p>}
-        </div>
+        </PhotoUpload>
 
-        <div className="mb-6 border border-[#E2DFD3] p-4 dark:border-[#2A3532]">
-          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
-            Featured photo
-          </span>
-          <p className="mb-2 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
-            Shown near the end of your invitation, after guests RSVP.
-          </p>
+        <PhotoUpload
+          label="Featured photo"
+          hint="Shown near the end of your invitation, after guests RSVP."
+          isUploading={isFeaturedPhotoUploading}
+          error={featuredPhotoError}
+          onFilesSelected={handleFeaturedPhotoChange}
+        >
           {(featuredPhotoPreviewUrl || featuredPhotoUrl) && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -397,16 +383,7 @@ export default function EditEventPage() {
               className="mb-2 h-40 w-full rounded-md object-cover"
             />
           )}
-          <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            disabled={isFeaturedPhotoUploading}
-            onChange={(e) => handleFeaturedPhotoChange(e.target.files)}
-            className="w-full text-sm text-[#5B6B67] dark:text-[#9CA9A5]"
-          />
-          {isFeaturedPhotoUploading && <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Uploading...</p>}
-          {featuredPhotoError && <p className="mt-1 text-xs text-red-600">{featuredPhotoError}</p>}
-        </div>
+        </PhotoUpload>
 
         <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel="Save changes" />
       </div>

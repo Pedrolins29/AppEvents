@@ -103,7 +103,7 @@ interface InvitationHeroProps {
 
 export function InvitationHero({ name, eventTypeLabel, formattedDate, coverImageUrl, theme, children }: InvitationHeroProps) {
   return (
-    <section className="relative flex min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
+    <section className="relative flex min-h-[75vh] sm:min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
       {coverImageUrl ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}

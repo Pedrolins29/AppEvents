@@ -56,19 +56,19 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-[#FDFBF7] dark:bg-[#0F1714]">
+    <div className="flex flex-1 flex-col bg-[#FDFBF7]">
       <SiteHeader />
       <main className="flex flex-1 items-center justify-center px-6 py-16">
         <div className="w-full max-w-sm">
           <h1
-            className="mb-6 font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
+            className="mb-6 font-serif text-2xl text-[#14211D]"
             style={{ fontWeight: 600 }}
           >
             Create your account
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
-              <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+              <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-[#14211D]">
                 Full name
               </label>
               <input
@@ -77,11 +77,11 @@ export default function RegisterPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+                className="w-full border border-[#E2DFD3] px-3 py-2"
               />
             </div>
             <div>
-              <label htmlFor="email" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+              <label htmlFor="email" className="mb-1 block text-sm font-medium text-[#14211D]">
                 Email
               </label>
               <input
@@ -90,11 +90,11 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+                className="w-full border border-[#E2DFD3] px-3 py-2"
               />
             </div>
             <div>
-              <label htmlFor="password" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+              <label htmlFor="password" className="mb-1 block text-sm font-medium text-[#14211D]">
                 Password
               </label>
               <div className="relative">
@@ -106,12 +106,12 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onBlur={() => setPasswordTouched(true)}
-                  className="w-full border border-[#E2DFD3] px-3 py-2 pr-16 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+                  className="w-full border border-[#E2DFD3] px-3 py-2 pr-16"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
@@ -123,7 +123,7 @@ export default function RegisterPage() {
                     return (
                       <li
                         key={label}
-                        className={`text-xs ${met ? "text-[#0F766E] dark:text-[#14B8A6]" : "text-[#5B6B67] dark:text-[#9CA9A5]"}`}
+                        className={`text-xs ${met ? "text-[#0F766E]" : "text-[#5B6B67]"}`}
                       >
                         {met ? "✓" : "○"} {label}
                       </li>
@@ -131,13 +131,13 @@ export default function RegisterPage() {
                   })}
                 </ul>
               ) : (
-                <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">
+                <p className="mt-1 text-xs text-[#5B6B67]">
                   At least 10 characters, with uppercase, lowercase, a digit, and a special character.
                 </p>
               )}
             </div>
             <div>
-              <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+              <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-[#14211D]">
                 Confirm password
               </label>
               <div className="relative">
@@ -147,12 +147,12 @@ export default function RegisterPage() {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full border border-[#E2DFD3] px-3 py-2 pr-16 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+                  className="w-full border border-[#E2DFD3] px-3 py-2 pr-16"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
                 >
                   {showConfirmPassword ? "Hide" : "Show"}
                 </button>
@@ -162,14 +162,14 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
             >
               {isSubmitting ? "Creating account..." : "Create account"}
             </button>
           </form>
-          <p className="mt-4 text-sm text-[#5B6B67] dark:text-[#9CA9A5]">
+          <p className="mt-4 text-sm text-[#5B6B67]">
             Already have an account?{" "}
-            <Link href="/login" className="font-medium text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]">
+            <Link href="/login" className="font-medium text-[#0F766E] underline transition-colors duration-150">
               Log in
             </Link>
           </p>

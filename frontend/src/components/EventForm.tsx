@@ -78,7 +78,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label htmlFor="name" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="name" className="mb-1 block text-sm font-medium text-[#14211D]">
           Event name
         </label>
         <input
@@ -87,11 +87,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           required
           value={values.name}
           onChange={(e) => update("name", e.target.value)}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
       <div>
-        <label htmlFor="slug" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="slug" className="mb-1 block text-sm font-medium text-[#14211D]">
           URL slug
         </label>
         <input
@@ -101,19 +101,19 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           placeholder="john-and-mary"
           value={values.slug}
           onChange={(e) => update("slug", e.target.value.toLowerCase())}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         />
-        <p className="mt-1 text-xs text-[#5B6B67] dark:text-[#9CA9A5]">Lowercase letters, numbers, and hyphens only.</p>
+        <p className="mt-1 text-xs text-[#5B6B67]">Lowercase letters, numbers, and hyphens only.</p>
       </div>
       <div>
-        <label htmlFor="eventType" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="eventType" className="mb-1 block text-sm font-medium text-[#14211D]">
           Event type
         </label>
         <select
           id="eventType"
           value={values.eventType}
           onChange={(e) => update("eventType", e.target.value as EventType)}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         >
           {EVENT_TYPES.map((type) => (
             <option key={type} value={type}>
@@ -123,7 +123,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
         </select>
       </div>
       <div>
-        <label htmlFor="eventDate" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="eventDate" className="mb-1 block text-sm font-medium text-[#14211D]">
           Event date
         </label>
         <input
@@ -132,11 +132,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           required
           value={values.eventDate}
           onChange={(e) => update("eventDate", e.target.value)}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
       <div>
-        <label htmlFor="description" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="description" className="mb-1 block text-sm font-medium text-[#14211D]">
           Description (optional)
         </label>
         <textarea
@@ -144,11 +144,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           rows={3}
           value={values.description}
           onChange={(e) => update("description", e.target.value)}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
       <div>
-        <label htmlFor="address" className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+        <label htmlFor="address" className="mb-1 block text-sm font-medium text-[#14211D]">
           Address (optional)
         </label>
         <input
@@ -156,20 +156,20 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           type="text"
           value={values.address}
           onChange={(e) => update("address", e.target.value)}
-          className="w-full border border-[#E2DFD3] px-3 py-2 dark:border-[#2A3532] dark:bg-[#1B2422] dark:text-[#F3F1EA]"
+          className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
       {templates.length > 0 && (
         <div>
-          <span className="mb-1 block text-sm font-medium text-[#14211D] dark:text-[#F3F1EA]">
+          <span className="mb-1 block text-sm font-medium text-[#14211D]">
             Template (optional)
           </span>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <button
               type="button"
               onClick={() => update("templateId", null)}
-              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-colors duration-150 dark:text-[#9CA9A5] ${
-                values.templateId === null ? "border-[#0F766E] dark:border-[#14B8A6]" : "border-transparent bg-[#F2EFE7] dark:bg-[#1B2422]"
+              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-colors duration-150 ${
+                values.templateId === null ? "border-[#0F766E]" : "border-transparent bg-[#F2EFE7]"
               }`}
             >
               None
@@ -180,7 +180,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
                 key={template.id}
                 onClick={() => update("templateId", template.id)}
                 className={`overflow-hidden border-2 transition-colors duration-150 ${
-                  values.templateId === template.id ? "border-[#0F766E] dark:border-[#14B8A6]" : "border-transparent"
+                  values.templateId === template.id ? "border-[#0F766E]" : "border-transparent"
                 }`}
               >
                 <TemplateCard theme={template.theme} name={template.name} />
@@ -193,7 +193,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50 dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
       >
         {isSubmitting ? "Saving..." : submitLabel}
       </button>

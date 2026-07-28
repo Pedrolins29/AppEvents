@@ -4,7 +4,7 @@ import { THEME_STYLES } from "@/components/InvitationHero";
 // illustrative content, not live data. Pure CSS animation (see .phone-scroll in globals.css),
 // so this stays a Server Component: no client-side JS needed.
 export function PhoneMockup() {
-  const theme = THEME_STYLES.elegant;
+  const theme = THEME_STYLES.floral;
 
   return (
     <div

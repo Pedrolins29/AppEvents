@@ -133,43 +133,43 @@ const FAQS = [
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col bg-[#FDFBF7] dark:bg-[#0F1714]">
+    <div className="flex flex-1 flex-col bg-[#FDFBF7]">
       <SiteHeader />
 
       <main className="flex-1">
         {/* Hero */}
-        <section className="px-6 py-20 sm:py-28">
-          <div className="mx-auto max-w-2xl border border-[#0F766E]/25 p-1.5 dark:border-[#14B8A6]/25">
-            <div className="border border-[#0F766E]/25 px-6 py-12 text-center sm:px-14 sm:py-16 dark:border-[#14B8A6]/25">
-              <Diamond className="mx-auto mb-6 text-[#A16207] dark:text-[#D4A017]" />
-              <p className="mb-4 text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+        <section className="px-6 py-14 sm:py-28">
+          <div className="mx-auto max-w-2xl border border-[#0F766E]/25 p-1.5">
+            <div className="border border-[#0F766E]/25 px-6 py-12 text-center sm:px-14 sm:py-16">
+              <Diamond className="mx-auto mb-6 text-[#A16207]" />
+              <p className="mb-4 text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
                 Digital Invitations
               </p>
               <h1
-                className="font-serif text-4xl leading-tight text-[#14211D] sm:text-5xl dark:text-[#F3F1EA]"
+                className="font-serif text-4xl leading-tight text-[#14211D] sm:text-5xl"
                 style={{ fontWeight: 600 }}
               >
                 Every celebration deserves its own page.
               </h1>
-              <p className="mx-auto mt-5 max-w-md text-base text-[#5B6B67] dark:text-[#9CA9A5]">
+              <p className="mx-auto mt-5 max-w-md text-base text-[#5B6B67]">
                 Pick a designer theme, add your story and photos, and share one link with a live
                 countdown and map built in.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href="/register"
-                  className="rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+                  className="rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
                 >
                   Create your invitation
                 </Link>
                 <Link
                   href="/templates"
-                  className="rounded-full border border-[#0F766E]/40 px-6 py-3 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5 dark:border-[#14B8A6]/40 dark:text-[#F3F1EA] dark:hover:bg-[#14B8A6]/10"
+                  className="rounded-full border border-[#0F766E]/40 px-6 py-3 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5"
                 >
                   Browse themes
                 </Link>
               </div>
-              <p className="mt-6 text-xs uppercase tracking-[0.15em] text-[#5B6B67]/80 dark:text-[#9CA9A5]/80">
+              <p className="mt-6 text-xs uppercase tracking-[0.15em] text-[#5B6B67]/80">
                 Four designer themes &middot; Live countdown &middot; Photo gallery &middot; Maps
                 built in
               </p>
@@ -178,7 +178,7 @@ export default function Home() {
                 {EVENT_TYPES.map((type) => (
                   <span
                     key={type}
-                    className="rounded-full border border-[#E2DFD3] px-3 py-1 text-xs text-[#5B6B67] dark:border-[#2A3532] dark:text-[#9CA9A5]"
+                    className="rounded-full border border-[#E2DFD3] px-3 py-1 text-xs text-[#5B6B67]"
                   >
                     {EVENT_TYPE_LABELS[type]}
                   </span>
@@ -193,42 +193,77 @@ export default function Home() {
         </section>
 
         {/* Features */}
-        <section className="px-6 pb-20 sm:pb-28">
+        <section className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
             {FEATURES.map(({ icon: Icon, title, body }) => (
               <div
                 key={title}
-                className="border border-[#E2DFD3] p-6 dark:border-[#2A3532]"
+                className="border border-[#E2DFD3] p-6"
               >
-                <div className="mb-3 text-[#0F766E] dark:text-[#14B8A6]">
-                  <Icon />
+                <div className="mb-3 text-[#0F766E]">
+                  {title === "A countdown that ticks" ? (
+                    <div className="flex items-center gap-2" aria-hidden>
+                      {["12", "08", "45"].map((value, i) => (
+                        <div
+                          key={i}
+                          className="flex flex-col items-center rounded border border-[#E2DFD3] px-2 py-1"
+                        >
+                          <span className="text-sm font-semibold tabular-nums text-[#0F766E]">
+                            {value}
+                          </span>
+                          <span className="text-[8px] uppercase tracking-wide text-[#5B6B67]">
+                            {["Days", "Hrs", "Min"][i]}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : title === "Maps built in" ? (
+                    <div className="flex items-center gap-2" aria-hidden>
+                      <Icon />
+                      <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
+                        Google Maps
+                      </span>
+                      <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
+                        Waze
+                      </span>
+                    </div>
+                  ) : (
+                    <Icon />
+                  )}
                 </div>
-                <h3 className="mb-1.5 text-sm font-semibold text-[#14211D] dark:text-[#F3F1EA]">
+                <h3 className="mb-1.5 text-sm font-semibold text-[#14211D]">
                   {title}
                 </h3>
-                <p className="text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{body}</p>
+                <p className="text-sm text-[#5B6B67]">{body}</p>
               </div>
             ))}
           </div>
         </section>
 
         {/* Choose your style */}
-        <section className="px-6 pb-20 sm:pb-28">
+        <section id="templates" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-3xl">
-            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
               Choose your style
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               {TEMPLATE_THEMES.map(({ theme, name }) => (
-                <Link key={theme} href={`/templates/${theme}`} className="block">
+                <Link
+                  key={theme}
+                  href={`/templates/${theme}`}
+                  className="group block overflow-hidden border border-[#E2DFD3] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
+                >
                   <TemplateCard theme={theme} name={name} />
+                  <div className="border-t border-[#E2DFD3] bg-white px-3 py-2 text-center">
+                    <span className="text-xs font-medium text-[#14211D]">{name}</span>
+                  </div>
                 </Link>
               ))}
             </div>
             <div className="mt-8 text-center">
               <Link
                 href="/templates"
-                className="text-sm font-medium text-[#0F766E] hover:underline dark:text-[#14B8A6]"
+                className="text-sm font-medium text-[#0F766E] hover:underline"
               >
                 See all templates &rarr;
               </Link>
@@ -237,24 +272,24 @@ export default function Home() {
         </section>
 
         {/* How it works */}
-        <section className="px-6 pb-20 sm:pb-28">
+        <section id="how-it-works" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-3xl">
-            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
               How it works
             </h2>
-            <div className="grid grid-cols-1 divide-y divide-[#E2DFD3] border-t border-b border-[#E2DFD3] sm:grid-cols-3 sm:divide-x sm:divide-y-0 dark:divide-[#2A3532] dark:border-[#2A3532]">
+            <div className="grid grid-cols-1 divide-y divide-[#E2DFD3] border-t border-b border-[#E2DFD3] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
               {STEPS.map(({ number, title, body }) => (
                 <div key={number} className="px-6 py-8 text-center sm:px-8">
                   <span
-                    className="font-serif text-3xl text-[#A16207] dark:text-[#D4A017]"
+                    className="font-serif text-3xl text-[#A16207]"
                     style={{ fontWeight: 600 }}
                   >
                     {number}
                   </span>
-                  <h3 className="mt-3 text-sm font-semibold text-[#14211D] dark:text-[#F3F1EA]">
+                  <h3 className="mt-3 text-sm font-semibold text-[#14211D]">
                     {title}
                   </h3>
-                  <p className="mt-1.5 text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{body}</p>
+                  <p className="mt-1.5 text-sm text-[#5B6B67]">{body}</p>
                 </div>
               ))}
             </div>
@@ -262,22 +297,37 @@ export default function Home() {
         </section>
 
         {/* FAQ */}
-        <section className="px-6 pb-20 sm:pb-28">
+        <section id="faq" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-2xl">
-            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E] dark:text-[#14B8A6]">
+            <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
               Questions
             </h2>
             <div className="flex flex-col gap-4">
               {FAQS.map(({ question, answer }) => (
-                <div
-                  key={question}
-                  className="border border-[#E2DFD3] p-6 dark:border-[#2A3532]"
-                >
-                  <h3 className="mb-1.5 text-sm font-semibold text-[#14211D] dark:text-[#F3F1EA]">
-                    {question}
-                  </h3>
-                  <p className="text-sm text-[#5B6B67] dark:text-[#9CA9A5]">{answer}</p>
-                </div>
+                <details key={question} className="group border border-[#E2DFD3] p-6">
+                  <summary className="cursor-pointer list-none marker:content-none [&::-webkit-details-marker]:hidden">
+                    <span className="flex items-center justify-between gap-4">
+                      <span className="text-sm font-semibold text-[#14211D]">{question}</span>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        aria-hidden
+                        className="shrink-0 text-[#0F766E] transition-transform duration-150 group-open:rotate-180 motion-reduce:transition-none"
+                      >
+                        <path
+                          d="M2 4L6 8L10 4"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p className="mt-3 text-sm text-[#5B6B67]">{answer}</p>
+                </details>
               ))}
             </div>
           </div>
@@ -285,19 +335,19 @@ export default function Home() {
 
         {/* Final CTA */}
         <section className="px-6 pb-24">
-          <div className="mx-auto max-w-xl border border-[#0F766E]/25 px-8 py-12 text-center dark:border-[#14B8A6]/25">
+          <div className="mx-auto max-w-xl border border-[#0F766E]/25 px-8 py-12 text-center">
             <h2
-              className="font-serif text-2xl text-[#14211D] sm:text-3xl dark:text-[#F3F1EA]"
+              className="font-serif text-2xl text-[#14211D] sm:text-3xl"
               style={{ fontWeight: 600 }}
             >
               Your invitation, live in minutes.
             </h2>
-            <p className="mx-auto mt-3 max-w-sm text-sm text-[#5B6B67] dark:text-[#9CA9A5]">
+            <p className="mx-auto mt-3 max-w-sm text-sm text-[#5B6B67]">
               Pick a theme, add your details, and share the link when you&apos;re ready.
             </p>
             <Link
               href="/register"
-              className="mt-6 inline-block rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+              className="mt-6 inline-block rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
             >
               Create your invitation
             </Link>

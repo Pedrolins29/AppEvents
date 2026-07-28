@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: event.name,
     description,
+    alternates: { canonical: `/e/${slug}` },
     openGraph: { title: event.name, description, type: "website" },
     twitter: { title: event.name, description },
   };
@@ -64,8 +65,26 @@ export default async function PublicEventPage({ params }: PageProps) {
   const theme = event.themeKey ? THEME_STYLES[event.themeKey] : DEFAULT_THEME_STYLE;
   const links = event.address ? mapsLinks(event.address) : null;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: event.name,
+    startDate: event.eventDate,
+    ...(event.description ? { description: event.description } : {}),
+    ...(event.address
+      ? { location: { "@type": "Place", name: event.address, address: event.address } }
+      : {}),
+    ...(event.coverImageUrl ? { image: [absoluteImageUrl(event.coverImageUrl)] } : {}),
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+  };
+
   return (
     <div style={{ backgroundColor: theme.pageBg }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <InvitationHero
         name={event.name}
         eventTypeLabel={EVENT_TYPE_LABELS[event.eventType]}

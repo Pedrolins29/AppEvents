@@ -57,7 +57,7 @@ export default function EventsPage() {
 
   if (isAuthLoading || !user) {
     return (
-      <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12 dark:bg-[#0F1714]">
+      <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12">
         <div className="mx-auto w-full max-w-2xl">
           <Skeleton className="mb-6 h-8 w-40" />
           <div className="flex flex-col gap-3">
@@ -71,18 +71,18 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12 dark:bg-[#0F1714]">
+    <div className="flex flex-1 flex-col bg-[#FDFBF7] px-6 py-12">
       <div className="mx-auto w-full max-w-2xl">
         <div className="mb-6 flex items-center justify-between">
           <h1
-            className="font-serif text-2xl text-[#14211D] dark:text-[#F3F1EA]"
+            className="font-serif text-2xl text-[#14211D]"
             style={{ fontWeight: 600 }}
           >
             Your events
           </h1>
           <Link
             href="/events/new"
-            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
           >
             New event
           </Link>
@@ -97,9 +97,9 @@ export default function EventsPage() {
             <Skeleton className="h-16 w-full" />
           </div>
         ) : events.length === 0 ? (
-          <p className="text-[#5B6B67] dark:text-[#9CA9A5]">
+          <p className="text-[#5B6B67]">
             You haven&apos;t created any events yet.{" "}
-            <Link href="/events/new" className="font-medium text-[#0F766E] underline dark:text-[#14B8A6]">
+            <Link href="/events/new" className="font-medium text-[#0F766E] underline">
               Create your first one
             </Link>
             .
@@ -109,28 +109,28 @@ export default function EventsPage() {
             {events.map((event) => (
               <li
                 key={event.id}
-                className="flex items-center justify-between border border-[#E2DFD3] bg-white px-4 py-3 dark:border-[#2A3532] dark:bg-[#1B2422]"
+                className="flex items-center justify-between border border-[#E2DFD3] bg-white px-4 py-3"
               >
                 <div>
-                  <p className="flex items-center gap-2 font-medium text-[#14211D] dark:text-[#F3F1EA]">
+                  <p className="flex items-center gap-2 font-medium text-[#14211D]">
                     {event.name}
                     <span
                       className={`rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${
                         event.isPublished
-                          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300"
-                          : "bg-[#F2EFE7] text-[#5B6B67] dark:bg-[#1B2422] dark:text-[#9CA9A5]"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-[#F2EFE7] text-[#5B6B67]"
                       }`}
                     >
                       {event.isPublished ? "Published" : "Draft"}
                     </span>
                   </p>
-                  <p className="text-sm text-[#5B6B67] dark:text-[#9CA9A5]">
+                  <p className="text-sm text-[#5B6B67]">
                     {EVENT_TYPE_LABELS[event.eventType]} &middot;{" "}
                     {new Date(event.eventDate).toLocaleDateString()} &middot; /{event.slug}
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
-                  <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline transition-colors duration-150 dark:text-[#14B8A6]">
+                  <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline transition-colors duration-150">
                     Edit
                   </Link>
                   <button
@@ -148,7 +148,7 @@ export default function EventsPage() {
 
         <Link
           href="/dashboard"
-          className="mt-8 inline-block text-sm text-[#5B6B67] underline dark:text-[#9CA9A5]"
+          className="mt-8 inline-block text-sm text-[#5B6B67] underline"
         >
           Back to dashboard
         </Link>

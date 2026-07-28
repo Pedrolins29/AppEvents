@@ -94,7 +94,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
     <div style={{ backgroundColor: theme.pageBg }}>
       <Link
         href="/templates"
-        className="fixed left-4 top-4 z-10 rounded-full bg-black/70 px-4 py-1.5 text-xs font-medium text-white backdrop-blur-sm"
+        className="fixed left-4 top-4 z-10 rounded-full bg-[#0F766E] px-4 py-1.5 text-xs font-medium text-white shadow-md backdrop-blur-sm"
       >
         Preview &middot; back to templates
       </Link>

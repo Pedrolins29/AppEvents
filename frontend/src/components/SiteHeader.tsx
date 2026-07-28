@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 function DiamondMark() {
   return (
@@ -8,32 +11,118 @@ function DiamondMark() {
   );
 }
 
-export function SiteHeader() {
+function MenuIcon({ open }: { open: boolean }) {
   return (
-    <header className="sticky top-0 z-10 border-b border-[#E2DFD3] bg-[#FDFBF7]/90 backdrop-blur dark:border-[#2A3532] dark:bg-[#0F1714]/90">
+    <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden fill="none">
+      {open ? (
+        <path
+          d="M5 5L15 15M15 5L5 15"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+      ) : (
+        <>
+          <path d="M3 6H17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M3 10H17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M3 14H17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </>
+      )}
+    </svg>
+  );
+}
+
+const NAV_LINKS = [
+  { href: "/#templates", label: "Choose Your Design" },
+  { href: "/templates", label: "Preview" },
+  { href: "/#how-it-works", label: "How It Works" },
+  { href: "/#faq", label: "Q&A" },
+];
+
+function NavLink({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className="group relative text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
+    >
+      {label}
+      <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[#0F766E] transition-transform duration-200 group-hover:scale-x-100" />
+    </Link>
+  );
+}
+
+export function SiteHeader() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-10 border-b border-[#E2DFD3] bg-[#FDFBF7]/90 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2">
+        <Link
+          href="/"
+          className="flex items-center gap-2 transition-colors duration-150"
+          onClick={() => setIsMenuOpen(false)}
+        >
           <DiamondMark />
-          <span className="text-sm font-semibold tracking-wide text-[#14211D] dark:text-[#F3F1EA]">
-            AppEvents
-          </span>
+          <span className="text-sm font-semibold tracking-wide text-[#14211D]">AppEvents</span>
         </Link>
-        <nav className="flex items-center gap-6">
-          <Link
-            href="/templates"
-            className="hidden text-sm text-[#5B6B67] hover:text-[#14211D] sm:inline dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
-          >
-            Templates
-          </Link>
+
+        <nav className="hidden items-center gap-6 sm:flex">
+          {NAV_LINKS.map((link) => (
+            <NavLink key={link.href} {...link} />
+          ))}
           <Link
             href="/login"
-            className="text-sm text-[#5B6B67] hover:text-[#14211D] dark:text-[#9CA9A5] dark:hover:text-[#F3F1EA]"
+            className="text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
           >
             Log in
           </Link>
           <Link
             href="/register"
-            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white hover:bg-[#0C5C56] dark:bg-[#14B8A6] dark:text-[#062420] dark:hover:bg-[#2DD4BF]"
+            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#0C5C56] hover:shadow-md"
+          >
+            Get started
+          </Link>
+        </nav>
+
+        <button
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-expanded={isMenuOpen}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          className="flex items-center justify-center rounded-md p-2 text-[#14211D] transition-colors duration-150 hover:text-[#0F766E] sm:hidden"
+        >
+          <MenuIcon open={isMenuOpen} />
+        </button>
+      </div>
+
+      <div
+        className={`origin-top overflow-hidden border-t border-[#E2DFD3] bg-[#FDFBF7] transition-all duration-150 sm:hidden ${
+          isMenuOpen ? "max-h-96 scale-y-100 opacity-100" : "max-h-0 scale-y-95 opacity-0"
+        }`}
+      >
+        <nav className="flex flex-col gap-1 px-6 py-4">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMenuOpen(false)}
+              className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/login"
+            onClick={() => setIsMenuOpen(false)}
+            className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
+          >
+            Log in
+          </Link>
+          <Link
+            href="/register"
+            onClick={() => setIsMenuOpen(false)}
+            className="mt-2 rounded-full bg-[#0F766E] px-4 py-2 text-center text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
           >
             Get started
           </Link>
