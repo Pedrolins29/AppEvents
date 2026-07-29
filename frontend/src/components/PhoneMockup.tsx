@@ -1,17 +1,29 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import { InvitationPhoneMockup } from "@/components/InvitationPhoneMockup";
+import { formatEventDate } from "@/lib/formatEventDate";
+import { getEventTypeLabels } from "@/types/event";
+
+const MOCKUP_DATE_ISO = "2026-09-14";
 
 // The landing hero's visual centerpiece — a fixed sample (Floral theme, wedding) rendered via
 // the generalized InvitationPhoneMockup also used by the "See it in action" showcase further
 // down the page.
-export function PhoneMockup() {
+export async function PhoneMockup() {
+  const [locale, eventTypeT, landingT] = await Promise.all([
+    getLocale(),
+    getTranslations("eventTypes"),
+    getTranslations("landing"),
+  ]);
+  const eventTypeLabels = getEventTypeLabels(eventTypeT);
+
   return (
     <InvitationPhoneMockup
       theme="floral"
-      eventTypeLabel="Wedding"
+      eventTypeLabel={eventTypeLabels.Wedding}
       name="Isabella & Marco"
-      dateLabel="September 14, 2026"
+      dateLabel={formatEventDate(MOCKUP_DATE_ISO, locale)}
       screens={["countdown", "story", "rsvp"]}
-      description="Two families, one celebration. Join us for an evening of vows and dancing."
+      description={landingT("hero.mockupDescription")}
     />
   );
 }

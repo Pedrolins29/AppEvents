@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Countdown } from "@/components/Countdown";
 import { InvitationHero, THEME_STYLES } from "@/components/InvitationHero";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RsvpForm } from "@/components/RsvpForm";
+import { getEventTypeLabels, type EventType } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
 
 interface SampleTimelineItem {
@@ -13,7 +16,7 @@ interface SampleTimelineItem {
 
 interface SampleEvent {
   name: string;
-  eventTypeLabel: string;
+  eventType: EventType;
   description: string;
   address: string;
   dressCode: string;
@@ -21,66 +24,36 @@ interface SampleEvent {
   coverImageUrl: string | null;
 }
 
-const SAMPLE_EVENTS: Record<ThemeKey, SampleEvent> = {
-  elegant: {
-    name: "Isabella & Marco",
-    eventTypeLabel: "Wedding",
-    description:
-      "Two families, one celebration. Join us for an evening of vows, dancing, and everything in between.",
-    address: "The Grand Pavilion, Lisbon",
-    dressCode: "Black tie optional",
-    timelineItems: [
-      { time: "16:00", label: "Ceremony" },
-      { time: "17:00", label: "Cocktail hour" },
-      { time: "18:30", label: "Dinner" },
-      { time: "20:00", label: "Dancing" },
-    ],
-    coverImageUrl: "/showcase/wedding-rose.jpg",
-  },
-  minimalist: {
-    name: "Maya's Graduation",
-    eventTypeLabel: "Graduation",
-    description: "Four years, countless late nights, and one very big day. Come celebrate with us.",
-    address: "University Hall, Austin",
-    dressCode: "Academic regalia, or smart casual",
-    timelineItems: [
-      { time: "10:00", label: "Processional" },
-      { time: "10:30", label: "Ceremony" },
-      { time: "12:00", label: "Reception" },
-    ],
-    coverImageUrl: "/showcase/graduation.jpg",
-  },
-  floral: {
-    name: "Welcome, Baby Rose",
-    eventTypeLabel: "Baby Shower",
-    description: "A little one is on the way. Join us for an afternoon of tea, games, and good wishes.",
-    address: "The Garden Room, Portland",
-    dressCode: "Garden pastels",
-    timelineItems: [
-      { time: "13:00", label: "Arrival" },
-      { time: "13:30", label: "Games" },
-      { time: "14:30", label: "Lunch" },
-      { time: "15:30", label: "Gifts" },
-    ],
-    coverImageUrl: "/showcase/babyshower-farm.jpg",
-  },
-  modern: {
-    name: "Alex's 30th Birthday",
-    eventTypeLabel: "Birthday",
-    description: "Thirty years in the making. Music, drinks, and a night to remember.",
-    address: "Skyline Loft, Chicago",
-    dressCode: "All black, everything",
-    timelineItems: [
-      { time: "19:00", label: "Arrival" },
-      { time: "20:00", label: "Dinner" },
-      { time: "22:00", label: "Dancing" },
-    ],
-    coverImageUrl: null,
-  },
+const SAMPLE_NAMES: Record<ThemeKey, string> = {
+  elegant: "Isabella & Marco",
+  minimalist: "Maya's Graduation",
+  floral: "Welcome, Baby Rose",
+  modern: "Alex's 30th Birthday",
 };
 
-function formatEventDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, {
+const SAMPLE_EVENT_TYPES: Record<ThemeKey, EventType> = {
+  elegant: "Wedding",
+  minimalist: "Graduation",
+  floral: "BabyShower",
+  modern: "Birthday",
+};
+
+const SAMPLE_ADDRESSES: Record<ThemeKey, string> = {
+  elegant: "The Grand Pavilion, Lisbon",
+  minimalist: "University Hall, Austin",
+  floral: "The Garden Room, Portland",
+  modern: "Skyline Loft, Chicago",
+};
+
+const SAMPLE_COVER_IMAGES: Record<ThemeKey, string | null> = {
+  elegant: "/showcase/wedding-rose.jpg",
+  minimalist: "/showcase/graduation.jpg",
+  floral: "/showcase/babyshower-farm.jpg",
+  modern: null,
+};
+
+function formatEventDate(iso: string, locale: string) {
+  return new Date(iso).toLocaleDateString(locale, {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -106,22 +79,39 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { theme } = await params;
-  const sample = SAMPLE_EVENTS[theme as ThemeKey];
-  if (!sample) {
-    return { title: "Template not found" };
+  const name = SAMPLE_NAMES[theme as ThemeKey];
+  const t = await getTranslations("templates.themePreview");
+  if (!name) {
+    return { title: t("notFoundTitle") };
   }
-  return { title: `${sample.name} — Preview` };
+  return { title: `${name}${t("metadataSuffix")}` };
 }
 
 export default async function TemplatePreviewPage({ params }: PageProps) {
   const { theme: themeParam } = await params;
-  const sample = SAMPLE_EVENTS[themeParam as ThemeKey];
+  const name = SAMPLE_NAMES[themeParam as ThemeKey];
 
-  if (!sample) {
+  if (!name) {
     notFound();
   }
 
-  const theme = THEME_STYLES[themeParam as ThemeKey];
+  const locale = await getLocale();
+  const t = await getTranslations("templates.themePreview");
+  const invitationT = await getTranslations("invitation");
+  const eventTypeLabels = getEventTypeLabels(await getTranslations("eventTypes"));
+
+  const sampleKey = themeParam as ThemeKey;
+  const sample: SampleEvent = {
+    name,
+    eventType: SAMPLE_EVENT_TYPES[sampleKey],
+    description: t(`samples.${sampleKey}.description`),
+    address: SAMPLE_ADDRESSES[sampleKey],
+    dressCode: t(`samples.${sampleKey}.dressCode`),
+    timelineItems: t.raw(`samples.${sampleKey}.timeline`) as SampleTimelineItem[],
+    coverImageUrl: SAMPLE_COVER_IMAGES[sampleKey],
+  };
+
+  const theme = THEME_STYLES[sampleKey];
   // 45 days out from whenever this is rendered, so the countdown is never stale — intentionally
   // impure (see `dynamic = "force-dynamic"` above, which is what makes that safe here).
   // eslint-disable-next-line react-hooks/purity
@@ -134,13 +124,16 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
         href="/templates"
         className="fixed left-4 top-4 z-10 rounded-full bg-[#0F766E] px-4 py-1.5 text-xs font-medium text-white shadow-md backdrop-blur-sm"
       >
-        Preview &middot; back to templates
+        {t("badge")}
       </Link>
+      <div className="fixed right-4 top-4 z-10">
+        <LanguageSwitcher />
+      </div>
 
       <InvitationHero
         name={sample.name}
-        eventTypeLabel={sample.eventTypeLabel}
-        formattedDate={formatEventDate(targetDate)}
+        eventTypeLabel={eventTypeLabels[sample.eventType]}
+        formattedDate={formatEventDate(targetDate, locale)}
         coverImageUrl={sample.coverImageUrl}
         theme={theme}
       >
@@ -153,7 +146,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
             className="mb-4 text-xs font-medium uppercase tracking-[0.3em]"
             style={{ color: theme.accent }}
           >
-            Our Story
+            {invitationT("ourStory")}
           </h2>
           <p className="whitespace-pre-line text-base leading-relaxed" style={{ color: theme.body }}>
             {sample.description}
@@ -167,7 +160,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
             className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
             style={{ color: theme.accent }}
           >
-            Timeline
+            {invitationT("timeline")}
           </h2>
           <ul>
             {sample.timelineItems.map((item, index) => (
@@ -193,13 +186,13 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
           className="mb-4 text-xs font-medium uppercase tracking-[0.3em]"
           style={{ color: theme.accent }}
         >
-          Location
+          {invitationT("location")}
         </h2>
         <p className="mb-2 text-base" style={{ color: theme.body }}>
           {sample.address}
         </p>
         <p className="mb-6 text-sm" style={{ color: theme.body }}>
-          Dress code: {sample.dressCode}
+          {invitationT("dressCodePrefix")}{sample.dressCode}
         </p>
         <div className="flex items-center justify-center gap-4">
           <a
@@ -209,7 +202,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
             className="rounded-full border px-5 py-2 text-sm font-medium"
             style={{ borderColor: theme.accent, color: theme.heading }}
           >
-            Open in Google Maps
+            {invitationT("openGoogleMaps")}
           </a>
           <a
             href={links.waze}
@@ -218,7 +211,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
             className="rounded-full border px-5 py-2 text-sm font-medium"
             style={{ borderColor: theme.accent, color: theme.heading }}
           >
-            Open in Waze
+            {invitationT("openWaze")}
           </a>
         </div>
       </section>
@@ -228,7 +221,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
           className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
           style={{ color: theme.accent }}
         >
-          RSVP
+          {invitationT("rsvp.heading")}
         </h2>
         <RsvpForm slug={themeParam} theme={theme} demoMode />
       </section>

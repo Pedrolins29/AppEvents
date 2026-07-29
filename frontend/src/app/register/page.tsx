@@ -1,21 +1,23 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth, ApiError } from "@/lib/auth-context";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
-const PASSWORD_CHECKS: { label: string; test: (value: string) => boolean }[] = [
-  { label: "At least 10 characters", test: (v) => v.length >= 10 },
-  { label: "One uppercase letter", test: (v) => /[A-Z]/.test(v) },
-  { label: "One lowercase letter", test: (v) => /[a-z]/.test(v) },
-  { label: "One number", test: (v) => /[0-9]/.test(v) },
-  { label: "One special character", test: (v) => /[^A-Za-z0-9]/.test(v) },
+const PASSWORD_TESTS: ((value: string) => boolean)[] = [
+  (v) => v.length >= 10,
+  (v) => /[A-Z]/.test(v),
+  (v) => /[a-z]/.test(v),
+  (v) => /[0-9]/.test(v),
+  (v) => /[^A-Za-z0-9]/.test(v),
 ];
 
 export default function RegisterPage() {
+  const t = useTranslations("auth.register");
   const router = useRouter();
   const { register } = useAuth();
   const [fullName, setFullName] = useState("");
@@ -28,12 +30,16 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const passwordChecks = (t.raw("passwordChecks") as { label: string }[]).map(
+    ({ label }, i) => ({ label, test: PASSWORD_TESTS[i] }),
+  );
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError(t("passwordsMismatch"));
       return;
     }
 
@@ -48,7 +54,7 @@ export default function RegisterPage() {
           : null;
         setError(fieldErrors || err.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(t("genericError"));
       }
     } finally {
       setIsSubmitting(false);
@@ -64,12 +70,12 @@ export default function RegisterPage() {
             className="mb-6 font-serif text-2xl text-[#14211D]"
             style={{ fontWeight: 600 }}
           >
-            Create your account
+            {t("title")}
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Full name
+                {t("fullName")}
               </label>
               <input
                 id="fullName"
@@ -82,7 +88,7 @@ export default function RegisterPage() {
             </div>
             <div>
               <label htmlFor="email" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Email
+                {t("email")}
               </label>
               <input
                 id="email"
@@ -95,7 +101,7 @@ export default function RegisterPage() {
             </div>
             <div>
               <label htmlFor="password" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Password
+                {t("password")}
               </label>
               <div className="relative">
                 <input
@@ -113,12 +119,12 @@ export default function RegisterPage() {
                   onClick={() => setShowPassword((v) => !v)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? t("hide") : t("show")}
                 </button>
               </div>
               {passwordTouched ? (
                 <ul className="mt-2 flex flex-col gap-0.5">
-                  {PASSWORD_CHECKS.map(({ label, test }) => {
+                  {passwordChecks.map(({ label, test }) => {
                     const met = test(password);
                     return (
                       <li
@@ -131,14 +137,12 @@ export default function RegisterPage() {
                   })}
                 </ul>
               ) : (
-                <p className="mt-1 text-xs text-[#5B6B67]">
-                  At least 10 characters, with uppercase, lowercase, a digit, and a special character.
-                </p>
+                <p className="mt-1 text-xs text-[#5B6B67]">{t("passwordHint")}</p>
               )}
             </div>
             <div>
               <label htmlFor="confirmPassword" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Confirm password
+                {t("confirmPassword")}
               </label>
               <div className="relative">
                 <input
@@ -154,7 +158,7 @@ export default function RegisterPage() {
                   onClick={() => setShowConfirmPassword((v) => !v)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
                 >
-                  {showConfirmPassword ? "Hide" : "Show"}
+                  {showConfirmPassword ? t("hide") : t("show")}
                 </button>
               </div>
             </div>
@@ -164,13 +168,13 @@ export default function RegisterPage() {
               disabled={isSubmitting}
               className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
             >
-              {isSubmitting ? "Creating account..." : "Create account"}
+              {isSubmitting ? t("creatingAccount") : t("createAccount")}
             </button>
           </form>
           <p className="mt-4 text-sm text-[#5B6B67]">
-            Already have an account?{" "}
+            {t("haveAccount")}{" "}
             <Link href="/login" className="font-medium text-[#0F766E] underline transition-colors duration-150">
-              Log in
+              {t("logIn")}
             </Link>
           </p>
         </div>

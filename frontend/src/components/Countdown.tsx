@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface CountdownProps {
@@ -20,6 +21,7 @@ function getRemaining(targetDate: string) {
 }
 
 export function Countdown({ targetDate, accentColor, textColor }: CountdownProps) {
+  const t = useTranslations("countdown");
   const [remaining, setRemaining] = useState(() => getRemaining(targetDate));
 
   useEffect(() => {
@@ -28,10 +30,10 @@ export function Countdown({ targetDate, accentColor, textColor }: CountdownProps
   }, [targetDate]);
 
   const units: Array<[string, number]> = [
-    ["Days", remaining.days],
-    ["Hours", remaining.hours],
-    ["Min", remaining.minutes],
-    ["Sec", remaining.seconds],
+    [t("days"), remaining.days],
+    [t("hours"), remaining.hours],
+    [t("min"), remaining.minutes],
+    [t("sec"), remaining.seconds],
   ];
 
   return (

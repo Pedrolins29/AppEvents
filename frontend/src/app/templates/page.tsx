@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/Skeleton";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -10,6 +11,8 @@ import { templatesApi } from "@/lib/templatesApi";
 import type { TemplateRecord } from "@/types/template";
 
 export default function TemplatesPage() {
+  const t = useTranslations("templates.gallery");
+  const themeNameT = useTranslations("templateThemeNames");
   const [templates, setTemplates] = useState<TemplateRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,9 +21,9 @@ export default function TemplatesPage() {
     templatesApi
       .list()
       .then(setTemplates)
-      .catch(() => setError("Could not load templates."))
+      .catch(() => setError(t("loadError")))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [t]);
 
   return (
     <div className="flex flex-1 flex-col bg-[#FDFBF7]">
@@ -30,16 +33,16 @@ export default function TemplatesPage() {
         <div className="mx-auto w-full max-w-4xl">
           <div className="mb-12 text-center">
             <p className="mb-3 text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-              Templates
+              {t("eyebrow")}
             </p>
             <h1
               className="font-serif text-3xl text-[#14211D] sm:text-4xl"
               style={{ fontWeight: 600 }}
             >
-              Choose your style
+              {t("heading")}
             </h1>
             <p className="mx-auto mt-3 max-w-md text-[#5B6B67]">
-              Four hand-designed themes — pick one and make it yours.
+              {t("subtitle")}
             </p>
           </div>
 
@@ -59,23 +62,23 @@ export default function TemplatesPage() {
                 key={template.id}
                 className="group overflow-hidden border border-[#E2DFD3] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
               >
-                <TemplateCard theme={template.theme} name={template.name} />
+                <TemplateCard theme={template.theme} name={themeNameT(template.theme)} />
                 <div className="flex items-center justify-between border-t border-[#E2DFD3] bg-white px-4 py-3">
                   <span className="font-medium text-[#14211D]">
-                    {template.name}
+                    {themeNameT(template.theme)}
                   </span>
                   <div className="flex items-center gap-3">
                     <Link
                       href={`/templates/${template.theme}`}
                       className="text-sm font-medium text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
                     >
-                      Preview
+                      {t("preview")}
                     </Link>
                     <Link
                       href={`/events/new?templateId=${template.id}`}
                       className="rounded-full bg-[#0F766E] px-4 py-1.5 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
                     >
-                      Use this template
+                      {t("useThisTemplate")}
                     </Link>
                   </div>
                 </div>

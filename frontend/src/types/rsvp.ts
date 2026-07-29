@@ -1,5 +1,13 @@
 export type RsvpStatus = "Confirmed" | "Declined";
 
+// Same pattern as getEventTypeLabels in types/event.ts — needs a translator instance from the caller.
+export function getRsvpStatusLabels(t: (key: RsvpStatus) => string): Record<RsvpStatus, string> {
+  return {
+    Confirmed: t("Confirmed"),
+    Declined: t("Declined"),
+  };
+}
+
 export interface CreateRsvpRequest {
   guestName: string;
   guestEmail: string;

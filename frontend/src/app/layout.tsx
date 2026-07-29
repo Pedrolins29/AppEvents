@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { AuthProvider } from "@/lib/auth-context";
 import "./globals.css";
 
@@ -16,36 +18,51 @@ const playfair = Playfair_Display({
 
 const APP_BASE_URL = process.env.NEXT_PUBLIC_APP_BASE_URL ?? "http://localhost:3000";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(APP_BASE_URL),
-  title: {
-    default: "AppEvents — Digital Invitations",
-    template: "%s | AppEvents",
-  },
-  description:
-    "Create a beautifully designed invitation page for your wedding, birthday, graduation, or celebration, and share it as one link with a live countdown, gallery, and map built in.",
-  openGraph: {
-    siteName: "AppEvents",
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-  },
+const OG_LOCALES: Record<string, string> = {
+  pt: "pt_BR",
+  en: "en_US",
+  es: "es_419",
 };
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("siteMetadata");
+
+  return {
+    metadataBase: new URL(APP_BASE_URL),
+    title: {
+      default: t("titleDefault"),
+      template: t("titleTemplate"),
+    },
+    description: t("description"),
+    openGraph: {
+      siteName: "AppEvents",
+      type: "website",
+      locale: OG_LOCALES[locale] ?? "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <AuthProvider>{children}</AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

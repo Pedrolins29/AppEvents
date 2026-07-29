@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
@@ -10,13 +11,17 @@ import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { rsvpApi } from "@/lib/rsvpApi";
 import type { CreateEventRequest, EventImageRecord, EventRecord } from "@/types/event";
-import type { AttendanceResponse } from "@/types/rsvp";
+import { getRsvpStatusLabels, type AttendanceResponse } from "@/types/rsvp";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://localhost:5001";
 
 export default function EditEventPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const t = useTranslations("events.edit");
+  const listT = useTranslations("events.list");
+  const photoT = useTranslations("photoUpload");
+  const rsvpStatusLabels = getRsvpStatusLabels(useTranslations("rsvpStatus"));
   const [initialValues, setInitialValues] = useState<EventFormValues | null>(null);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
@@ -62,12 +67,12 @@ export default function EditEventPage() {
       .then(applyEvent)
       .catch((err) => {
         if (err instanceof ApiError && err.status === 404) {
-          setError("Event not found.");
+          setError(t("notFound"));
         } else {
-          setError("Could not load this event.");
+          setError(t("loadError"));
         }
       });
-  }, [params.id]);
+  }, [params.id, t]);
 
   useEffect(() => {
     rsvpApi.getAttendance(params.id).then(setAttendance).catch(() => setAttendance(null));
@@ -114,7 +119,7 @@ export default function EditEventPage() {
           : null;
         setUploadError(fieldErrors || err.message);
       } else {
-        setUploadError("Could not upload the image.");
+        setUploadError(t("uploadError"));
       }
     } finally {
       setIsUploading(false);
@@ -146,7 +151,7 @@ export default function EditEventPage() {
           : null;
         setFeaturedPhotoError(fieldErrors || err.message);
       } else {
-        setFeaturedPhotoError("Could not upload the image.");
+        setFeaturedPhotoError(t("uploadError"));
       }
     } finally {
       setIsFeaturedPhotoUploading(false);
@@ -162,7 +167,7 @@ export default function EditEventPage() {
         : await eventsApi.publish(params.id);
       setIsPublished(updated.isPublished);
     } catch {
-      setPublishError("Could not update the publish status.");
+      setPublishError(t("publishError"));
     } finally {
       setIsPublishToggling(false);
     }
@@ -191,7 +196,7 @@ export default function EditEventPage() {
           : null;
         setGalleryError(fieldErrors || err.message);
       } else {
-        setGalleryError("Could not upload one or more images.");
+        setGalleryError(t("galleryUploadError"));
       }
     } finally {
       setIsGalleryUploading(false);
@@ -201,7 +206,7 @@ export default function EditEventPage() {
   }
 
   async function handleRemoveGalleryImage(imageId: string) {
-    if (!confirm("Remove this image?")) {
+    if (!confirm(t("removeImageConfirm"))) {
       return;
     }
     setGalleryError(null);
@@ -209,7 +214,7 @@ export default function EditEventPage() {
       const updated = await eventsApi.removeGalleryImage(params.id, imageId);
       setGalleryImages(updated.galleryImages);
     } catch {
-      setGalleryError("Could not remove the image.");
+      setGalleryError(t("removeImageError"));
     }
   }
 
@@ -249,14 +254,14 @@ export default function EditEventPage() {
           className="mb-6 font-serif text-2xl text-[#14211D]"
           style={{ fontWeight: 600 }}
         >
-          Edit event
+          {t("heading")}
         </h1>
 
         <div className="mb-6 border border-[#E2DFD3] p-4">
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="font-medium text-[#14211D]">
-                {isPublished ? "Published" : "Draft"}
+                {isPublished ? listT("published") : listT("draft")}
               </p>
               {isPublished && initialValues && (
                 <a
@@ -275,7 +280,7 @@ export default function EditEventPage() {
               disabled={isPublishToggling}
               className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
             >
-              {isPublishToggling ? "Saving..." : isPublished ? "Unpublish" : "Publish"}
+              {isPublishToggling ? t("saving") : isPublished ? t("unpublish") : t("publish")}
             </button>
           </div>
           {publishError && <p className="mt-2 text-xs text-red-600">{publishError}</p>}
@@ -283,16 +288,16 @@ export default function EditEventPage() {
 
         {attendance && (
           <div className="mb-6 border border-[#E2DFD3] p-4">
-            <p className="mb-3 font-medium text-[#14211D]">Attendance</p>
+            <p className="mb-3 font-medium text-[#14211D]">{t("attendance")}</p>
             <div className="mb-3 flex gap-4 text-sm">
               <span className="text-[#14211D]">
-                <strong>{attendance.summary.total}</strong> total
+                <strong>{attendance.summary.total}</strong> {t("total")}
               </span>
               <span className="text-emerald-700">
-                <strong>{attendance.summary.confirmed}</strong> confirmed
+                <strong>{attendance.summary.confirmed}</strong> {t("confirmed")}
               </span>
               <span className="text-[#5B6B67]">
-                <strong>{attendance.summary.declined}</strong> declined
+                <strong>{attendance.summary.declined}</strong> {t("declined")}
               </span>
             </div>
             {attendance.responses.length > 0 && (
@@ -313,7 +318,7 @@ export default function EditEventPage() {
                           : "text-[#5B6B67]"
                       }
                     >
-                      {response.status}
+                      {rsvpStatusLabels[response.status]}
                     </span>
                   </li>
                 ))}
@@ -323,8 +328,8 @@ export default function EditEventPage() {
         )}
 
         <PhotoUpload
-          label="Gallery"
-          hint={`${galleryImages.length}/10 images`}
+          label={photoT("gallery")}
+          hint={photoT("galleryHint", { count: galleryImages.length })}
           multiple
           disabled={galleryImages.length >= 10}
           isUploading={isGalleryUploading}
@@ -338,7 +343,7 @@ export default function EditEventPage() {
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`${API_BASE_URL}${image.imageUrl}`}
-                    alt="Gallery"
+                    alt={photoT("galleryAlt")}
                     className="h-24 w-full rounded-md object-cover"
                   />
                   <button
@@ -355,7 +360,7 @@ export default function EditEventPage() {
                 <img
                   key={url}
                   src={url}
-                  alt="Uploading"
+                  alt={photoT("uploadingAlt")}
                   className="h-24 w-full rounded-md object-cover opacity-60"
                 />
               ))}
@@ -364,7 +369,7 @@ export default function EditEventPage() {
         </PhotoUpload>
 
         <PhotoUpload
-          label="Cover image"
+          label={photoT("coverImage")}
           isUploading={isUploading}
           error={uploadError}
           onFilesSelected={handleCoverImageChange}
@@ -373,15 +378,15 @@ export default function EditEventPage() {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={coverPreviewUrl ?? `${API_BASE_URL}${coverImageUrl}`}
-              alt="Event cover"
+              alt={photoT("coverAlt")}
               className="mb-2 h-40 w-full rounded-md object-cover"
             />
           )}
         </PhotoUpload>
 
         <PhotoUpload
-          label="Featured photo"
-          hint="Shown near the end of your invitation, after guests RSVP."
+          label={photoT("featuredPhoto")}
+          hint={photoT("featuredPhotoHint")}
           isUploading={isFeaturedPhotoUploading}
           error={featuredPhotoError}
           onFilesSelected={handleFeaturedPhotoChange}
@@ -390,13 +395,13 @@ export default function EditEventPage() {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={featuredPhotoPreviewUrl ?? `${API_BASE_URL}${featuredPhotoUrl}`}
-              alt="Featured"
+              alt={photoT("featuredAlt")}
               className="mb-2 h-40 w-full rounded-md object-cover"
             />
           )}
         </PhotoUpload>
 
-        <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel="Save changes" />
+        <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel={t("saveChanges")} />
       </div>
       </div>
     </div>

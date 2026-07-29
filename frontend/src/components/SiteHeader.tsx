@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function DiamondMark() {
   return (
@@ -33,11 +35,11 @@ function MenuIcon({ open }: { open: boolean }) {
 }
 
 const NAV_LINKS = [
-  { href: "/#templates", label: "Choose Your Design" },
-  { href: "/templates", label: "Preview" },
-  { href: "/#how-it-works", label: "How It Works" },
-  { href: "/#faq", label: "Q&A" },
-];
+  { href: "/#templates", labelKey: "chooseYourDesign" },
+  { href: "/templates", labelKey: "preview" },
+  { href: "/#how-it-works", labelKey: "howItWorks" },
+  { href: "/#faq", labelKey: "qa" },
+] as const;
 
 function NavLink({ href, label, onClick }: { href: string; label: string; onClick?: () => void }) {
   return (
@@ -53,6 +55,7 @@ function NavLink({ href, label, onClick }: { href: string; label: string; onClic
 }
 
 export function SiteHeader() {
+  const t = useTranslations("siteHeader");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -69,19 +72,20 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-6 sm:flex">
           {NAV_LINKS.map((link) => (
-            <NavLink key={link.href} {...link} />
+            <NavLink key={link.href} href={link.href} label={t(link.labelKey)} />
           ))}
+          <LanguageSwitcher />
           <Link
             href="/login"
             className="text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
           >
-            Log in
+            {t("logIn")}
           </Link>
           <Link
             href="/register"
             className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#0C5C56] hover:shadow-md"
           >
-            Get started
+            {t("getStarted")}
           </Link>
         </nav>
 
@@ -89,7 +93,7 @@ export function SiteHeader() {
           type="button"
           onClick={() => setIsMenuOpen((open) => !open)}
           aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
           className="flex items-center justify-center rounded-md p-2 text-[#14211D] transition-colors duration-150 hover:text-[#0F766E] sm:hidden"
         >
           <MenuIcon open={isMenuOpen} />
@@ -109,7 +113,7 @@ export function SiteHeader() {
               onClick={() => setIsMenuOpen(false)}
               className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
             >
-              {link.label}
+              {t(link.labelKey)}
             </Link>
           ))}
           <Link
@@ -117,15 +121,18 @@ export function SiteHeader() {
             onClick={() => setIsMenuOpen(false)}
             className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
           >
-            Log in
+            {t("logIn")}
           </Link>
           <Link
             href="/register"
             onClick={() => setIsMenuOpen(false)}
             className="mt-2 rounded-full bg-[#0F766E] px-4 py-2 text-center text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
           >
-            Get started
+            {t("getStarted")}
           </Link>
+          <div className="mt-2 flex justify-center">
+            <LanguageSwitcher />
+          </div>
         </nav>
       </div>
     </header>

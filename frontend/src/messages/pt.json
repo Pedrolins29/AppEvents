@@ -1,0 +1,349 @@
+{
+  "siteMetadata": {
+    "titleDefault": "AppEvents — Convites Digitais",
+    "titleTemplate": "%s | AppEvents",
+    "description": "Crie uma página de convite com um design lindo para o seu casamento, aniversário, formatura ou celebração, e compartilhe com um único link com contagem regressiva, galeria e mapa inclusos."
+  },
+  "siteHeader": {
+    "chooseYourDesign": "Escolha seu Design",
+    "preview": "Ver exemplos",
+    "howItWorks": "Como Funciona",
+    "qa": "Perguntas",
+    "logIn": "Entrar",
+    "getStarted": "Começar",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "appHeader": {
+    "templates": "Modelos",
+    "logOut": "Sair",
+    "loggingOut": "Saindo...",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "languageSwitcher": {
+    "label": "Idioma"
+  },
+  "siteFooter": {
+    "templates": "Modelos",
+    "logIn": "Entrar",
+    "getStarted": "Começar"
+  },
+  "eventTypes": {
+    "Wedding": "Casamento",
+    "Birthday": "Aniversário",
+    "Graduation": "Formatura",
+    "FifteenYearsParty": "Debutante (15 anos)",
+    "BabyShower": "Chá de Bebê",
+    "GenderReveal": "Revelação de Sexo"
+  },
+  "rsvpStatus": {
+    "Confirmed": "Confirmado",
+    "Declined": "Recusado"
+  },
+  "templateThemeNames": {
+    "elegant": "Elegante",
+    "minimalist": "Minimalista",
+    "floral": "Floral",
+    "modern": "Moderno"
+  },
+  "countdown": {
+    "days": "Dias",
+    "hours": "Horas",
+    "min": "Min",
+    "sec": "Seg"
+  },
+  "auth": {
+    "login": {
+      "title": "Bem-vindo de volta",
+      "email": "Email",
+      "password": "Senha",
+      "submit": "Entrar",
+      "submitting": "Entrando...",
+      "noAccount": "Não tem uma conta?",
+      "createOne": "Criar uma",
+      "genericError": "Algo deu errado. Tente novamente."
+    },
+    "register": {
+      "title": "Crie sua conta",
+      "fullName": "Nome completo",
+      "email": "Email",
+      "password": "Senha",
+      "confirmPassword": "Confirmar senha",
+      "show": "Mostrar",
+      "hide": "Ocultar",
+      "passwordHint": "Pelo menos 10 caracteres, com maiúscula, minúscula, um número e um caractere especial.",
+      "passwordChecks": [
+        { "label": "Pelo menos 10 caracteres" },
+        { "label": "Uma letra maiúscula" },
+        { "label": "Uma letra minúscula" },
+        { "label": "Um número" },
+        { "label": "Um caractere especial" }
+      ],
+      "passwordsMismatch": "As senhas não coincidem.",
+      "creatingAccount": "Criando conta...",
+      "createAccount": "Criar conta",
+      "haveAccount": "Já tem uma conta?",
+      "logIn": "Entrar",
+      "genericError": "Algo deu errado. Tente novamente."
+    }
+  },
+  "events": {
+    "list": {
+      "heading": "Seus eventos",
+      "newEvent": "Novo evento",
+      "emptyState": "Você ainda não criou nenhum evento.",
+      "createFirstOne": "Crie o primeiro",
+      "published": "Publicado",
+      "draft": "Rascunho",
+      "preview": "Visualizar",
+      "edit": "Editar",
+      "delete": "Excluir",
+      "deleting": "Excluindo...",
+      "deleteConfirm": "Excluir este evento? Isso não pode ser desfeito.",
+      "loadError": "Não foi possível carregar seus eventos.",
+      "deleteError": "Não foi possível excluir o evento."
+    },
+    "form": {
+      "eventName": "Nome do evento",
+      "urlSlug": "Endereço (URL)",
+      "slugHint": "Apenas letras minúsculas, números e hífens.",
+      "slugPlaceholder": "joao-e-maria",
+      "eventType": "Tipo de evento",
+      "eventDate": "Data do evento",
+      "description": "Descrição (opcional)",
+      "address": "Endereço (opcional)",
+      "dressCode": "Traje (opcional)",
+      "dressCodePlaceholder": "Traje social",
+      "template": "Modelo (opcional)",
+      "none": "Nenhum",
+      "saving": "Salvando...",
+      "genericError": "Algo deu errado. Tente novamente."
+    },
+    "edit": {
+      "heading": "Editar evento",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "saving": "Salvando...",
+      "attendance": "Presença",
+      "total": "total",
+      "confirmed": "confirmados",
+      "declined": "recusados",
+      "notFound": "Evento não encontrado.",
+      "loadError": "Não foi possível carregar este evento.",
+      "removeImageConfirm": "Remover esta imagem?",
+      "removeImageError": "Não foi possível remover a imagem.",
+      "publishError": "Não foi possível atualizar o status de publicação.",
+      "uploadError": "Não foi possível enviar a imagem.",
+      "galleryUploadError": "Não foi possível enviar uma ou mais imagens.",
+      "saveChanges": "Salvar alterações"
+    },
+    "timelineEditor": {
+      "label": "Linha do tempo (opcional)",
+      "momentsCount": "{count}/{max} momentos",
+      "timePlaceholder": "12:00",
+      "labelPlaceholder": "Cerimônia",
+      "addMoment": "+ Adicionar momento",
+      "moveUp": "Mover para cima",
+      "moveDown": "Mover para baixo",
+      "remove": "Remover"
+    },
+    "preview": {
+      "notFound": "Evento não encontrado.",
+      "backToEvents": "Voltar aos seus eventos",
+      "loadError": "Não foi possível carregar este evento.",
+      "badgePreview": "Visualização",
+      "badgeDraft": "Visualização · ainda não publicado"
+    },
+    "new": {
+      "heading": "Criar um evento",
+      "loading": "Carregando...",
+      "createEvent": "Criar evento"
+    }
+  },
+  "templates": {
+    "gallery": {
+      "eyebrow": "Modelos",
+      "heading": "Escolha seu estilo",
+      "subtitle": "Quatro temas exclusivos — escolha um e deixe com a sua cara.",
+      "loadError": "Não foi possível carregar os modelos.",
+      "preview": "Ver exemplo",
+      "useThisTemplate": "Usar este modelo"
+    },
+    "metadata": {
+      "title": "Ver Modelos",
+      "description": "Quatro temas de convite exclusivos — Elegante, Minimalista, Floral e Moderno. Escolha um e deixe com a sua cara."
+    },
+    "themePreview": {
+      "badge": "Visualização · voltar aos modelos",
+      "metadataSuffix": " — Visualização",
+      "notFoundTitle": "Modelo não encontrado",
+      "samples": {
+        "elegant": {
+          "description": "Duas famílias, uma celebração. Junte-se a nós para uma noite de votos, dança, e tudo o mais.",
+          "dressCode": "Traje social opcional",
+          "timeline": [
+            { "time": "16:00", "label": "Cerimônia" },
+            { "time": "17:00", "label": "Coquetel" },
+            { "time": "18:30", "label": "Jantar" },
+            { "time": "20:00", "label": "Baile" }
+          ]
+        },
+        "minimalist": {
+          "description": "Quatro anos, incontáveis noites em claro, e um grande dia. Venha celebrar com a gente.",
+          "dressCode": "Beca acadêmica, ou casual chique",
+          "timeline": [
+            { "time": "10:00", "label": "Procissão" },
+            { "time": "10:30", "label": "Cerimônia" },
+            { "time": "12:00", "label": "Recepção" }
+          ]
+        },
+        "floral": {
+          "description": "Um pequeno bebê está a caminho. Junte-se a nós para uma tarde de chá, brincadeiras e votos de boa sorte.",
+          "dressCode": "Tons pastéis de jardim",
+          "timeline": [
+            { "time": "13:00", "label": "Chegada" },
+            { "time": "13:30", "label": "Brincadeiras" },
+            { "time": "14:30", "label": "Almoço" },
+            { "time": "15:30", "label": "Presentes" }
+          ]
+        },
+        "modern": {
+          "description": "Trinta anos se passaram. Música, drinks e uma noite para lembrar.",
+          "dressCode": "Tudo em preto",
+          "timeline": [
+            { "time": "19:00", "label": "Chegada" },
+            { "time": "20:00", "label": "Jantar" },
+            { "time": "22:00", "label": "Baile" }
+          ]
+        }
+      }
+    }
+  },
+  "photoUpload": {
+    "gallery": "Galeria",
+    "galleryHint": "{count}/10 fotos",
+    "coverImage": "Foto de capa",
+    "featuredPhoto": "Foto de destaque",
+    "featuredPhotoHint": "Exibida perto do fim do seu convite, depois que os convidados confirmarem presença.",
+    "uploading": "Enviando…",
+    "clickOrDrag": "Clique ou arraste fotos aqui",
+    "fileHint": "JPEG, PNG ou WEBP, até 5MB",
+    "galleryAlt": "Galeria",
+    "uploadingAlt": "Enviando",
+    "coverAlt": "Capa do evento",
+    "featuredAlt": "Destaque"
+  },
+  "invitation": {
+    "ourStory": "Nossa História",
+    "timeline": "Linha do Tempo",
+    "gallery": "Galeria",
+    "location": "Local",
+    "dressCodePrefix": "Traje: ",
+    "dressCodeHeading": "Traje",
+    "openGoogleMaps": "Abrir no Google Maps",
+    "openWaze": "Abrir no Waze",
+    "cantWaitToCelebrate": "Mal podemos esperar para celebrar com você",
+    "rsvp": {
+      "heading": "RSVP",
+      "attending": "Estarei lá",
+      "notAttending": "Não poderei ir",
+      "yourName": "Seu nome",
+      "yourEmail": "Seu email",
+      "emailHint": "Enviaremos os detalhes e o local do evento para este endereço.",
+      "phone": "Telefone (opcional)",
+      "send": "Enviar confirmação",
+      "sending": "Enviando...",
+      "submitError": "Não foi possível enviar sua confirmação. Tente novamente.",
+      "thanksMessage": "Obrigado pela sua confirmação, {name}.",
+      "confirmedMessage": "Mal podemos esperar para ver você lá.",
+      "declinedMessage": "Vamos sentir sua falta — obrigado por avisar."
+    },
+    "dressCode": "Traje",
+    "metadataFallback": "Você está convidado — {type} em {date}.",
+    "notFoundTitle": "Convite não encontrado"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Convites Digitais",
+      "title": "Toda celebração merece sua própria página.",
+      "subtitle": "Escolha um tema exclusivo, adicione sua história e fotos, e compartilhe um único link com contagem regressiva e mapa inclusos.",
+      "ctaCreate": "Criar meu convite",
+      "ctaBrowse": "Ver temas",
+      "tagline": "Quatro temas exclusivos · Contagem regressiva · Galeria de fotos · Mapas inclusos",
+      "mockupDescription": "Duas famílias, uma celebração. Junte-se a nós para uma noite de votos e dança."
+    },
+    "features": [
+      {
+        "title": "Quatro temas exclusivos",
+        "body": "Elegante, Minimalista, Floral ou Moderno — cada um com sua própria tipografia, cor e estilo. Escolha o que mais combina com seu evento."
+      },
+      {
+        "title": "Uma contagem regressiva ao vivo",
+        "body": "A cada visita, os convidados veem exatamente quanto falta para o grande dia, direto na página do convite."
+      },
+      {
+        "title": "Foto de capa e galeria",
+        "body": "Adicione uma imagem de capa e um conjunto de fotos para contar a história antes do grande dia."
+      },
+      {
+        "title": "Mapas inclusos",
+        "body": "Um toque abre o Google Maps ou Waze com o endereço do local já preenchido."
+      }
+    ],
+    "chooseYourStyle": {
+      "heading": "Escolha seu estilo",
+      "seeAll": "Ver todos os modelos →"
+    },
+    "showcase": {
+      "heading": "Veja funcionando",
+      "subtitle": "Casamentos, formaturas, festas, chás de bebê — veja a contagem regressiva, mapas, linha do tempo, traje e fotos em temas reais do AppEvents."
+    },
+    "howItWorks": {
+      "heading": "Como funciona",
+      "steps": [
+        {
+          "title": "Escolha um tema",
+          "body": "Elegante, Minimalista, Floral ou Moderno — escolha o que mais combina com seu evento."
+        },
+        {
+          "title": "Adicione os detalhes",
+          "body": "Nome, data, história, foto de capa e galeria — tudo na sua própria página de convite."
+        },
+        {
+          "title": "Compartilhe o link",
+          "body": "Publique quando estiver pronto e envie um único link. Todos veem a mesma página."
+        }
+      ]
+    },
+    "faq": {
+      "heading": "Perguntas",
+      "items": [
+        {
+          "question": "O AppEvents é gratuito?",
+          "answer": "Sim — é gratuito criar e publicar seu convite agora mesmo."
+        },
+        {
+          "question": "Que tipos de eventos posso criar?",
+          "answer": "{types} e muito mais."
+        },
+        {
+          "question": "Os convidados podem confirmar presença?",
+          "answer": "Sim — todo convite publicado tem um formulário de confirmação de presença embutido, e você pode ver quem confirmou ou recusou no seu painel."
+        },
+        {
+          "question": "Posso editar meu convite depois de publicar?",
+          "answer": "Sim, a qualquer momento. As alterações entram no ar imediatamente no mesmo link."
+        },
+        {
+          "question": "Existe um limite de convidados?",
+          "answer": "Não — compartilhe seu link com quantos convidados quiser."
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Seu convite, no ar em minutos.",
+      "subtitle": "Escolha um tema, adicione os detalhes e compartilhe o link quando estiver pronto."
+    }
+  }
+}

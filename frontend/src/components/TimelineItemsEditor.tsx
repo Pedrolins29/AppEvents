@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { TimelineItemRecord } from "@/types/event";
 
@@ -21,6 +22,7 @@ function newKey() {
 }
 
 export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProps) {
+  const t = useTranslations("events.timelineEditor");
   const [rows, setRows] = useState<TimelineRow[]>(() =>
     items.map((item) => ({ ...item, key: newKey() })),
   );
@@ -58,8 +60,8 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
   return (
     <div>
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-sm font-medium text-[#14211D]">Timeline (optional)</span>
-        <span className="text-xs text-[#5B6B67]">{rows.length}/{MAX_ITEMS} moments</span>
+        <span className="text-sm font-medium text-[#14211D]">{t("label")}</span>
+        <span className="text-xs text-[#5B6B67]">{t("momentsCount", { count: rows.length, max: MAX_ITEMS })}</span>
       </div>
       <div className="flex flex-col gap-2">
         {rows.map((row, index) => (
@@ -68,14 +70,14 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
               type="text"
               value={row.time}
               onChange={(e) => updateRow(row.key, "time", e.target.value)}
-              placeholder="12:00"
+              placeholder={t("timePlaceholder")}
               className="w-20 border border-[#E2DFD3] px-2 py-1.5 text-sm"
             />
             <input
               type="text"
               value={row.label}
               onChange={(e) => updateRow(row.key, "label", e.target.value)}
-              placeholder="Ceremony"
+              placeholder={t("labelPlaceholder")}
               className="flex-1 border border-[#E2DFD3] px-2 py-1.5 text-sm"
             />
             <div className="flex items-center gap-1">
@@ -83,7 +85,7 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
                 type="button"
                 onClick={() => moveRow(index, -1)}
                 disabled={index === 0}
-                aria-label="Move up"
+                aria-label={t("moveUp")}
                 className="rounded px-1.5 py-1 text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D] disabled:opacity-30"
               >
                 &uarr;
@@ -92,7 +94,7 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
                 type="button"
                 onClick={() => moveRow(index, 1)}
                 disabled={index === rows.length - 1}
-                aria-label="Move down"
+                aria-label={t("moveDown")}
                 className="rounded px-1.5 py-1 text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D] disabled:opacity-30"
               >
                 &darr;
@@ -100,7 +102,7 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
               <button
                 type="button"
                 onClick={() => removeRow(row.key)}
-                aria-label="Remove"
+                aria-label={t("remove")}
                 className="rounded px-1.5 py-1 text-[#5B6B67] transition-colors duration-150 hover:text-red-600"
               >
                 &times;
@@ -115,7 +117,7 @@ export function TimelineItemsEditor({ items, onChange }: TimelineItemsEditorProp
         disabled={rows.length >= MAX_ITEMS}
         className="mt-2 text-sm font-medium text-[#0F766E] transition-colors duration-150 hover:text-[#0C5C56] disabled:opacity-40"
       >
-        + Add moment
+        {t("addMoment")}
       </button>
     </div>
   );

@@ -1,12 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ApiError } from "@/lib/auth-context";
 import { templatesApi } from "@/lib/templatesApi";
 import { TemplateCard } from "@/components/TemplateCard";
 import { TimelineItemsEditor } from "@/components/TimelineItemsEditor";
 import {
-  EVENT_TYPE_LABELS,
+  getEventTypeLabels,
   EVENT_TYPES,
   type CreateEventRequest,
   type EventType,
@@ -45,6 +46,8 @@ interface EventFormProps {
 }
 
 export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormProps) {
+  const t = useTranslations("events.form");
+  const eventTypeLabels = getEventTypeLabels(useTranslations("eventTypes"));
   const [values, setValues] = useState<EventFormValues>(initialValues ?? EMPTY_VALUES);
   const [templates, setTemplates] = useState<TemplateRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -81,7 +84,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           : null;
         setError(fieldErrors || err.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(t("genericError"));
       }
     } finally {
       setIsSubmitting(false);
@@ -92,7 +95,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
         <label htmlFor="name" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Event name
+          {t("eventName")}
         </label>
         <input
           id="name"
@@ -105,22 +108,22 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       </div>
       <div>
         <label htmlFor="slug" className="mb-1 block text-sm font-medium text-[#14211D]">
-          URL slug
+          {t("urlSlug")}
         </label>
         <input
           id="slug"
           type="text"
           required
-          placeholder="john-and-mary"
+          placeholder={t("slugPlaceholder")}
           value={values.slug}
           onChange={(e) => update("slug", e.target.value.toLowerCase())}
           className="w-full border border-[#E2DFD3] px-3 py-2"
         />
-        <p className="mt-1 text-xs text-[#5B6B67]">Lowercase letters, numbers, and hyphens only.</p>
+        <p className="mt-1 text-xs text-[#5B6B67]">{t("slugHint")}</p>
       </div>
       <div>
         <label htmlFor="eventType" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Event type
+          {t("eventType")}
         </label>
         <select
           id="eventType"
@@ -130,14 +133,14 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
         >
           {EVENT_TYPES.map((type) => (
             <option key={type} value={type}>
-              {EVENT_TYPE_LABELS[type]}
+              {eventTypeLabels[type]}
             </option>
           ))}
         </select>
       </div>
       <div>
         <label htmlFor="eventDate" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Event date
+          {t("eventDate")}
         </label>
         <input
           id="eventDate"
@@ -150,7 +153,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       </div>
       <div>
         <label htmlFor="description" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Description (optional)
+          {t("description")}
         </label>
         <textarea
           id="description"
@@ -162,7 +165,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       </div>
       <div>
         <label htmlFor="address" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Address (optional)
+          {t("address")}
         </label>
         <input
           id="address"
@@ -174,12 +177,12 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       </div>
       <div>
         <label htmlFor="dressCode" className="mb-1 block text-sm font-medium text-[#14211D]">
-          Dress code (optional)
+          {t("dressCode")}
         </label>
         <input
           id="dressCode"
           type="text"
-          placeholder="Black tie optional"
+          placeholder={t("dressCodePlaceholder")}
           value={values.dressCode}
           onChange={(e) => update("dressCode", e.target.value)}
           className="w-full border border-[#E2DFD3] px-3 py-2"
@@ -192,7 +195,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       {templates.length > 0 && (
         <div>
           <span className="mb-1 block text-sm font-medium text-[#14211D]">
-            Template (optional)
+            {t("template")}
           </span>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <button
@@ -202,7 +205,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
                 values.templateId === null ? "border-[#0F766E]" : "border-transparent bg-[#F2EFE7]"
               }`}
             >
-              None
+              {t("none")}
             </button>
             {templates.map((template) => (
               <button
@@ -225,7 +228,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
         disabled={isSubmitting}
         className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
       >
-        {isSubmitting ? "Saving..." : submitLabel}
+        {isSubmitting ? t("saving") : submitLabel}
       </button>
     </form>
   );

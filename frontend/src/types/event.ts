@@ -6,14 +6,20 @@ export type EventType =
   | "BabyShower"
   | "GenderReveal";
 
-export const EVENT_TYPE_LABELS: Record<EventType, string> = {
-  Wedding: "Wedding",
-  Birthday: "Birthday",
-  Graduation: "Graduation",
-  FifteenYearsParty: "15th Birthday",
-  BabyShower: "Baby Shower",
-  GenderReveal: "Gender Reveal",
-};
+// EVENT_TYPE_LABELS can't be a static export once labels are translated — it needs a translator
+// instance, which only exists inside a component render. Callers do
+// `getEventTypeLabels(useTranslations("eventTypes"))` (client) or
+// `getEventTypeLabels(await getTranslations("eventTypes"))` (server).
+export function getEventTypeLabels(t: (key: EventType) => string): Record<EventType, string> {
+  return {
+    Wedding: t("Wedding"),
+    Birthday: t("Birthday"),
+    Graduation: t("Graduation"),
+    FifteenYearsParty: t("FifteenYearsParty"),
+    BabyShower: t("BabyShower"),
+    GenderReveal: t("GenderReveal"),
+  };
+}
 
 export const EVENT_TYPES: EventType[] = [
   "Wedding",

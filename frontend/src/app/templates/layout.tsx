@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: "Browse Templates",
-  description:
-    "Four hand-designed invitation themes — Elegant, Minimalist, Floral, and Modern. Pick one and make it yours.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("templates.metadata");
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default function TemplatesLayout({ children }: { children: React.ReactNode }) {
   return children;

@@ -1,0 +1,349 @@
+{
+  "siteMetadata": {
+    "titleDefault": "AppEvents — Digital Invitations",
+    "titleTemplate": "%s | AppEvents",
+    "description": "Create a beautifully designed invitation page for your wedding, birthday, graduation, or celebration, and share it as one link with a live countdown, gallery, and map built in."
+  },
+  "siteHeader": {
+    "chooseYourDesign": "Choose Your Design",
+    "preview": "Preview",
+    "howItWorks": "How It Works",
+    "qa": "Q&A",
+    "logIn": "Log in",
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "appHeader": {
+    "templates": "Templates",
+    "logOut": "Log out",
+    "loggingOut": "Logging out...",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "siteFooter": {
+    "templates": "Templates",
+    "logIn": "Log in",
+    "getStarted": "Get started"
+  },
+  "eventTypes": {
+    "Wedding": "Wedding",
+    "Birthday": "Birthday",
+    "Graduation": "Graduation",
+    "FifteenYearsParty": "15th Birthday",
+    "BabyShower": "Baby Shower",
+    "GenderReveal": "Gender Reveal"
+  },
+  "rsvpStatus": {
+    "Confirmed": "Confirmed",
+    "Declined": "Declined"
+  },
+  "templateThemeNames": {
+    "elegant": "Elegant",
+    "minimalist": "Minimalist",
+    "floral": "Floral",
+    "modern": "Modern"
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "min": "Min",
+    "sec": "Sec"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "submitting": "Logging in...",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "register": {
+      "title": "Create your account",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "show": "Show",
+      "hide": "Hide",
+      "passwordHint": "At least 10 characters, with uppercase, lowercase, a digit, and a special character.",
+      "passwordChecks": [
+        { "label": "At least 10 characters" },
+        { "label": "One uppercase letter" },
+        { "label": "One lowercase letter" },
+        { "label": "One number" },
+        { "label": "One special character" }
+      ],
+      "passwordsMismatch": "Passwords do not match.",
+      "creatingAccount": "Creating account...",
+      "createAccount": "Create account",
+      "haveAccount": "Already have an account?",
+      "logIn": "Log in",
+      "genericError": "Something went wrong. Please try again."
+    }
+  },
+  "events": {
+    "list": {
+      "heading": "Your events",
+      "newEvent": "New event",
+      "emptyState": "You haven't created any events yet.",
+      "createFirstOne": "Create your first one",
+      "published": "Published",
+      "draft": "Draft",
+      "preview": "Preview",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "deleteConfirm": "Delete this event? This cannot be undone.",
+      "loadError": "Could not load your events.",
+      "deleteError": "Could not delete the event."
+    },
+    "form": {
+      "eventName": "Event name",
+      "urlSlug": "URL slug",
+      "slugHint": "Lowercase letters, numbers, and hyphens only.",
+      "slugPlaceholder": "john-and-mary",
+      "eventType": "Event type",
+      "eventDate": "Event date",
+      "description": "Description (optional)",
+      "address": "Address (optional)",
+      "dressCode": "Dress code (optional)",
+      "dressCodePlaceholder": "Black tie optional",
+      "template": "Template (optional)",
+      "none": "None",
+      "saving": "Saving...",
+      "genericError": "Something went wrong. Please try again."
+    },
+    "edit": {
+      "heading": "Edit event",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "saving": "Saving...",
+      "attendance": "Attendance",
+      "total": "total",
+      "confirmed": "confirmed",
+      "declined": "declined",
+      "notFound": "Event not found.",
+      "loadError": "Could not load this event.",
+      "removeImageConfirm": "Remove this image?",
+      "removeImageError": "Could not remove the image.",
+      "publishError": "Could not update the publish status.",
+      "uploadError": "Could not upload the image.",
+      "galleryUploadError": "Could not upload one or more images.",
+      "saveChanges": "Save changes"
+    },
+    "timelineEditor": {
+      "label": "Timeline (optional)",
+      "momentsCount": "{count}/{max} moments",
+      "timePlaceholder": "12:00",
+      "labelPlaceholder": "Ceremony",
+      "addMoment": "+ Add moment",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "remove": "Remove"
+    },
+    "preview": {
+      "notFound": "Event not found.",
+      "backToEvents": "Back to your events",
+      "loadError": "Could not load this event.",
+      "badgePreview": "Preview",
+      "badgeDraft": "Preview · not published yet"
+    },
+    "new": {
+      "heading": "Create an event",
+      "loading": "Loading...",
+      "createEvent": "Create event"
+    }
+  },
+  "templates": {
+    "gallery": {
+      "eyebrow": "Templates",
+      "heading": "Choose your style",
+      "subtitle": "Four hand-designed themes — pick one and make it yours.",
+      "loadError": "Could not load templates.",
+      "preview": "Preview",
+      "useThisTemplate": "Use this template"
+    },
+    "metadata": {
+      "title": "Browse Templates",
+      "description": "Four hand-designed invitation themes — Elegant, Minimalist, Floral, and Modern. Pick one and make it yours."
+    },
+    "themePreview": {
+      "badge": "Preview · back to templates",
+      "metadataSuffix": " — Preview",
+      "notFoundTitle": "Template not found",
+      "samples": {
+        "elegant": {
+          "description": "Two families, one celebration. Join us for an evening of vows, dancing, and everything in between.",
+          "dressCode": "Black tie optional",
+          "timeline": [
+            { "time": "16:00", "label": "Ceremony" },
+            { "time": "17:00", "label": "Cocktail hour" },
+            { "time": "18:30", "label": "Dinner" },
+            { "time": "20:00", "label": "Dancing" }
+          ]
+        },
+        "minimalist": {
+          "description": "Four years, countless late nights, and one very big day. Come celebrate with us.",
+          "dressCode": "Academic regalia, or smart casual",
+          "timeline": [
+            { "time": "10:00", "label": "Processional" },
+            { "time": "10:30", "label": "Ceremony" },
+            { "time": "12:00", "label": "Reception" }
+          ]
+        },
+        "floral": {
+          "description": "A little one is on the way. Join us for an afternoon of tea, games, and good wishes.",
+          "dressCode": "Garden pastels",
+          "timeline": [
+            { "time": "13:00", "label": "Arrival" },
+            { "time": "13:30", "label": "Games" },
+            { "time": "14:30", "label": "Lunch" },
+            { "time": "15:30", "label": "Gifts" }
+          ]
+        },
+        "modern": {
+          "description": "Thirty years in the making. Music, drinks, and a night to remember.",
+          "dressCode": "All black, everything",
+          "timeline": [
+            { "time": "19:00", "label": "Arrival" },
+            { "time": "20:00", "label": "Dinner" },
+            { "time": "22:00", "label": "Dancing" }
+          ]
+        }
+      }
+    }
+  },
+  "photoUpload": {
+    "gallery": "Gallery",
+    "galleryHint": "{count}/10 images",
+    "coverImage": "Cover image",
+    "featuredPhoto": "Featured photo",
+    "featuredPhotoHint": "Shown near the end of your invitation, after guests RSVP.",
+    "uploading": "Uploading…",
+    "clickOrDrag": "Click or drag photos here",
+    "fileHint": "JPEG, PNG or WEBP, up to 5MB",
+    "galleryAlt": "Gallery",
+    "uploadingAlt": "Uploading",
+    "coverAlt": "Event cover",
+    "featuredAlt": "Featured"
+  },
+  "invitation": {
+    "ourStory": "Our Story",
+    "timeline": "Timeline",
+    "gallery": "Gallery",
+    "location": "Location",
+    "dressCodePrefix": "Dress code: ",
+    "dressCodeHeading": "Dress Code",
+    "openGoogleMaps": "Open in Google Maps",
+    "openWaze": "Open in Waze",
+    "cantWaitToCelebrate": "We can't wait to celebrate with you",
+    "rsvp": {
+      "heading": "RSVP",
+      "attending": "I'll be there",
+      "notAttending": "Can't make it",
+      "yourName": "Your name",
+      "yourEmail": "Your email",
+      "emailHint": "We'll send the event details and location here.",
+      "phone": "Phone (optional)",
+      "send": "Send RSVP",
+      "sending": "Sending...",
+      "submitError": "Could not submit your RSVP. Please try again.",
+      "thanksMessage": "Thanks for your RSVP, {name}.",
+      "confirmedMessage": "We can't wait to see you there.",
+      "declinedMessage": "We'll miss you — thanks for letting us know."
+    },
+    "dressCode": "Dress code",
+    "metadataFallback": "You're invited — {type} on {date}.",
+    "notFoundTitle": "Invitation not found"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Digital Invitations",
+      "title": "Every celebration deserves its own page.",
+      "subtitle": "Pick a designer theme, add your story and photos, and share one link with a live countdown and map built in.",
+      "ctaCreate": "Create your invitation",
+      "ctaBrowse": "Browse themes",
+      "tagline": "Four designer themes · Live countdown · Photo gallery · Maps built in",
+      "mockupDescription": "Two families, one celebration. Join us for an evening of vows and dancing."
+    },
+    "features": [
+      {
+        "title": "Four designer themes",
+        "body": "Elegant, Minimalist, Floral, or Modern — each with its own type, color, and mood. Pick the one that feels like your event."
+      },
+      {
+        "title": "A countdown that ticks",
+        "body": "Every visit shows guests exactly how close the day is, right on your invitation page."
+      },
+      {
+        "title": "Cover photo & gallery",
+        "body": "Add a cover image and a set of photos to tell the story before the big day."
+      },
+      {
+        "title": "Maps built in",
+        "body": "One tap opens Google Maps or Waze with your venue address already filled in."
+      }
+    ],
+    "chooseYourStyle": {
+      "heading": "Choose your style",
+      "seeAll": "See all templates →"
+    },
+    "showcase": {
+      "heading": "See it in action",
+      "subtitle": "Weddings, graduations, parties, baby showers — a look at the countdown, maps, timeline, dress code, and photo features on real AppEvents themes."
+    },
+    "howItWorks": {
+      "heading": "How it works",
+      "steps": [
+        {
+          "title": "Choose a theme",
+          "body": "Elegant, Minimalist, Floral, or Modern — pick the one that feels like your event."
+        },
+        {
+          "title": "Add your details",
+          "body": "Name, date, story, cover photo, and a gallery — all on your own invitation page."
+        },
+        {
+          "title": "Share the link",
+          "body": "Publish when you're ready and send one link. Everyone sees the same page."
+        }
+      ]
+    },
+    "faq": {
+      "heading": "Questions",
+      "items": [
+        {
+          "question": "Is AppEvents free?",
+          "answer": "Yes — it's free to create and publish your invitation right now."
+        },
+        {
+          "question": "What kinds of events can I create?",
+          "answer": "{types}, and more."
+        },
+        {
+          "question": "Can guests RSVP?",
+          "answer": "Yes — every published invitation has a built-in RSVP form, and you can see who's confirmed or declined from your dashboard."
+        },
+        {
+          "question": "Can I edit my invitation after publishing?",
+          "answer": "Yes, anytime. Changes go live immediately at the same link."
+        },
+        {
+          "question": "Is there a limit on guests?",
+          "answer": "No — share your one link with as many guests as you like."
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Your invitation, live in minutes.",
+      "subtitle": "Pick a theme, add your details, and share the link when you're ready."
+    }
+  }
+}

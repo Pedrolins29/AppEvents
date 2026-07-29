@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import type { ThemeStyle } from "@/components/InvitationHero";
 import { rsvpApi } from "@/lib/rsvpApi";
@@ -13,6 +14,7 @@ interface RsvpFormProps {
 }
 
 export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
+  const t = useTranslations("invitation.rsvp");
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
@@ -38,7 +40,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
       }
       setSubmitted(true);
     } catch {
-      setError("Could not submit your RSVP. Please try again.");
+      setError(t("submitError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -48,10 +50,10 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
     return (
       <div className="text-center">
         <p className={theme.fontClassName} style={{ color: theme.heading, fontStyle: theme.fontStyle, fontSize: "1.5rem" }}>
-          Thanks for your RSVP, {guestName}.
+          {t("thanksMessage", { name: guestName })}
         </p>
         <p className="mt-2 text-sm" style={{ color: theme.body }}>
-          {status === "Confirmed" ? "We can't wait to see you there." : "We'll miss you — thanks for letting us know."}
+          {status === "Confirmed" ? t("confirmedMessage") : t("declinedMessage")}
         </p>
       </div>
     );
@@ -74,7 +76,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
 
       <div>
         <label htmlFor="rsvp-name" className="mb-1 block text-sm" style={{ color: theme.body }}>
-          Your name
+          {t("yourName")}
         </label>
         <input
           id="rsvp-name"
@@ -89,7 +91,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
 
       <div>
         <label htmlFor="rsvp-email" className="mb-1 block text-sm" style={{ color: theme.body }}>
-          Your email
+          {t("yourEmail")}
         </label>
         <input
           id="rsvp-email"
@@ -101,13 +103,13 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
           style={{ borderColor: theme.accent, color: theme.heading }}
         />
         <p className="mt-1 text-xs" style={{ color: theme.body }}>
-          We&apos;ll send the event details and location here.
+          {t("emailHint")}
         </p>
       </div>
 
       <div>
         <label htmlFor="rsvp-phone" className="mb-1 block text-sm" style={{ color: theme.body }}>
-          Phone (optional)
+          {t("phone")}
         </label>
         <input
           id="rsvp-phone"
@@ -130,7 +132,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
               : { borderColor: theme.accent, color: theme.heading }
           }
         >
-          I&apos;ll be there
+          {t("attending")}
         </button>
         <button
           type="button"
@@ -142,7 +144,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
               : { borderColor: theme.accent, color: theme.heading }
           }
         >
-          Can&apos;t make it
+          {t("notAttending")}
         </button>
       </div>
 
@@ -154,7 +156,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
         className="rounded-full px-6 py-2 text-sm font-medium disabled:opacity-50"
         style={{ background: theme.accent, color: theme.pageBg }}
       >
-        {isSubmitting ? "Sending..." : "Send RSVP"}
+        {isSubmitting ? t("sending") : t("send")}
       </button>
     </form>
   );

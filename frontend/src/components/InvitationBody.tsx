@@ -1,5 +1,9 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { Countdown } from "@/components/Countdown";
 import { InvitationHero, ThemeMotif, type ThemeStyle } from "@/components/InvitationHero";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RsvpForm } from "@/components/RsvpForm";
 import { absoluteImageUrl } from "@/lib/absoluteImageUrl";
 import type { InvitationViewModel } from "@/lib/invitationViewModel";
@@ -24,11 +28,23 @@ interface InvitationBodyProps {
 // The section stack shared by the real public invitation page (/e/[slug]) and the authenticated
 // owner-preview page (/events/[id]/preview) — same order, same conditionals, no consumer wants a
 // subset, so this is one component rather than several independently-imported sub-components.
+//
+// Client Component (not Server): this renders inside events/[id]/preview/page.tsx, a "use client"
+// page, which pulls any component it imports directly into the client bundle regardless of that
+// component's own directive — a Server Component using the server-only getTranslations API broke
+// exactly this way for SiteFooter.tsx earlier in this sprint. useTranslations (client-side) avoids
+// that class of bug and works fine when rendered from the two Server Component consumers too
+// (e/[slug], templates/[theme]), since a Server Component rendering a Client Component is normal.
 export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBodyProps) {
+  const t = useTranslations("invitation");
   const links = event.address ? mapsLinks(event.address) : null;
 
   return (
     <div style={{ backgroundColor: theme.pageBg }}>
+      <div className="fixed right-4 top-4 z-10">
+        <LanguageSwitcher />
+      </div>
+
       <InvitationHero
         name={event.name}
         eventTypeLabel={event.eventTypeLabel}
@@ -46,7 +62,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className="mb-4 text-xs font-medium uppercase tracking-[0.3em]"
               style={{ color: theme.accent }}
             >
-              Our Story
+              {t("ourStory")}
             </h2>
             <p className="whitespace-pre-line text-base leading-relaxed" style={{ color: theme.body }}>
               {event.description}
@@ -62,7 +78,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
               style={{ color: theme.accent }}
             >
-              Timeline
+              {t("timeline")}
             </h2>
             <ul>
               {event.timelineItems.map((item, index) => (
@@ -91,7 +107,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
               style={{ color: theme.accent }}
             >
-              Gallery
+              {t("gallery")}
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
               {event.galleryImageUrls.map((url) => (
@@ -115,14 +131,14 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
             className="mb-4 text-xs font-medium uppercase tracking-[0.3em]"
             style={{ color: theme.accent }}
           >
-            Location
+            {t("location")}
           </h2>
           <p className={event.dressCode ? "mb-2 text-base" : "mb-6 text-base"} style={{ color: theme.body }}>
             {event.address}
           </p>
           {event.dressCode && (
             <p className="mb-6 text-sm" style={{ color: theme.body }}>
-              Dress code: {event.dressCode}
+              {t("dressCodePrefix")}{event.dressCode}
             </p>
           )}
           <div className="flex items-center justify-center gap-4">
@@ -133,7 +149,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className="rounded-full border px-5 py-2 text-sm font-medium"
               style={{ borderColor: theme.accent, color: theme.heading }}
             >
-              Open in Google Maps
+              {t("openGoogleMaps")}
             </a>
             <a
               href={links.waze}
@@ -142,7 +158,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className="rounded-full border px-5 py-2 text-sm font-medium"
               style={{ borderColor: theme.accent, color: theme.heading }}
             >
-              Open in Waze
+              {t("openWaze")}
             </a>
           </div>
         </section>
@@ -154,7 +170,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
             className="mb-4 text-xs font-medium uppercase tracking-[0.3em]"
             style={{ color: theme.accent }}
           >
-            Dress Code
+            {t("dressCodeHeading")}
           </h2>
           <p className="text-base" style={{ color: theme.body }}>
             {event.dressCode}
@@ -167,7 +183,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
           className="mb-6 text-center text-xs font-medium uppercase tracking-[0.3em]"
           style={{ color: theme.accent }}
         >
-          RSVP
+          {t("rsvp.heading")}
         </h2>
         <RsvpForm slug={event.slug} theme={theme} demoMode={demoRsvp} />
       </section>
@@ -180,7 +196,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
               className={theme.fontClassName}
               style={{ color: theme.heading, fontStyle: theme.fontStyle, fontSize: "1.5rem" }}
             >
-              We can&apos;t wait to celebrate with you
+              {t("cantWaitToCelebrate")}
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img

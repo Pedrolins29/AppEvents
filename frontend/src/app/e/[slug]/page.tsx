@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import { InvitationBody } from "@/components/InvitationBody";
 import { DEFAULT_THEME_STYLE, THEME_STYLES } from "@/components/InvitationHero";
 import { absoluteImageUrl } from "@/lib/absoluteImageUrl";
 import { formatEventDate } from "@/lib/formatEventDate";
 import type { InvitationViewModel } from "@/lib/invitationViewModel";
 import { publicEventsApi } from "@/lib/publicEventsApi";
-import { EVENT_TYPE_LABELS } from "@/types/event";
+import { getEventTypeLabels } from "@/types/event";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -17,12 +18,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const event = await publicEventsApi.get(slug);
 
   if (!event) {
-    return { title: "Invitation not found" };
+    const t = await getTranslations("invitation");
+    return { title: t("notFoundTitle") };
   }
 
+  const locale = await getLocale();
+  const eventTypeLabels = getEventTypeLabels(await getTranslations("eventTypes"));
+  const invitationT = await getTranslations("invitation");
   const description = event.description
     ? event.description.slice(0, 160)
-    : `You're invited — ${EVENT_TYPE_LABELS[event.eventType]} on ${new Date(event.eventDate).toLocaleDateString()}.`;
+    : invitationT("metadataFallback", {
+        type: eventTypeLabels[event.eventType],
+        date: new Date(event.eventDate).toLocaleDateString(locale),
+      });
 
   return {
     title: event.name,
@@ -41,6 +49,8 @@ export default async function PublicEventPage({ params }: PageProps) {
     notFound();
   }
 
+  const locale = await getLocale();
+  const eventTypeLabels = getEventTypeLabels(await getTranslations("eventTypes"));
   const theme = event.themeKey ? THEME_STYLES[event.themeKey] : DEFAULT_THEME_STYLE;
 
   const jsonLd = {
@@ -59,8 +69,8 @@ export default async function PublicEventPage({ params }: PageProps) {
 
   const viewModel: InvitationViewModel = {
     name: event.name,
-    eventTypeLabel: EVENT_TYPE_LABELS[event.eventType],
-    formattedDate: formatEventDate(event.eventDate),
+    eventTypeLabel: eventTypeLabels[event.eventType],
+    formattedDate: formatEventDate(event.eventDate, locale),
     eventDateIso: event.eventDate,
     coverImageUrl: event.coverImageUrl,
     description: event.description,

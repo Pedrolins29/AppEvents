@@ -1,0 +1,349 @@
+{
+  "siteMetadata": {
+    "titleDefault": "AppEvents — Invitaciones Digitales",
+    "titleTemplate": "%s | AppEvents",
+    "description": "Crea una página de invitación con un diseño hermoso para tu boda, cumpleaños, graduación o celebración, y compártela con un solo enlace con cuenta regresiva, galería y mapa incluidos."
+  },
+  "siteHeader": {
+    "chooseYourDesign": "Elige tu Diseño",
+    "preview": "Ver ejemplos",
+    "howItWorks": "Cómo Funciona",
+    "qa": "Preguntas",
+    "logIn": "Iniciar sesión",
+    "getStarted": "Empezar",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "appHeader": {
+    "templates": "Plantillas",
+    "logOut": "Cerrar sesión",
+    "loggingOut": "Cerrando sesión...",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "languageSwitcher": {
+    "label": "Idioma"
+  },
+  "siteFooter": {
+    "templates": "Plantillas",
+    "logIn": "Iniciar sesión",
+    "getStarted": "Empezar"
+  },
+  "eventTypes": {
+    "Wedding": "Boda",
+    "Birthday": "Cumpleaños",
+    "Graduation": "Graduación",
+    "FifteenYearsParty": "Quinceañera",
+    "BabyShower": "Baby Shower",
+    "GenderReveal": "Revelación de Género"
+  },
+  "rsvpStatus": {
+    "Confirmed": "Confirmado",
+    "Declined": "Rechazado"
+  },
+  "templateThemeNames": {
+    "elegant": "Elegante",
+    "minimalist": "Minimalista",
+    "floral": "Floral",
+    "modern": "Moderno"
+  },
+  "countdown": {
+    "days": "Días",
+    "hours": "Horas",
+    "min": "Min",
+    "sec": "Seg"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido de nuevo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "submitting": "Iniciando sesión...",
+      "noAccount": "¿No tienes una cuenta?",
+      "createOne": "Crear una",
+      "genericError": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "register": {
+      "title": "Crea tu cuenta",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "show": "Mostrar",
+      "hide": "Ocultar",
+      "passwordHint": "Al menos 10 caracteres, con mayúscula, minúscula, un número y un carácter especial.",
+      "passwordChecks": [
+        { "label": "Al menos 10 caracteres" },
+        { "label": "Una letra mayúscula" },
+        { "label": "Una letra minúscula" },
+        { "label": "Un número" },
+        { "label": "Un carácter especial" }
+      ],
+      "passwordsMismatch": "Las contraseñas no coinciden.",
+      "creatingAccount": "Creando cuenta...",
+      "createAccount": "Crear cuenta",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "logIn": "Iniciar sesión",
+      "genericError": "Algo salió mal. Inténtalo de nuevo."
+    }
+  },
+  "events": {
+    "list": {
+      "heading": "Tus eventos",
+      "newEvent": "Nuevo evento",
+      "emptyState": "Aún no has creado ningún evento.",
+      "createFirstOne": "Crea el primero",
+      "published": "Publicado",
+      "draft": "Borrador",
+      "preview": "Vista previa",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "deleting": "Eliminando...",
+      "deleteConfirm": "¿Eliminar este evento? Esta acción no se puede deshacer.",
+      "loadError": "No se pudieron cargar tus eventos.",
+      "deleteError": "No se pudo eliminar el evento."
+    },
+    "form": {
+      "eventName": "Nombre del evento",
+      "urlSlug": "URL del evento",
+      "slugHint": "Solo letras minúsculas, números y guiones.",
+      "slugPlaceholder": "juan-y-maria",
+      "eventType": "Tipo de evento",
+      "eventDate": "Fecha del evento",
+      "description": "Descripción (opcional)",
+      "address": "Dirección (opcional)",
+      "dressCode": "Código de vestimenta (opcional)",
+      "dressCodePlaceholder": "Formal opcional",
+      "template": "Plantilla (opcional)",
+      "none": "Ninguna",
+      "saving": "Guardando...",
+      "genericError": "Algo salió mal. Inténtalo de nuevo."
+    },
+    "edit": {
+      "heading": "Editar evento",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "saving": "Guardando...",
+      "attendance": "Asistencia",
+      "total": "total",
+      "confirmed": "confirmados",
+      "declined": "rechazados",
+      "notFound": "Evento no encontrado.",
+      "loadError": "No se pudo cargar este evento.",
+      "removeImageConfirm": "¿Eliminar esta imagen?",
+      "removeImageError": "No se pudo eliminar la imagen.",
+      "publishError": "No se pudo actualizar el estado de publicación.",
+      "uploadError": "No se pudo subir la imagen.",
+      "galleryUploadError": "No se pudo subir una o más imágenes.",
+      "saveChanges": "Guardar cambios"
+    },
+    "timelineEditor": {
+      "label": "Línea de tiempo (opcional)",
+      "momentsCount": "{count}/{max} momentos",
+      "timePlaceholder": "12:00",
+      "labelPlaceholder": "Ceremonia",
+      "addMoment": "+ Agregar momento",
+      "moveUp": "Subir",
+      "moveDown": "Bajar",
+      "remove": "Eliminar"
+    },
+    "preview": {
+      "notFound": "Evento no encontrado.",
+      "backToEvents": "Volver a tus eventos",
+      "loadError": "No se pudo cargar este evento.",
+      "badgePreview": "Vista previa",
+      "badgeDraft": "Vista previa · aún no publicado"
+    },
+    "new": {
+      "heading": "Crear un evento",
+      "loading": "Cargando...",
+      "createEvent": "Crear evento"
+    }
+  },
+  "templates": {
+    "gallery": {
+      "eyebrow": "Plantillas",
+      "heading": "Elige tu estilo",
+      "subtitle": "Cuatro temas exclusivos — elige uno y hazlo tuyo.",
+      "loadError": "No se pudieron cargar las plantillas.",
+      "preview": "Vista previa",
+      "useThisTemplate": "Usar esta plantilla"
+    },
+    "metadata": {
+      "title": "Ver Plantillas",
+      "description": "Cuatro temas de invitación exclusivos — Elegante, Minimalista, Floral y Moderno. Elige uno y hazlo tuyo."
+    },
+    "themePreview": {
+      "badge": "Vista previa · volver a plantillas",
+      "metadataSuffix": " — Vista previa",
+      "notFoundTitle": "Plantilla no encontrada",
+      "samples": {
+        "elegant": {
+          "description": "Dos familias, una celebración. Únete a nosotros para una noche de votos, baile y todo lo demás.",
+          "dressCode": "Formal opcional",
+          "timeline": [
+            { "time": "16:00", "label": "Ceremonia" },
+            { "time": "17:00", "label": "Cóctel" },
+            { "time": "18:30", "label": "Cena" },
+            { "time": "20:00", "label": "Baile" }
+          ]
+        },
+        "minimalist": {
+          "description": "Cuatro años, incontables noches en vela, y un gran día. Ven a celebrar con nosotros.",
+          "dressCode": "Toga académica, o casual elegante",
+          "timeline": [
+            { "time": "10:00", "label": "Procesión" },
+            { "time": "10:30", "label": "Ceremonia" },
+            { "time": "12:00", "label": "Recepción" }
+          ]
+        },
+        "floral": {
+          "description": "Un pequeño está en camino. Únete a nosotros para una tarde de té, juegos y buenos deseos.",
+          "dressCode": "Tonos pastel de jardín",
+          "timeline": [
+            { "time": "13:00", "label": "Llegada" },
+            { "time": "13:30", "label": "Juegos" },
+            { "time": "14:30", "label": "Almuerzo" },
+            { "time": "15:30", "label": "Regalos" }
+          ]
+        },
+        "modern": {
+          "description": "Treinta años en camino. Música, tragos y una noche para recordar.",
+          "dressCode": "Todo de negro",
+          "timeline": [
+            { "time": "19:00", "label": "Llegada" },
+            { "time": "20:00", "label": "Cena" },
+            { "time": "22:00", "label": "Baile" }
+          ]
+        }
+      }
+    }
+  },
+  "photoUpload": {
+    "gallery": "Galería",
+    "galleryHint": "{count}/10 fotos",
+    "coverImage": "Foto de portada",
+    "featuredPhoto": "Foto destacada",
+    "featuredPhotoHint": "Se muestra cerca del final de tu invitación, después de que los invitados confirmen asistencia.",
+    "uploading": "Subiendo…",
+    "clickOrDrag": "Haz clic o arrastra fotos aquí",
+    "fileHint": "JPEG, PNG o WEBP, hasta 5MB",
+    "galleryAlt": "Galería",
+    "uploadingAlt": "Subiendo",
+    "coverAlt": "Portada del evento",
+    "featuredAlt": "Destacada"
+  },
+  "invitation": {
+    "ourStory": "Nuestra Historia",
+    "timeline": "Línea de Tiempo",
+    "gallery": "Galería",
+    "location": "Ubicación",
+    "dressCodePrefix": "Código de vestimenta: ",
+    "dressCodeHeading": "Código de Vestimenta",
+    "openGoogleMaps": "Abrir en Google Maps",
+    "openWaze": "Abrir en Waze",
+    "cantWaitToCelebrate": "No podemos esperar para celebrar contigo",
+    "rsvp": {
+      "heading": "RSVP",
+      "attending": "Allí estaré",
+      "notAttending": "No podré ir",
+      "yourName": "Tu nombre",
+      "yourEmail": "Tu correo electrónico",
+      "emailHint": "Enviaremos los detalles y la ubicación del evento aquí.",
+      "phone": "Teléfono (opcional)",
+      "send": "Enviar confirmación",
+      "sending": "Enviando...",
+      "submitError": "No se pudo enviar tu confirmación. Inténtalo de nuevo.",
+      "thanksMessage": "Gracias por tu confirmación, {name}.",
+      "confirmedMessage": "No podemos esperar para verte allí.",
+      "declinedMessage": "Te vamos a extrañar — gracias por avisarnos."
+    },
+    "dressCode": "Código de vestimenta",
+    "metadataFallback": "Estás invitado — {type} el {date}.",
+    "notFoundTitle": "Invitación no encontrada"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Invitaciones Digitales",
+      "title": "Toda celebración merece su propia página.",
+      "subtitle": "Elige un tema exclusivo, agrega tu historia y fotos, y comparte un solo enlace con cuenta regresiva y mapa incluidos.",
+      "ctaCreate": "Crear mi invitación",
+      "ctaBrowse": "Ver plantillas",
+      "tagline": "Cuatro plantillas exclusivas · Cuenta regresiva · Galería de fotos · Mapas incluidos",
+      "mockupDescription": "Dos familias, una celebración. Únete a nosotros para una noche de votos y baile."
+    },
+    "features": [
+      {
+        "title": "Cuatro plantillas exclusivas",
+        "body": "Elegante, Minimalista, Floral o Moderno — cada una con su propia tipografía, color y estilo. Elige la que más se parezca a tu evento."
+      },
+      {
+        "title": "Una cuenta regresiva en vivo",
+        "body": "Cada visita muestra a los invitados exactamente cuánto falta para el gran día, directo en la página de la invitación."
+      },
+      {
+        "title": "Foto de portada y galería",
+        "body": "Agrega una imagen de portada y un conjunto de fotos para contar la historia antes del gran día."
+      },
+      {
+        "title": "Mapas incluidos",
+        "body": "Un toque abre Google Maps o Waze con la dirección del lugar ya completada."
+      }
+    ],
+    "chooseYourStyle": {
+      "heading": "Elige tu estilo",
+      "seeAll": "Ver todas las plantillas →"
+    },
+    "showcase": {
+      "heading": "Véalo en acción",
+      "subtitle": "Bodas, graduaciones, fiestas, baby showers — mira la cuenta regresiva, mapas, línea de tiempo, código de vestimenta y fotos en plantillas reales de AppEvents."
+    },
+    "howItWorks": {
+      "heading": "Cómo funciona",
+      "steps": [
+        {
+          "title": "Elige un tema",
+          "body": "Elegante, Minimalista, Floral o Moderno — elige el que más se parezca a tu evento."
+        },
+        {
+          "title": "Agrega los detalles",
+          "body": "Nombre, fecha, historia, foto de portada y galería — todo en tu propia página de invitación."
+        },
+        {
+          "title": "Comparte el enlace",
+          "body": "Publica cuando estés listo y envía un solo enlace. Todos ven la misma página."
+        }
+      ]
+    },
+    "faq": {
+      "heading": "Preguntas",
+      "items": [
+        {
+          "question": "¿AppEvents es gratis?",
+          "answer": "Sí — es gratis crear y publicar tu invitación ahora mismo."
+        },
+        {
+          "question": "¿Qué tipos de eventos puedo crear?",
+          "answer": "{types} y mucho más."
+        },
+        {
+          "question": "¿Los invitados pueden confirmar asistencia?",
+          "answer": "Sí — cada invitación publicada tiene un formulario de confirmación integrado, y puedes ver quién confirmó o rechazó desde tu panel."
+        },
+        {
+          "question": "¿Puedo editar mi invitación después de publicarla?",
+          "answer": "Sí, en cualquier momento. Los cambios se publican de inmediato en el mismo enlace."
+        },
+        {
+          "question": "¿Hay un límite de invitados?",
+          "answer": "No — comparte tu enlace con tantos invitados como quieras."
+        }
+      ]
+    },
+    "finalCta": {
+      "title": "Tu invitación, en línea en minutos.",
+      "subtitle": "Elige un tema, agrega los detalles y comparte el enlace cuando estés listo."
+    }
+  }
+}

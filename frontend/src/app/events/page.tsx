@@ -1,16 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { useAuth } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { Skeleton } from "@/components/Skeleton";
-import { EVENT_TYPE_LABELS, type EventRecord } from "@/types/event";
+import { getEventTypeLabels, type EventRecord } from "@/types/event";
 
 export default function EventsPage() {
   const router = useRouter();
+  const t = useTranslations("events.list");
+  const locale = useLocale();
+  const eventTypeLabels = getEventTypeLabels(useTranslations("eventTypes"));
   const { user, isLoading: isAuthLoading } = useAuth();
   const [events, setEvents] = useState<EventRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,11 +27,11 @@ export default function EventsPage() {
       const data = await eventsApi.list();
       setEvents(data);
     } catch {
-      setError("Could not load your events.");
+      setError(t("loadError"));
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (!isAuthLoading && !user) {
@@ -42,7 +46,7 @@ export default function EventsPage() {
   }, [isAuthLoading, user, router, loadEvents]);
 
   async function handleDelete(id: string) {
-    if (!confirm("Delete this event? This cannot be undone.")) {
+    if (!confirm(t("deleteConfirm"))) {
       return;
     }
     setDeletingId(id);
@@ -50,7 +54,7 @@ export default function EventsPage() {
       await eventsApi.remove(id);
       setEvents((prev) => prev.filter((e) => e.id !== id));
     } catch {
-      setError("Could not delete the event.");
+      setError(t("deleteError"));
     } finally {
       setDeletingId(null);
     }
@@ -84,13 +88,13 @@ export default function EventsPage() {
             className="font-serif text-2xl text-[#14211D]"
             style={{ fontWeight: 600 }}
           >
-            Your events
+            {t("heading")}
           </h1>
           <Link
             href="/events/new"
             className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
           >
-            New event
+            {t("newEvent")}
           </Link>
         </div>
 
@@ -104,9 +108,9 @@ export default function EventsPage() {
           </div>
         ) : events.length === 0 ? (
           <p className="text-[#5B6B67]">
-            You haven&apos;t created any events yet.{" "}
+            {t("emptyState")}{" "}
             <Link href="/events/new" className="font-medium text-[#0F766E] underline">
-              Create your first one
+              {t("createFirstOne")}
             </Link>
             .
           </p>
@@ -127,12 +131,12 @@ export default function EventsPage() {
                           : "bg-[#F2EFE7] text-[#5B6B67]"
                       }`}
                     >
-                      {event.isPublished ? "Published" : "Draft"}
+                      {event.isPublished ? t("published") : t("draft")}
                     </span>
                   </p>
                   <p className="text-sm text-[#5B6B67]">
-                    {EVENT_TYPE_LABELS[event.eventType]} &middot;{" "}
-                    {new Date(event.eventDate).toLocaleDateString()} &middot;{" "}
+                    {eventTypeLabels[event.eventType]} &middot;{" "}
+                    {new Date(event.eventDate).toLocaleDateString(locale)} &middot;{" "}
                     {event.isPublished ? (
                       <a
                         href={`/e/${event.slug}`}
@@ -152,17 +156,17 @@ export default function EventsPage() {
                     href={`/events/${event.id}/preview`}
                     className="font-medium text-[#0F766E] underline transition-colors duration-150"
                   >
-                    Preview
+                    {t("preview")}
                   </Link>
                   <Link href={`/events/${event.id}/edit`} className="font-medium text-[#0F766E] underline transition-colors duration-150">
-                    Edit
+                    {t("edit")}
                   </Link>
                   <button
                     onClick={() => handleDelete(event.id)}
                     disabled={deletingId === event.id}
                     className="font-medium text-red-600 underline transition-colors duration-150 disabled:opacity-50"
                   >
-                    {deletingId === event.id ? "Deleting..." : "Delete"}
+                    {deletingId === event.id ? t("deleting") : t("delete")}
                   </button>
                 </div>
               </li>

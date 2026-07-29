@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useAuth } from "@/lib/auth-context";
 
 function DiamondMark() {
@@ -37,6 +39,7 @@ function MenuIcon({ open }: { open: boolean }) {
 // The authenticated equivalent of SiteHeader.tsx — only mounted on already auth-gated pages, so
 // it assumes `user` is present (no internal loading/redirect logic of its own).
 export function AppHeader() {
+  const t = useTranslations("appHeader");
   const router = useRouter();
   const { user, logout } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -69,16 +72,17 @@ export function AppHeader() {
             href="/templates"
             className="text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
           >
-            Templates
+            {t("templates")}
           </Link>
           {user && <span className="text-sm text-[#5B6B67]">{user.fullName}</span>}
+          <LanguageSwitcher />
           <button
             type="button"
             onClick={handleLogout}
             disabled={isLoggingOut}
             className="rounded-full border border-[#E2DFD3] px-4 py-2 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5 disabled:opacity-50"
           >
-            {isLoggingOut ? "Logging out..." : "Log out"}
+            {isLoggingOut ? t("loggingOut") : t("logOut")}
           </button>
         </nav>
 
@@ -86,7 +90,7 @@ export function AppHeader() {
           type="button"
           onClick={() => setIsMenuOpen((open) => !open)}
           aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+          aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
           className="flex items-center justify-center rounded-md p-2 text-[#14211D] transition-colors duration-150 hover:text-[#0F766E] sm:hidden"
         >
           <MenuIcon open={isMenuOpen} />
@@ -105,7 +109,7 @@ export function AppHeader() {
             onClick={() => setIsMenuOpen(false)}
             className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
           >
-            Templates
+            {t("templates")}
           </Link>
           <button
             type="button"
@@ -113,8 +117,11 @@ export function AppHeader() {
             disabled={isLoggingOut}
             className="mt-2 rounded-full border border-[#E2DFD3] px-4 py-2 text-center text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5 disabled:opacity-50"
           >
-            {isLoggingOut ? "Logging out..." : "Log out"}
+            {isLoggingOut ? t("loggingOut") : t("logOut")}
           </button>
+          <div className="mt-2 flex justify-center">
+            <LanguageSwitcher />
+          </div>
         </nav>
       </div>
     </header>

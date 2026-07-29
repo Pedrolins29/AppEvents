@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ApiError } from "@/lib/apiClient";
 import { InvitationBody } from "@/components/InvitationBody";
@@ -12,12 +13,15 @@ import { eventsApi } from "@/lib/eventsApi";
 import { formatEventDate } from "@/lib/formatEventDate";
 import type { InvitationViewModel } from "@/lib/invitationViewModel";
 import { templatesApi } from "@/lib/templatesApi";
-import { EVENT_TYPE_LABELS, type EventRecord } from "@/types/event";
+import { getEventTypeLabels, type EventRecord } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
 
 export default function EventPreviewPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const locale = useLocale();
+  const t = useTranslations("events.preview");
+  const eventTypeLabels = getEventTypeLabels(useTranslations("eventTypes"));
   const { user, isLoading: isAuthLoading } = useAuth();
   const [event, setEvent] = useState<EventRecord | null>(null);
   const [theme, setTheme] = useState<ThemeStyle>(DEFAULT_THEME_STYLE);
@@ -54,17 +58,17 @@ export default function EventPreviewPage() {
         if (err instanceof ApiError && err.status === 404) {
           setNotFoundState(true);
         } else {
-          setError("Could not load this event.");
+          setError(t("loadError"));
         }
       });
-  }, [user, params.id]);
+  }, [user, params.id, t]);
 
   if (notFoundState) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-[#FDFBF7] px-6 text-center">
-        <p className="text-[#14211D]">Event not found.</p>
+        <p className="text-[#14211D]">{t("notFound")}</p>
         <Link href="/events" className="text-sm font-medium text-[#0F766E] underline">
-          Back to your events
+          {t("backToEvents")}
         </Link>
       </div>
     );
@@ -75,7 +79,7 @@ export default function EventPreviewPage() {
       <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-[#FDFBF7] px-6 text-center">
         <p className="text-red-600">{error}</p>
         <Link href="/events" className="text-sm font-medium text-[#0F766E] underline">
-          Back to your events
+          {t("backToEvents")}
         </Link>
       </div>
     );
@@ -92,8 +96,8 @@ export default function EventPreviewPage() {
 
   const viewModel: InvitationViewModel = {
     name: event.name,
-    eventTypeLabel: EVENT_TYPE_LABELS[event.eventType],
-    formattedDate: formatEventDate(event.eventDate),
+    eventTypeLabel: eventTypeLabels[event.eventType],
+    formattedDate: formatEventDate(event.eventDate, locale),
     eventDateIso: event.eventDate,
     coverImageUrl: event.coverImageUrl,
     description: event.description,
@@ -112,7 +116,7 @@ export default function EventPreviewPage() {
         href="/events"
         className="fixed left-4 top-4 z-10 rounded-full bg-[#0F766E] px-4 py-1.5 text-xs font-medium text-white shadow-md backdrop-blur-sm"
       >
-        {event.isPublished ? "Preview" : "Preview · not published yet"}
+        {event.isPublished ? t("badgePreview") : t("badgeDraft")}
       </Link>
       <InvitationBody event={viewModel} theme={theme} demoRsvp />
     </>

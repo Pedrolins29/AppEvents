@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { InvitationPhoneMockup, type MockupScreen } from "@/components/InvitationPhoneMockup";
 import { PhoneMockup } from "@/components/PhoneMockup";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TemplateCard } from "@/components/TemplateCard";
-import { EVENT_TYPE_LABELS, EVENT_TYPES } from "@/types/event";
+import { formatEventDate } from "@/lib/formatEventDate";
+import { EVENT_TYPES, getEventTypeLabels, type EventType } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
 
 function Diamond({ className }: { className?: string }) {
@@ -60,18 +62,15 @@ function MapIcon() {
   );
 }
 
-const TEMPLATE_THEMES: { theme: ThemeKey; name: string }[] = [
-  { theme: "elegant", name: "Elegant" },
-  { theme: "minimalist", name: "Minimalist" },
-  { theme: "floral", name: "Floral" },
-  { theme: "modern", name: "Modern" },
-];
+const FEATURE_ICONS = [ThemesIcon, CountdownIcon, GalleryIcon, MapIcon] as const;
+
+const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern"];
 
 interface ShowcaseEntry {
   theme: ThemeKey;
-  eventTypeLabel: string;
+  eventType: EventType;
   name: string;
-  dateLabel: string;
+  dateIso: string;
   screens: [MockupScreen, MockupScreen];
   address?: string;
   dressCode?: string;
@@ -86,18 +85,18 @@ interface ShowcaseEntry {
 const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   {
     theme: "elegant",
-    eventTypeLabel: EVENT_TYPE_LABELS.Wedding,
+    eventType: "Wedding",
     name: "Isabella & Marco",
-    dateLabel: "September 14, 2026",
+    dateIso: "2026-09-14",
     screens: ["countdown", "map"],
     address: "The Grand Pavilion, Lisbon",
     photoUrl: "/showcase/wedding-rose.jpg",
   },
   {
     theme: "floral",
-    eventTypeLabel: EVENT_TYPE_LABELS.Wedding,
+    eventType: "Wedding",
     name: "Sofia & Daniel",
-    dateLabel: "June 6, 2026",
+    dateIso: "2026-06-06",
     screens: ["timeline", "dressCode"],
     dressCode: "Garden formal — soft pastels",
     timelineItems: [
@@ -109,9 +108,9 @@ const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   },
   {
     theme: "minimalist",
-    eventTypeLabel: EVENT_TYPE_LABELS.Graduation,
+    eventType: "Graduation",
     name: "Maya's Graduation",
-    dateLabel: "May 22, 2026",
+    dateIso: "2026-05-22",
     screens: ["countdown", "timeline"],
     timelineItems: [
       { time: "10:00", label: "Processional" },
@@ -122,9 +121,9 @@ const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   },
   {
     theme: "modern",
-    eventTypeLabel: EVENT_TYPE_LABELS.Graduation,
+    eventType: "Graduation",
     name: "Jordan's Grad Night",
-    dateLabel: "May 30, 2026",
+    dateIso: "2026-05-30",
     screens: ["map", "dressCode"],
     address: "Skyline Loft, Chicago",
     dressCode: "Black tie, no exceptions",
@@ -132,16 +131,16 @@ const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   },
   {
     theme: "modern",
-    eventTypeLabel: EVENT_TYPE_LABELS.Birthday,
+    eventType: "Birthday",
     name: "Alex's 30th Birthday",
-    dateLabel: "August 8, 2026",
+    dateIso: "2026-08-08",
     screens: ["countdown", "photo"],
   },
   {
     theme: "elegant",
-    eventTypeLabel: EVENT_TYPE_LABELS.FifteenYearsParty,
+    eventType: "FifteenYearsParty",
     name: "Camila's Quinceañera",
-    dateLabel: "November 1, 2026",
+    dateIso: "2026-11-01",
     screens: ["timeline", "map"],
     address: "Grand Ballroom, Miami",
     timelineItems: [
@@ -153,18 +152,18 @@ const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   },
   {
     theme: "floral",
-    eventTypeLabel: EVENT_TYPE_LABELS.BabyShower,
+    eventType: "BabyShower",
     name: "Welcome, Baby Rose",
-    dateLabel: "April 12, 2026",
+    dateIso: "2026-04-12",
     screens: ["countdown", "dressCode"],
     dressCode: "Garden pastels",
     photoUrl: "/showcase/babyshower-farm.jpg",
   },
   {
     theme: "minimalist",
-    eventTypeLabel: EVENT_TYPE_LABELS.BabyShower,
+    eventType: "BabyShower",
     name: "Baby Chen's Shower",
-    dateLabel: "March 3, 2026",
+    dateIso: "2026-03-03",
     screens: ["timeline", "photo"],
     timelineItems: [
       { time: "13:00", label: "Arrival" },
@@ -175,72 +174,20 @@ const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
   },
 ];
 
-const STEPS = [
-  {
-    number: "01",
-    title: "Choose a theme",
-    body: "Elegant, Minimalist, Floral, or Modern — pick the one that feels like your event.",
-  },
-  {
-    number: "02",
-    title: "Add your details",
-    body: "Name, date, story, cover photo, and a gallery — all on your own invitation page.",
-  },
-  {
-    number: "03",
-    title: "Share the link",
-    body: "Publish when you're ready and send one link. Everyone sees the same page.",
-  },
-];
+export default async function Home() {
+  const locale = await getLocale();
+  const t = await getTranslations("landing");
+  const eventTypeT = await getTranslations("eventTypes");
+  const themeNameT = await getTranslations("templateThemeNames");
+  const countdownT = await getTranslations("countdown");
+  const eventTypeLabels = getEventTypeLabels(eventTypeT);
 
-const FEATURES = [
-  {
-    icon: ThemesIcon,
-    title: "Four designer themes",
-    body: "Elegant, Minimalist, Floral, or Modern — each with its own type, color, and mood. Pick the one that feels like your event.",
-  },
-  {
-    icon: CountdownIcon,
-    title: "A countdown that ticks",
-    body: "Every visit shows guests exactly how close the day is, right on your invitation page.",
-  },
-  {
-    icon: GalleryIcon,
-    title: "Cover photo & gallery",
-    body: "Add a cover image and a set of photos to tell the story before the big day.",
-  },
-  {
-    icon: MapIcon,
-    title: "Maps built in",
-    body: "One tap opens Google Maps or Waze with your venue address already filled in.",
-  },
-];
+  const features = t.raw("features") as { title: string; body: string }[];
+  const steps = t.raw("howItWorks.steps") as { title: string; body: string }[];
+  const faqItems = t.raw("faq.items") as { question: string; answer: string }[];
+  const eventTypesJoined = EVENT_TYPES.map((type) => eventTypeLabels[type]).join(", ");
+  const miniCountdownLabels = [countdownT("days"), countdownT("hours"), countdownT("min")];
 
-const FAQS = [
-  {
-    question: "Is AppEvents free?",
-    answer: "Yes — it's free to create and publish your invitation right now.",
-  },
-  {
-    question: "What kinds of events can I create?",
-    answer: `${EVENT_TYPES.map((type) => EVENT_TYPE_LABELS[type]).join(", ")}, and more.`,
-  },
-  {
-    question: "Can guests RSVP?",
-    answer:
-      "Yes — every published invitation has a built-in RSVP form, and you can see who's confirmed or declined from your dashboard.",
-  },
-  {
-    question: "Can I edit my invitation after publishing?",
-    answer: "Yes, anytime. Changes go live immediately at the same link.",
-  },
-  {
-    question: "Is there a limit on guests?",
-    answer: "No — share your one link with as many guests as you like.",
-  },
-];
-
-export default function Home() {
   return (
     <div className="flex flex-1 flex-col bg-[#FDFBF7]">
       <SiteHeader />
@@ -252,35 +199,31 @@ export default function Home() {
             <div className="border border-[#0F766E]/25 px-6 py-12 text-center sm:px-14 sm:py-16">
               <Diamond className="mx-auto mb-6 text-[#A16207]" />
               <p className="mb-4 text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-                Digital Invitations
+                {t("hero.eyebrow")}
               </p>
               <h1
                 className="font-serif text-4xl leading-tight text-[#14211D] sm:text-5xl"
                 style={{ fontWeight: 600 }}
               >
-                Every celebration deserves its own page.
+                {t("hero.title")}
               </h1>
-              <p className="mx-auto mt-5 max-w-md text-base text-[#5B6B67]">
-                Pick a designer theme, add your story and photos, and share one link with a live
-                countdown and map built in.
-              </p>
+              <p className="mx-auto mt-5 max-w-md text-base text-[#5B6B67]">{t("hero.subtitle")}</p>
               <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <Link
                   href="/register"
                   className="rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
                 >
-                  Create your invitation
+                  {t("hero.ctaCreate")}
                 </Link>
                 <Link
                   href="/templates"
                   className="rounded-full border border-[#0F766E]/40 px-6 py-3 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#0F766E]/5"
                 >
-                  Browse themes
+                  {t("hero.ctaBrowse")}
                 </Link>
               </div>
               <p className="mt-6 text-xs uppercase tracking-[0.15em] text-[#5B6B67]/80">
-                Four designer themes &middot; Live countdown &middot; Photo gallery &middot; Maps
-                built in
+                {t("hero.tagline")}
               </p>
 
               <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -289,7 +232,7 @@ export default function Home() {
                     key={type}
                     className="rounded-full border border-[#E2DFD3] px-3 py-1 text-xs text-[#5B6B67]"
                   >
-                    {EVENT_TYPE_LABELS[type]}
+                    {eventTypeLabels[type]}
                   </span>
                 ))}
               </div>
@@ -304,48 +247,46 @@ export default function Home() {
         {/* Features */}
         <section className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
-            {FEATURES.map(({ icon: Icon, title, body }) => (
-              <div
-                key={title}
-                className="border border-[#E2DFD3] p-6"
-              >
-                <div className="mb-3 text-[#0F766E]">
-                  {title === "A countdown that ticks" ? (
-                    <div className="flex items-center gap-2" aria-hidden>
-                      {["12", "08", "45"].map((value, i) => (
-                        <div
-                          key={i}
-                          className="flex flex-col items-center rounded border border-[#E2DFD3] px-2 py-1"
-                        >
-                          <span className="text-sm font-semibold tabular-nums text-[#0F766E]">
-                            {value}
+            {features.map(({ title, body }, i) => {
+                const Icon = FEATURE_ICONS[i];
+                return (
+                  <div key={title} className="border border-[#E2DFD3] p-6">
+                    <div className="mb-3 text-[#0F766E]">
+                      {i === 1 ? (
+                        <div className="flex items-center gap-2" aria-hidden>
+                          {["12", "08", "45"].map((value, j) => (
+                            <div
+                              key={j}
+                              className="flex flex-col items-center rounded border border-[#E2DFD3] px-2 py-1"
+                            >
+                              <span className="text-sm font-semibold tabular-nums text-[#0F766E]">
+                                {value}
+                              </span>
+                              <span className="text-[8px] uppercase tracking-wide text-[#5B6B67]">
+                                {miniCountdownLabels[j]}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : i === 3 ? (
+                        <div className="flex items-center gap-2" aria-hidden>
+                          <Icon />
+                          <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
+                            Google Maps
                           </span>
-                          <span className="text-[8px] uppercase tracking-wide text-[#5B6B67]">
-                            {["Days", "Hrs", "Min"][i]}
+                          <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
+                            Waze
                           </span>
                         </div>
-                      ))}
+                      ) : (
+                        <Icon />
+                      )}
                     </div>
-                  ) : title === "Maps built in" ? (
-                    <div className="flex items-center gap-2" aria-hidden>
-                      <Icon />
-                      <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
-                        Google Maps
-                      </span>
-                      <span className="rounded-full border border-[#E2DFD3] px-2 py-0.5 text-[10px] text-[#5B6B67]">
-                        Waze
-                      </span>
-                    </div>
-                  ) : (
-                    <Icon />
-                  )}
-                </div>
-                <h3 className="mb-1.5 text-sm font-semibold text-[#14211D]">
-                  {title}
-                </h3>
-                <p className="text-sm text-[#5B6B67]">{body}</p>
-              </div>
-            ))}
+                    <h3 className="mb-1.5 text-sm font-semibold text-[#14211D]">{title}</h3>
+                    <p className="text-sm text-[#5B6B67]">{body}</p>
+                  </div>
+                );
+              })}
           </div>
         </section>
 
@@ -353,28 +294,25 @@ export default function Home() {
         <section id="templates" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-              Choose your style
+              {t("chooseYourStyle.heading")}
             </h2>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {TEMPLATE_THEMES.map(({ theme, name }) => (
+              {TEMPLATE_THEMES.map((theme) => (
                 <Link
                   key={theme}
                   href={`/templates/${theme}`}
                   className="group block overflow-hidden border border-[#E2DFD3] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
                 >
-                  <TemplateCard theme={theme} name={name} />
+                  <TemplateCard theme={theme} name={themeNameT(theme)} />
                   <div className="border-t border-[#E2DFD3] bg-white px-3 py-2 text-center">
-                    <span className="text-xs font-medium text-[#14211D]">{name}</span>
+                    <span className="text-xs font-medium text-[#14211D]">{themeNameT(theme)}</span>
                   </div>
                 </Link>
               ))}
             </div>
             <div className="mt-8 text-center">
-              <Link
-                href="/templates"
-                className="text-sm font-medium text-[#0F766E] hover:underline"
-              >
-                See all templates &rarr;
+              <Link href="/templates" className="text-sm font-medium text-[#0F766E] hover:underline">
+                {t("chooseYourStyle.seeAll")}
               </Link>
             </div>
           </div>
@@ -384,35 +322,38 @@ export default function Home() {
         <section className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-5xl">
             <h2 className="mb-2 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-              See it in action
+              {t("showcase.heading")}
             </h2>
             <p className="mx-auto mb-10 max-w-md text-center text-sm text-[#5B6B67]">
-              Weddings, graduations, parties, baby showers — a look at the countdown, maps,
-              timeline, dress code, and photo features on real AppEvents themes.
+              {t("showcase.subtitle")}
             </p>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
-              {SHOWCASE_ENTRIES.map((entry) => (
-                <div key={entry.name} className="flex flex-col items-center gap-3">
-                  <InvitationPhoneMockup
-                    theme={entry.theme}
-                    eventTypeLabel={entry.eventTypeLabel}
-                    name={entry.name}
-                    dateLabel={entry.dateLabel}
-                    screens={entry.screens}
-                    address={entry.address}
-                    dressCode={entry.dressCode}
-                    timelineItems={entry.timelineItems}
-                    photoUrl={entry.photoUrl}
-                    size="sm"
-                  />
-                  <div className="text-center">
-                    <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#0F766E]">
-                      {entry.eventTypeLabel}
-                    </p>
-                    <p className="text-xs font-medium text-[#14211D]">{entry.name}</p>
+              {SHOWCASE_ENTRIES.map((entry) => {
+                const eventTypeLabel = eventTypeLabels[entry.eventType];
+                const dateLabel = formatEventDate(entry.dateIso, locale);
+                return (
+                  <div key={entry.name} className="flex flex-col items-center gap-3">
+                    <InvitationPhoneMockup
+                      theme={entry.theme}
+                      eventTypeLabel={eventTypeLabel}
+                      name={entry.name}
+                      dateLabel={dateLabel}
+                      screens={entry.screens}
+                      address={entry.address}
+                      dressCode={entry.dressCode}
+                      timelineItems={entry.timelineItems}
+                      photoUrl={entry.photoUrl}
+                      size="sm"
+                    />
+                    <div className="text-center">
+                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#0F766E]">
+                        {eventTypeLabel}
+                      </p>
+                      <p className="text-xs font-medium text-[#14211D]">{entry.name}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -421,20 +362,15 @@ export default function Home() {
         <section id="how-it-works" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-3xl">
             <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-              How it works
+              {t("howItWorks.heading")}
             </h2>
             <div className="grid grid-cols-1 divide-y divide-[#E2DFD3] border-t border-b border-[#E2DFD3] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-              {STEPS.map(({ number, title, body }) => (
-                <div key={number} className="px-6 py-8 text-center sm:px-8">
-                  <span
-                    className="font-serif text-3xl text-[#A16207]"
-                    style={{ fontWeight: 600 }}
-                  >
-                    {number}
+              {steps.map(({ title, body }, i) => (
+                <div key={title} className="px-6 py-8 text-center sm:px-8">
+                  <span className="font-serif text-3xl text-[#A16207]" style={{ fontWeight: 600 }}>
+                    {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="mt-3 text-sm font-semibold text-[#14211D]">
-                    {title}
-                  </h3>
+                  <h3 className="mt-3 text-sm font-semibold text-[#14211D]">{title}</h3>
                   <p className="mt-1.5 text-sm text-[#5B6B67]">{body}</p>
                 </div>
               ))}
@@ -446,10 +382,10 @@ export default function Home() {
         <section id="faq" className="px-6 pb-14 sm:pb-28">
           <div className="mx-auto max-w-2xl">
             <h2 className="mb-10 text-center text-xs font-medium uppercase tracking-[0.35em] text-[#0F766E]">
-              Questions
+              {t("faq.heading")}
             </h2>
             <div className="flex flex-col gap-4">
-              {FAQS.map(({ question, answer }) => (
+              {faqItems.map(({ question, answer }) => (
                 <details key={question} className="group border border-[#E2DFD3] p-6">
                   <summary className="cursor-pointer list-none marker:content-none [&::-webkit-details-marker]:hidden">
                     <span className="flex items-center justify-between gap-4">
@@ -472,7 +408,9 @@ export default function Home() {
                       </svg>
                     </span>
                   </summary>
-                  <p className="mt-3 text-sm text-[#5B6B67]">{answer}</p>
+                  <p className="mt-3 text-sm text-[#5B6B67]">
+                    {answer.replace("{types}", eventTypesJoined)}
+                  </p>
                 </details>
               ))}
             </div>
@@ -482,20 +420,15 @@ export default function Home() {
         {/* Final CTA */}
         <section className="px-6 pb-24">
           <div className="mx-auto max-w-xl border border-[#0F766E]/25 px-8 py-12 text-center">
-            <h2
-              className="font-serif text-2xl text-[#14211D] sm:text-3xl"
-              style={{ fontWeight: 600 }}
-            >
-              Your invitation, live in minutes.
+            <h2 className="font-serif text-2xl text-[#14211D] sm:text-3xl" style={{ fontWeight: 600 }}>
+              {t("finalCta.title")}
             </h2>
-            <p className="mx-auto mt-3 max-w-sm text-sm text-[#5B6B67]">
-              Pick a theme, add your details, and share the link when you&apos;re ready.
-            </p>
+            <p className="mx-auto mt-3 max-w-sm text-sm text-[#5B6B67]">{t("finalCta.subtitle")}</p>
             <Link
               href="/register"
               className="mt-6 inline-block rounded-full bg-[#0F766E] px-6 py-3 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
             >
-              Create your invitation
+              {t("hero.ctaCreate")}
             </Link>
           </div>
         </section>

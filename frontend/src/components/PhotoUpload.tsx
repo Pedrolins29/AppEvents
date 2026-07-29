@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState, type DragEvent, type ReactNode } from "react";
 
 interface PhotoUploadProps {
@@ -25,6 +26,7 @@ export function PhotoUpload({
   onFilesSelected,
   children,
 }: PhotoUploadProps) {
+  const t = useTranslations("photoUpload");
   const [isDragOver, setIsDragOver] = useState(false);
   const isDisabled = disabled || isUploading;
 
@@ -69,12 +71,12 @@ export function PhotoUpload({
               className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#0F766E] border-t-transparent"
               aria-hidden
             />
-            Uploading&hellip;
+            {t("uploading")}
           </span>
         ) : (
           <>
-            <span className="text-sm font-medium text-[#0F766E]">Click or drag photos here</span>
-            <span className="text-xs text-[#5B6B67]">JPEG, PNG or WEBP, up to 5MB</span>
+            <span className="text-sm font-medium text-[#0F766E]">{t("clickOrDrag")}</span>
+            <span className="text-xs text-[#5B6B67]">{t("fileHint")}</span>
           </>
         )}
       </label>

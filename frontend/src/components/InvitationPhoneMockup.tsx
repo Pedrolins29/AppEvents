@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import { THEME_STYLES } from "@/components/InvitationHero";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import type { ThemeKey } from "@/types/template";
@@ -46,6 +47,17 @@ function MapGlyph({ color }: { color: string }) {
   );
 }
 
+interface MockupLabels {
+  days: string;
+  hrs: string;
+  min: string;
+  sec: string;
+  dressCode: string;
+  rsvpHeading: string;
+  attending: string;
+  notAttending: string;
+}
+
 function ScreenBlock({
   theme,
   screen,
@@ -53,6 +65,7 @@ function ScreenBlock({
   timelineItems,
   dressCode,
   description,
+  labels,
 }: {
   theme: (typeof THEME_STYLES)[ThemeKey];
   screen: MockupScreen;
@@ -60,6 +73,7 @@ function ScreenBlock({
   timelineItems?: SampleTimelineItem[];
   dressCode?: string;
   description?: string;
+  labels: MockupLabels;
 }) {
   if (screen === "countdown") {
     return (
@@ -70,7 +84,7 @@ function ScreenBlock({
               {value}
             </span>
             <span className="mt-0.5 text-[7px] uppercase tracking-[0.15em]" style={{ color: theme.body }}>
-              {["Days", "Hrs", "Min", "Sec"][i]}
+              {[labels.days, labels.hrs, labels.min, labels.sec][i]}
             </span>
           </div>
         ))}
@@ -117,7 +131,7 @@ function ScreenBlock({
     return (
       <div className="flex flex-col items-center gap-1">
         <span className="text-[8px] uppercase tracking-[0.25em]" style={{ color: theme.accent }}>
-          Dress code
+          {labels.dressCode}
         </span>
         <span className="text-[10px]" style={{ color: theme.heading }}>
           {dressCode}
@@ -142,20 +156,20 @@ function ScreenBlock({
     return (
       <div className="flex flex-col items-center gap-3">
         <span className="text-[9px] font-medium uppercase tracking-[0.3em]" style={{ color: theme.accent }}>
-          RSVP
+          {labels.rsvpHeading}
         </span>
         <div className="flex gap-2">
           <span
             className="rounded-full px-3 py-1.5 text-[9px] font-medium"
             style={{ backgroundColor: theme.accent, color: theme.pageBg }}
           >
-            I&apos;ll be there
+            {labels.attending}
           </span>
           <span
             className="rounded-full border px-3 py-1.5 text-[9px] font-medium"
             style={{ borderColor: theme.accent, color: theme.heading }}
           >
-            Can&apos;t make it
+            {labels.notAttending}
           </span>
         </div>
       </div>
@@ -168,7 +182,7 @@ function ScreenBlock({
 // A decorative, non-interactive echo of the real invitation experience — static illustrative
 // content, not live data. Pure CSS animation (see .phone-scroll in globals.css), so this stays a
 // Server Component: no client-side JS needed.
-export function InvitationPhoneMockup({
+export async function InvitationPhoneMockup({
   theme: themeKey,
   eventTypeLabel,
   name,
@@ -183,6 +197,20 @@ export function InvitationPhoneMockup({
 }: InvitationPhoneMockupProps) {
   const theme = THEME_STYLES[themeKey];
   const dims = size === "sm" ? { h: 320, w: 160 } : { h: 420, w: 210 };
+  const [countdownT, invitationT] = await Promise.all([
+    getTranslations("countdown"),
+    getTranslations("invitation"),
+  ]);
+  const labels: MockupLabels = {
+    days: countdownT("days"),
+    hrs: countdownT("hours"),
+    min: countdownT("min"),
+    sec: countdownT("sec"),
+    dressCode: invitationT("dressCode"),
+    rsvpHeading: invitationT("rsvp.heading"),
+    attending: invitationT("rsvp.attending"),
+    notAttending: invitationT("rsvp.notAttending"),
+  };
 
   return (
     <div
@@ -233,6 +261,7 @@ export function InvitationPhoneMockup({
               timelineItems={timelineItems}
               dressCode={dressCode}
               description={description}
+              labels={labels}
             />
           ))}
         </div>

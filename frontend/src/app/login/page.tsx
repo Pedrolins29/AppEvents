@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth, ApiError } from "@/lib/auth-context";
@@ -8,6 +9,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export default function LoginPage() {
+  const t = useTranslations("auth.login");
   const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -26,7 +28,7 @@ export default function LoginPage() {
       if (err instanceof ApiError) {
         setError(err.message);
       } else {
-        setError("Something went wrong. Please try again.");
+        setError(t("genericError"));
       }
     } finally {
       setIsSubmitting(false);
@@ -42,12 +44,12 @@ export default function LoginPage() {
             className="mb-6 font-serif text-2xl text-[#14211D]"
             style={{ fontWeight: 600 }}
           >
-            Welcome back
+            {t("title")}
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div>
               <label htmlFor="email" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Email
+                {t("email")}
               </label>
               <input
                 id="email"
@@ -60,7 +62,7 @@ export default function LoginPage() {
             </div>
             <div>
               <label htmlFor="password" className="mb-1 block text-sm font-medium text-[#14211D]">
-                Password
+                {t("password")}
               </label>
               <input
                 id="password"
@@ -77,13 +79,13 @@ export default function LoginPage() {
               disabled={isSubmitting}
               className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
             >
-              {isSubmitting ? "Logging in..." : "Log in"}
+              {isSubmitting ? t("submitting") : t("submit")}
             </button>
           </form>
           <p className="mt-4 text-sm text-[#5B6B67]">
-            Don&apos;t have an account?{" "}
+            {t("noAccount")}{" "}
             <Link href="/register" className="font-medium text-[#0F766E] underline transition-colors duration-150">
-              Create one
+              {t("createOne")}
             </Link>
           </p>
         </div>
