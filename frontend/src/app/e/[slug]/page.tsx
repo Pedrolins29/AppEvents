@@ -87,7 +87,9 @@ export default async function PublicEventPage({ params }: PageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // Escape "<" so a literal "</script>" inside user-entered description/address can't
+        // prematurely close this tag.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <InvitationBody event={viewModel} theme={theme} />
     </>

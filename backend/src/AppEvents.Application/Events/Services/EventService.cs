@@ -246,8 +246,16 @@ public class EventService : IEventService
     private async Task<Event> GetOwnedEventAsync(Guid userId, Guid eventId, CancellationToken cancellationToken)
     {
         var @event = await _eventRepository.GetByIdAsync(eventId, cancellationToken);
-        if (@event is null || @event.UserId != userId)
+        if (@event is null)
         {
+            throw new NotFoundException("Event not found.");
+        }
+
+        if (@event.UserId != userId)
+        {
+            _logger.LogWarning(
+                "Audit: user {UserId} attempted to access event {EventId} owned by {OwnerId}",
+                userId, eventId, @event.UserId);
             throw new NotFoundException("Event not found.");
         }
 

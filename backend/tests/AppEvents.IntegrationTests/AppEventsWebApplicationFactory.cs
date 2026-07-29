@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using AppEvents.Application.Common.Interfaces;
 using AppEvents.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
@@ -35,19 +36,46 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
         });
 
         // Real SmtpEmailSender would otherwise try to actually connect to whatever Email:Host
-        // is configured on every RSVP-submitting test - slow (blocks on the send timeout) and
-        // flaky (depends on Mailpit happening to be running). Swap in a no-op fake instead.
+        // is configured on every RSVP-submitting/registering test - slow (blocks on the send
+        // timeout) and flaky (depends on Mailpit happening to be running). Swap in a capturing
+        // fake instead - still a no-op against real SMTP, but lets tests assert an email was
+        // sent and recover the token embedded in a confirmation link. Singleton (not scoped) so
+        // every test in the process can read back what the app under test actually sent.
         builder.ConfigureTestServices(services =>
         {
             services.RemoveAll<IEmailSender>();
-            services.AddScoped<IEmailSender, NoOpEmailSender>();
+            services.AddSingleton<IEmailSender, TestEmailSender>();
         });
     }
 
-    private class NoOpEmailSender : IEmailSender
+    public TestEmailSender EmailSender => (TestEmailSender)Services.GetRequiredService<IEmailSender>();
+
+    public class TestEmailSender : IEmailSender
     {
-        public Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default) =>
-            Task.CompletedTask;
+        public record SentEmail(string To, string Subject, string HtmlBody);
+
+        // ConcurrentQueue (not ConcurrentBag) - tests rely on Sent preserving send order to
+        // distinguish an original confirmation email from a later resend.
+        private readonly ConcurrentQueue<SentEmail> _sent = new();
+
+        public IReadOnlyCollection<SentEmail> Sent => _sent.ToArray();
+
+        public Task SendAsync(string toEmail, string subject, string htmlBody, CancellationToken cancellationToken = default)
+        {
+            _sent.Enqueue(new SentEmail(toEmail, subject, htmlBody));
+            return Task.CompletedTask;
+        }
+    }
+
+    // Bypasses the confirmation flow for tests that just need an active account (e.g. testing
+    // login/refresh/logout itself) without exercising confirm-email as its own concern.
+    public async Task ConfirmUserAsync(string email)
+    {
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppEventsDbContext>();
+        var user = await dbContext.Users.SingleAsync(u => u.Email == email.Trim().ToLowerInvariant());
+        user.EmailConfirmed = true;
+        await dbContext.SaveChangesAsync();
     }
 
     // xUnit creates a separate factory instance per test class under IClassFixture, and runs

@@ -58,4 +58,40 @@ public class RegisterRequestValidatorTests
         result.IsValid.Should().BeFalse();
         result.Errors.Should().Contain(e => e.PropertyName == nameof(RegisterRequest.FullName));
     }
+
+    [Fact]
+    public void Validate_WithFilledHoneypot_HasError()
+    {
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe", "I am a bot");
+
+        var result = _validator.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(RegisterRequest.HoneypotField));
+    }
+
+    [Theory]
+    [InlineData("en")]
+    [InlineData("pt")]
+    [InlineData("es")]
+    [InlineData(null)]
+    public void Validate_WithSupportedOrMissingLocale_HasNoLocaleError(string? locale)
+    {
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe", Locale: locale);
+
+        var result = _validator.Validate(request);
+
+        result.Errors.Should().NotContain(e => e.PropertyName == nameof(RegisterRequest.Locale));
+    }
+
+    [Fact]
+    public void Validate_WithUnsupportedLocale_HasError()
+    {
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe", Locale: "fr");
+
+        var result = _validator.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(RegisterRequest.Locale));
+    }
 }

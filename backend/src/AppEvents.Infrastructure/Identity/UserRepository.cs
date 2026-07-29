@@ -27,6 +27,9 @@ public class UserRepository : IUserRepository
     public Task<bool> EmailExistsAsync(string normalizedEmail, CancellationToken cancellationToken = default) =>
         _dbContext.Users.AnyAsync(u => u.Email == normalizedEmail, cancellationToken);
 
+    public Task<User?> GetByEmailConfirmationTokenHashAsync(string tokenHash, CancellationToken cancellationToken = default) =>
+        _dbContext.Users.FirstOrDefaultAsync(u => u.EmailConfirmationTokenHash == tokenHash, cancellationToken);
+
     public Task<Role?> GetRoleByNameAsync(string roleName, CancellationToken cancellationToken = default) =>
         _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == roleName, cancellationToken);
 

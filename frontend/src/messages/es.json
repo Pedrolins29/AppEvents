@@ -62,7 +62,10 @@
       "submitting": "Iniciando sesión...",
       "noAccount": "¿No tienes una cuenta?",
       "createOne": "Crear una",
-      "genericError": "Algo salió mal. Inténtalo de nuevo."
+      "genericError": "Algo salió mal. Inténtalo de nuevo.",
+      "resendConfirmation": "Reenviar email de confirmación",
+      "resendConfirmationSending": "Enviando...",
+      "resendConfirmationSent": "Email enviado — revisa tu bandeja de entrada."
     },
     "register": {
       "title": "Crea tu cuenta",
@@ -85,7 +88,22 @@
       "createAccount": "Crear cuenta",
       "haveAccount": "¿Ya tienes una cuenta?",
       "logIn": "Iniciar sesión",
-      "genericError": "Algo salió mal. Inténtalo de nuevo."
+      "genericError": "Algo salió mal. Inténtalo de nuevo.",
+      "checkEmailTitle": "Revisa tu correo",
+      "checkEmailBody": "Enviamos un enlace de confirmación a {email}. Haz clic en él para activar tu cuenta y luego inicia sesión."
+    },
+    "verifyEmail": {
+      "confirming": "Confirmando tu correo...",
+      "successTitle": "¡Tu correo fue confirmado!",
+      "successBody": "Ya puedes iniciar sesión en tu cuenta.",
+      "alreadyConfirmedTitle": "Ya confirmado",
+      "alreadyConfirmedBody": "Esta cuenta ya está confirmada — puedes iniciar sesión.",
+      "errorTitle": "Este enlace no funcionó",
+      "missingToken": "No se proporcionó ningún token de confirmación.",
+      "resendPrompt": "Ingresa tu correo para recibir un nuevo enlace de confirmación.",
+      "resendButton": "Reenviar email de confirmación",
+      "resendSuccess": "Si esa cuenta necesita confirmación, un nuevo correo está en camino.",
+      "backToLogin": "Volver al inicio de sesión"
     }
   },
   "events": {

@@ -54,6 +54,21 @@ public class AuthController : ControllerBase
         return Ok(new LoginResponse(result.AccessToken, result.ExpiresInSeconds, result.User));
     }
 
+    [HttpPost("confirm-email")]
+    public async Task<ActionResult<ConfirmEmailResponse>> ConfirmEmail(ConfirmEmailRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _authService.ConfirmEmailAsync(request.Token, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("resend-confirmation")]
+    [EnableRateLimiting(RateLimitingExtensions.ResendConfirmationPolicy)]
+    public async Task<IActionResult> ResendConfirmation(ResendConfirmationRequest request, CancellationToken cancellationToken)
+    {
+        await _authService.ResendConfirmationAsync(request.Email, cancellationToken);
+        return NoContent();
+    }
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout(CancellationToken cancellationToken)
     {

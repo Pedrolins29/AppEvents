@@ -2,6 +2,8 @@ export interface RegisterRequest {
   email: string;
   password: string;
   fullName: string;
+  honeypotField?: string | null;
+  locale?: string;
 }
 
 export interface LoginRequest {
@@ -20,6 +22,10 @@ export interface AuthResponse {
   accessToken: string;
   expiresInSeconds: number;
   user: UserProfile;
+}
+
+export interface ConfirmEmailResponse {
+  alreadyConfirmed: boolean;
 }
 
 export interface ApiProblem {

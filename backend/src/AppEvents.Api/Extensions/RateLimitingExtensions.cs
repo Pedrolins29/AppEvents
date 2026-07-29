@@ -8,6 +8,7 @@ public static class RateLimitingExtensions
     public const string AuthPolicy = "auth";
     public const string RsvpPolicy = "rsvp";
     public const string UploadPolicy = "upload";
+    public const string ResendConfirmationPolicy = "resend-confirmation";
 
     /// <summary>
     /// The "Testing" environment (used by AppEventsWebApplicationFactory) gets much higher
@@ -66,6 +67,18 @@ public static class RateLimitingExtensions
                     {
                         PermitLimit = isTesting ? 10_000 : 10,
                         Window = TimeSpan.FromSeconds(60),
+                        QueueLimit = 0,
+                    }));
+
+            // Tighter than auth's 5/60s: this endpoint accepts an arbitrary target email with no
+            // account-ownership proof, so it's the easiest of the auth endpoints to abuse for spam.
+            options.AddPolicy(ResendConfirmationPolicy, httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetClientIp(httpContext),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = isTesting ? 10_000 : 3,
+                        Window = TimeSpan.FromMinutes(15),
                         QueueLimit = 0,
                     }));
         });

@@ -62,7 +62,10 @@
       "submitting": "Entrando...",
       "noAccount": "Não tem uma conta?",
       "createOne": "Criar uma",
-      "genericError": "Algo deu errado. Tente novamente."
+      "genericError": "Algo deu errado. Tente novamente.",
+      "resendConfirmation": "Reenviar email de confirmação",
+      "resendConfirmationSending": "Enviando...",
+      "resendConfirmationSent": "Email enviado — confira sua caixa de entrada."
     },
     "register": {
       "title": "Crie sua conta",
@@ -85,7 +88,22 @@
       "createAccount": "Criar conta",
       "haveAccount": "Já tem uma conta?",
       "logIn": "Entrar",
-      "genericError": "Algo deu errado. Tente novamente."
+      "genericError": "Algo deu errado. Tente novamente.",
+      "checkEmailTitle": "Confira seu email",
+      "checkEmailBody": "Enviamos um link de confirmação para {email}. Clique nele para ativar sua conta e depois faça login."
+    },
+    "verifyEmail": {
+      "confirming": "Confirmando seu email...",
+      "successTitle": "Seu email foi confirmado!",
+      "successBody": "Agora você já pode fazer login na sua conta.",
+      "alreadyConfirmedTitle": "Já confirmado",
+      "alreadyConfirmedBody": "Essa conta já está confirmada — você pode fazer login.",
+      "errorTitle": "Esse link não funcionou",
+      "missingToken": "Nenhum token de confirmação foi informado.",
+      "resendPrompt": "Digite seu email para receber um novo link de confirmação.",
+      "resendButton": "Reenviar email de confirmação",
+      "resendSuccess": "Se essa conta precisar de confirmação, um novo email está a caminho.",
+      "backToLogin": "Voltar para o login"
     }
   },
   "events": {

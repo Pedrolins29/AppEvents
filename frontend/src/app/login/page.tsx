@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useAuth, ApiError } from "@/lib/auth-context";
+import { authApi } from "@/lib/authApi";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -16,10 +17,15 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [needsConfirmation, setNeedsConfirmation] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [resendSent, setResendSent] = useState(false);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
+    setNeedsConfirmation(false);
+    setResendSent(false);
     setIsSubmitting(true);
     try {
       await login({ email, password });
@@ -27,11 +33,22 @@ export default function LoginPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);
+        setNeedsConfirmation(err.status === 403);
       } else {
         setError(t("genericError"));
       }
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function handleResendConfirmation() {
+    setIsResending(true);
+    try {
+      await authApi.resendConfirmation(email);
+      setResendSent(true);
+    } finally {
+      setIsResending(false);
     }
   }
 
@@ -74,6 +91,20 @@ export default function LoginPage() {
               />
             </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
+            {needsConfirmation && (
+              resendSent ? (
+                <p className="text-sm text-[#0F766E]">{t("resendConfirmationSent")}</p>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleResendConfirmation}
+                  disabled={isResending}
+                  className="text-left text-sm font-medium text-[#0F766E] underline transition-colors duration-150 disabled:opacity-50"
+                >
+                  {isResending ? t("resendConfirmationSending") : t("resendConfirmation")}
+                </button>
+              )
+            )}
             <button
               type="submit"
               disabled={isSubmitting}

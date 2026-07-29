@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useAuth, ApiError } from "@/lib/auth-context";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -18,7 +17,7 @@ const PASSWORD_TESTS: ((value: string) => boolean)[] = [
 
 export default function RegisterPage() {
   const t = useTranslations("auth.register");
-  const router = useRouter();
+  const locale = useLocale();
   const { register } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,6 +28,8 @@ export default function RegisterPage() {
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [honeypotField, setHoneypotField] = useState("");
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
 
   const passwordChecks = (t.raw("passwordChecks") as { label: string }[]).map(
     ({ label }, i) => ({ label, test: PASSWORD_TESTS[i] }),
@@ -45,8 +46,8 @@ export default function RegisterPage() {
 
     setIsSubmitting(true);
     try {
-      await register({ fullName, email, password });
-      router.push("/login");
+      await register({ fullName, email, password, honeypotField: honeypotField || null, locale });
+      setSubmittedEmail(email);
     } catch (err) {
       if (err instanceof ApiError) {
         const fieldErrors = err.problem?.errors
@@ -61,6 +62,23 @@ export default function RegisterPage() {
     }
   }
 
+  if (submittedEmail) {
+    return (
+      <div className="flex flex-1 flex-col bg-[#FDFBF7]">
+        <SiteHeader />
+        <main className="flex flex-1 items-center justify-center px-6 py-16">
+          <div className="w-full max-w-sm text-center">
+            <h1 className="mb-2 font-serif text-2xl text-[#14211D]" style={{ fontWeight: 600 }}>
+              {t("checkEmailTitle")}
+            </h1>
+            <p className="text-[#5B6B67]">{t("checkEmailBody", { email: submittedEmail })}</p>
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-1 flex-col bg-[#FDFBF7]">
       <SiteHeader />
@@ -73,6 +91,18 @@ export default function RegisterPage() {
             {t("title")}
           </h1>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Honeypot: hidden from every real visitor (visually and from assistive tech), left
+                empty by humans, often auto-filled by bots - a non-empty value fails validation. */}
+            <input
+              type="text"
+              name="hp_confirm_token"
+              value={honeypotField}
+              onChange={(e) => setHoneypotField(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+            />
             <div>
               <label htmlFor="fullName" className="mb-1 block text-sm font-medium text-[#14211D]">
                 {t("fullName")}

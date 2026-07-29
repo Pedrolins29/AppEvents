@@ -25,6 +25,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired()
             .HasMaxLength(200);
 
+        builder.Property(u => u.EmailConfirmationTokenHash)
+            .HasMaxLength(200);
+
+        builder.HasIndex(u => u.EmailConfirmationTokenHash).IsUnique();
+
+        builder.Property(u => u.PreferredLocale)
+            .IsRequired()
+            .HasMaxLength(10)
+            .HasDefaultValue(SupportedLocales.Default);
+
         builder.HasOne(u => u.Role)
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId)

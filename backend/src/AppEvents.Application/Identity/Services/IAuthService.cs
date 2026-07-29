@@ -13,4 +13,8 @@ public interface IAuthService
     Task LogoutAsync(string rawRefreshToken, CancellationToken cancellationToken = default);
 
     Task<UserProfileResponse> GetProfileAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    Task<ConfirmEmailResponse> ConfirmEmailAsync(string rawToken, CancellationToken cancellationToken = default);
+
+    Task ResendConfirmationAsync(string email, CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,5 @@
 using AppEvents.Application.Common.Exceptions;
+using AppEvents.Application.Common.Interfaces;
 using AppEvents.Application.Identity.Dtos;
 using AppEvents.Application.Identity.Interfaces;
 using AppEvents.Application.Identity.Services;
@@ -16,6 +17,8 @@ public class AuthServiceTests
     private readonly IPasswordHasher _passwordHasher = Substitute.For<IPasswordHasher>();
     private readonly IJwtTokenService _jwtTokenService = Substitute.For<IJwtTokenService>();
     private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+    private readonly IEmailSender _emailSender = Substitute.For<IEmailSender>();
+    private readonly IEmailConfirmationLinkBuilder _linkBuilder = Substitute.For<IEmailConfirmationLinkBuilder>();
     private readonly ILogger<AuthService> _logger = Substitute.For<ILogger<AuthService>>();
 
     private readonly DateTime _now = new(2026, 7, 21, 12, 0, 0, DateTimeKind.Utc);
@@ -24,7 +27,10 @@ public class AuthServiceTests
     private AuthService CreateSut()
     {
         _dateTimeProvider.UtcNow.Returns(_now);
-        return new AuthService(_userRepository, _refreshTokenRepository, _passwordHasher, _jwtTokenService, _dateTimeProvider, _logger);
+        _linkBuilder.Build(Arg.Any<string>()).Returns(callInfo => $"https://example.com/verify-email?token={callInfo.Arg<string>()}");
+        return new AuthService(
+            _userRepository, _refreshTokenRepository, _passwordHasher, _jwtTokenService,
+            _dateTimeProvider, _emailSender, _linkBuilder, _logger);
     }
 
     private User CreateUser(string password, out string passwordHash)
@@ -38,6 +44,7 @@ public class AuthServiceTests
             FullName = "Jane Doe",
             RoleId = _customerRole.Id,
             Role = _customerRole,
+            EmailConfirmed = true,
         };
     }
 
@@ -56,9 +63,69 @@ public class AuthServiceTests
         response.Email.Should().Be("jane.doe@example.com");
         response.Role.Should().Be(RoleNames.Customer);
         await _userRepository.Received(1).AddAsync(
-            Arg.Is<User>(u => u!.Email == "jane.doe@example.com" && u.PasswordHash == "hashed-password" && u.RoleId == _customerRole.Id),
+            Arg.Is<User>(u =>
+                u!.Email == "jane.doe@example.com" && u.PasswordHash == "hashed-password" && u.RoleId == _customerRole.Id
+                && u.EmailConfirmed == false && u.EmailConfirmationTokenHash != null
+                && u.EmailConfirmationTokenExpiresAtUtc == _now.AddHours(24)),
             Arg.Any<CancellationToken>());
         await _userRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _emailSender.Received(1).SendAsync("jane.doe@example.com", Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    [Theory]
+    [InlineData("pt")]
+    [InlineData("es")]
+    [InlineData(null)]
+    [InlineData("fr")]
+    public async Task RegisterAsync_SetsPreferredLocale_FallingBackToEnglishWhenUnsupportedOrMissing(string? requestedLocale)
+    {
+        var sut = CreateSut();
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe", Locale: requestedLocale);
+        var expectedLocale = requestedLocale is "pt" or "es" ? requestedLocale : "en";
+
+        _userRepository.EmailExistsAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(false);
+        _userRepository.GetRoleByNameAsync(RoleNames.Customer, Arg.Any<CancellationToken>()).Returns(_customerRole);
+
+        await sut.RegisterAsync(request);
+
+        await _userRepository.Received(1).AddAsync(
+            Arg.Is<User>(u => u!.PreferredLocale == expectedLocale),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task RegisterAsync_WithPortugueseLocale_SendsPortugueseConfirmationEmail()
+    {
+        var sut = CreateSut();
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe", Locale: "pt");
+
+        _userRepository.EmailExistsAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(false);
+        _userRepository.GetRoleByNameAsync(RoleNames.Customer, Arg.Any<CancellationToken>()).Returns(_customerRole);
+
+        await sut.RegisterAsync(request);
+
+        await _emailSender.Received(1).SendAsync(
+            "jane.doe@example.com",
+            "Confirme sua conta AppEvents",
+            Arg.Is<string>(body => body!.Contains("Olá")),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task RegisterAsync_WhenEmailSendThrows_StillSucceeds()
+    {
+        var sut = CreateSut();
+        var request = new RegisterRequest("jane.doe@example.com", "Str0ng!Passw0rd", "Jane Doe");
+
+        _userRepository.EmailExistsAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(false);
+        _userRepository.GetRoleByNameAsync(RoleNames.Customer, Arg.Any<CancellationToken>()).Returns(_customerRole);
+        _passwordHasher.Hash("Str0ng!Passw0rd").Returns("hashed-password");
+        _emailSender.SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(_ => Task.FromException(new InvalidOperationException("SMTP unreachable")));
+
+        var response = await sut.RegisterAsync(request);
+
+        response.Email.Should().Be("jane.doe@example.com");
     }
 
     [Fact]
@@ -153,6 +220,23 @@ public class AuthServiceTests
     }
 
     [Fact]
+    public async Task LoginAsync_WithCorrectPasswordButUnconfirmedEmail_ThrowsEmailNotConfirmed()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out var hash);
+        user.EmailConfirmed = false;
+
+        _userRepository.GetByEmailAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(user);
+        _passwordHasher.Verify("Str0ng!Passw0rd", hash).Returns(true);
+
+        var act = () => sut.LoginAsync(new LoginRequest("jane.doe@example.com", "Str0ng!Passw0rd"), "127.0.0.1");
+
+        await act.Should().ThrowAsync<EmailNotConfirmedException>();
+        user.FailedLoginAttempts.Should().Be(0);
+        await _refreshTokenRepository.DidNotReceive().AddAsync(Arg.Any<RefreshToken>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
     public async Task RefreshAsync_WithValidToken_RotatesAndRevokesOldToken()
     {
         var sut = CreateSut();
@@ -225,5 +309,134 @@ public class AuthServiceTests
         var act = () => sut.GetProfileAsync(userId);
 
         await act.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task ConfirmEmailAsync_WithValidToken_ConfirmsAndSaves()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = false;
+        user.EmailConfirmationTokenHash = RefreshTokenGenerator.Hash("raw-token");
+        user.EmailConfirmationTokenExpiresAtUtc = _now.AddHours(1);
+
+        _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
+            .Returns(user);
+
+        var response = await sut.ConfirmEmailAsync("raw-token");
+
+        response.AlreadyConfirmed.Should().BeFalse();
+        user.EmailConfirmed.Should().BeTrue();
+        await _userRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ConfirmEmailAsync_WithUnknownToken_ThrowsNotFound()
+    {
+        var sut = CreateSut();
+        _userRepository.GetByEmailConfirmationTokenHashAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns((User?)null);
+
+        var act = () => sut.ConfirmEmailAsync("garbage-token");
+
+        await act.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task ConfirmEmailAsync_WithExpiredToken_ThrowsNotFound()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = false;
+        user.EmailConfirmationTokenHash = RefreshTokenGenerator.Hash("raw-token");
+        user.EmailConfirmationTokenExpiresAtUtc = _now.AddHours(-1);
+
+        _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
+            .Returns(user);
+
+        var act = () => sut.ConfirmEmailAsync("raw-token");
+
+        await act.Should().ThrowAsync<NotFoundException>();
+    }
+
+    [Fact]
+    public async Task ConfirmEmailAsync_AlreadyConfirmed_ReturnsAlreadyConfirmedTrueWithoutMutating()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = true;
+        user.EmailConfirmationTokenHash = RefreshTokenGenerator.Hash("raw-token");
+
+        _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
+            .Returns(user);
+
+        var response = await sut.ConfirmEmailAsync("raw-token");
+
+        response.AlreadyConfirmed.Should().BeTrue();
+        await _userRepository.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ResendConfirmationAsync_ForUnconfirmedUser_IssuesNewTokenAndSendsEmail()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = false;
+        var oldHash = RefreshTokenGenerator.Hash("old-token");
+        user.EmailConfirmationTokenHash = oldHash;
+
+        _userRepository.GetByEmailAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(user);
+
+        await sut.ResendConfirmationAsync("jane.doe@example.com");
+
+        user.EmailConfirmationTokenHash.Should().NotBe(oldHash);
+        await _userRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _emailSender.Received(1).SendAsync("jane.doe@example.com", Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ResendConfirmationAsync_UsesUsersStoredPreferredLocale()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = false;
+        user.PreferredLocale = "es";
+
+        _userRepository.GetByEmailAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(user);
+
+        await sut.ResendConfirmationAsync("jane.doe@example.com");
+
+        await _emailSender.Received(1).SendAsync(
+            "jane.doe@example.com",
+            "Confirma tu cuenta de AppEvents",
+            Arg.Any<string>(),
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ResendConfirmationAsync_ForUnknownEmail_NoOp()
+    {
+        var sut = CreateSut();
+        _userRepository.GetByEmailAsync("nobody@example.com", Arg.Any<CancellationToken>()).Returns((User?)null);
+
+        await sut.ResendConfirmationAsync("nobody@example.com");
+
+        await _userRepository.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _emailSender.DidNotReceive().SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ResendConfirmationAsync_ForAlreadyConfirmedUser_NoOp()
+    {
+        var sut = CreateSut();
+        var user = CreateUser("Str0ng!Passw0rd", out _);
+        user.EmailConfirmed = true;
+
+        _userRepository.GetByEmailAsync("jane.doe@example.com", Arg.Any<CancellationToken>()).Returns(user);
+
+        await sut.ResendConfirmationAsync("jane.doe@example.com");
+
+        await _userRepository.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _emailSender.DidNotReceive().SendAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>());
     }
 }

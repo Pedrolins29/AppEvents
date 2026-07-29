@@ -1,5 +1,7 @@
 using AppEvents.Application.Common.Exceptions;
+using AppEvents.Application.Common.Interfaces;
 using AppEvents.Application.Identity.Dtos;
+using AppEvents.Application.Identity.Emails;
 using AppEvents.Application.Identity.Interfaces;
 using AppEvents.Domain.Identity;
 using Microsoft.Extensions.Logging;
@@ -14,6 +16,7 @@ namespace AppEvents.Application.Identity.Services;
 public class AuthService : IAuthService
 {
     private const int RefreshTokenDays = 14;
+    private const int EmailConfirmationTokenExpiryHours = 24;
     private const string GenericLoginFailureMessage = "Invalid email or password.";
 
     private readonly IUserRepository _userRepository;
@@ -21,6 +24,8 @@ public class AuthService : IAuthService
     private readonly IPasswordHasher _passwordHasher;
     private readonly IJwtTokenService _jwtTokenService;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IEmailSender _emailSender;
+    private readonly IEmailConfirmationLinkBuilder _linkBuilder;
     private readonly ILogger<AuthService> _logger;
 
     public AuthService(
@@ -29,6 +34,8 @@ public class AuthService : IAuthService
         IPasswordHasher passwordHasher,
         IJwtTokenService jwtTokenService,
         IDateTimeProvider dateTimeProvider,
+        IEmailSender emailSender,
+        IEmailConfirmationLinkBuilder linkBuilder,
         ILogger<AuthService> logger)
     {
         _userRepository = userRepository;
@@ -36,6 +43,8 @@ public class AuthService : IAuthService
         _passwordHasher = passwordHasher;
         _jwtTokenService = jwtTokenService;
         _dateTimeProvider = dateTimeProvider;
+        _emailSender = emailSender;
+        _linkBuilder = linkBuilder;
         _logger = logger;
     }
 
@@ -51,18 +60,28 @@ public class AuthService : IAuthService
         var customerRole = await _userRepository.GetRoleByNameAsync(RoleNames.Customer, cancellationToken)
             ?? throw new InvalidOperationException($"Role '{RoleNames.Customer}' is not seeded.");
 
+        var now = _dateTimeProvider.UtcNow;
+        var rawToken = RefreshTokenGenerator.GenerateRawToken();
+        var locale = SupportedLocales.IsSupported(request.Locale) ? request.Locale! : SupportedLocales.Default;
+
         var user = new User
         {
             Email = normalizedEmail,
             PasswordHash = _passwordHasher.Hash(request.Password),
             FullName = request.FullName.Trim(),
             RoleId = customerRole.Id,
+            EmailConfirmed = false,
+            EmailConfirmationTokenHash = RefreshTokenGenerator.Hash(rawToken),
+            EmailConfirmationTokenExpiresAtUtc = now.AddHours(EmailConfirmationTokenExpiryHours),
+            PreferredLocale = locale,
         };
 
         await _userRepository.AddAsync(user, cancellationToken);
         await _userRepository.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Audit: registration succeeded for user {UserId} ({Email})", user.Id, user.Email);
+
+        await TrySendAsync(() => SendConfirmationEmailAsync(user, rawToken, cancellationToken), "confirmation", user.Id);
 
         return new RegisterResponse(user.Id, user.Email, user.FullName, customerRole.Name);
     }
@@ -102,6 +121,16 @@ public class AuthService : IAuthService
             }
 
             throw new UnauthorizedAppException(GenericLoginFailureMessage);
+        }
+
+        // Checked only after a successful password verify - checking earlier would let an
+        // attacker learn "this unconfirmed account exists" for any email without knowing its
+        // password, the same enumeration class the generic unknown-email 401 above guards
+        // against. No failed-attempt penalty applies here since the credentials were correct.
+        if (!user.EmailConfirmed)
+        {
+            _logger.LogWarning("Audit: login rejected for user {UserId} — email not confirmed", user.Id);
+            throw new EmailNotConfirmedException("Please confirm your email address before logging in.");
         }
 
         user.RegisterSuccessfulLogin();
@@ -189,6 +218,73 @@ public class AuthService : IAuthService
             ?? throw new NotFoundException("User not found.");
 
         return ToProfile(user);
+    }
+
+    public async Task<ConfirmEmailResponse> ConfirmEmailAsync(string rawToken, CancellationToken cancellationToken = default)
+    {
+        var tokenHash = RefreshTokenGenerator.Hash(rawToken);
+        var user = await _userRepository.GetByEmailConfirmationTokenHashAsync(tokenHash, cancellationToken)
+            ?? throw new NotFoundException("This confirmation link is invalid. Please request a new one.");
+
+        if (user.EmailConfirmed)
+        {
+            return new ConfirmEmailResponse(AlreadyConfirmed: true);
+        }
+
+        if (user.EmailConfirmationTokenExpiresAtUtc is null || user.EmailConfirmationTokenExpiresAtUtc < _dateTimeProvider.UtcNow)
+        {
+            throw new NotFoundException("This confirmation link has expired. Please request a new one.");
+        }
+
+        user.ConfirmEmail();
+        await _userRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Audit: email confirmed for user {UserId}", user.Id);
+
+        return new ConfirmEmailResponse(AlreadyConfirmed: false);
+    }
+
+    public async Task ResendConfirmationAsync(string email, CancellationToken cancellationToken = default)
+    {
+        var normalizedEmail = NormalizeEmail(email);
+        var user = await _userRepository.GetByEmailAsync(normalizedEmail, cancellationToken);
+
+        // Enumeration-safe: silently no-ops for unknown or already-confirmed accounts, so the
+        // caller (an unauthenticated public endpoint) can't use this to probe which emails exist.
+        if (user is null || user.EmailConfirmed)
+        {
+            _logger.LogInformation("Audit: resend-confirmation no-op for {Email}", normalizedEmail);
+            return;
+        }
+
+        var now = _dateTimeProvider.UtcNow;
+        var rawToken = RefreshTokenGenerator.GenerateRawToken();
+        user.EmailConfirmationTokenHash = RefreshTokenGenerator.Hash(rawToken);
+        user.EmailConfirmationTokenExpiresAtUtc = now.AddHours(EmailConfirmationTokenExpiryHours);
+        await _userRepository.SaveChangesAsync(cancellationToken);
+
+        _logger.LogInformation("Audit: confirmation email resent for user {UserId}", user.Id);
+
+        await TrySendAsync(() => SendConfirmationEmailAsync(user, rawToken, cancellationToken), "confirmation resend", user.Id);
+    }
+
+    private async Task TrySendAsync(Func<Task> send, string emailKind, Guid userId)
+    {
+        try
+        {
+            await send();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Audit: failed to send {EmailKind} email for user {UserId}", emailKind, userId);
+        }
+    }
+
+    private Task SendConfirmationEmailAsync(User user, string rawToken, CancellationToken cancellationToken)
+    {
+        var link = _linkBuilder.Build(rawToken);
+        var (subject, body) = ConfirmationEmailTemplates.Build(user.PreferredLocale, user.FullName, link);
+        return _emailSender.SendAsync(user.Email, subject, body, cancellationToken);
     }
 
     private async Task<AuthResult> IssueTokensAsync(User user, string? ipAddress, CancellationToken cancellationToken)

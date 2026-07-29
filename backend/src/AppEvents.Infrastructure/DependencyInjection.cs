@@ -47,6 +47,7 @@ public static class DependencyInjection
         services.AddScoped<IRsvpService, RsvpService>();
 
         services.AddScoped<IEmailSender, SmtpEmailSender>();
+        services.AddScoped<IEmailConfirmationLinkBuilder, EmailConfirmationLinkBuilder>();
 
         return services;
     }

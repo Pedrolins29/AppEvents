@@ -23,6 +23,7 @@ public class GlobalExceptionHandler : IExceptionHandler
             NotFoundException => (StatusCodes.Status404NotFound, "Resource not found"),
             ConflictException => (StatusCodes.Status409Conflict, "Conflict"),
             UnauthorizedAppException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
+            EmailNotConfirmedException => (StatusCodes.Status403Forbidden, "Email not confirmed"),
             _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred"),
         };
 
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         {
             Status = statusCode,
             Title = title,
-            Detail = exception is ValidationAppException or NotFoundException or ConflictException or UnauthorizedAppException || _environment.IsDevelopment()
+            Detail = exception is ValidationAppException or NotFoundException or ConflictException or UnauthorizedAppException or EmailNotConfirmedException || _environment.IsDevelopment()
                 ? exception.Message
                 : "An unexpected error occurred. Please try again later.",
         };

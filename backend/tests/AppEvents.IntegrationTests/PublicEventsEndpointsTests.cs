@@ -33,6 +33,7 @@ public class PublicEventsEndpointsTests : IClassFixture<AppEventsWebApplicationF
         var client = _factory.CreateClient();
         var email = UniqueEmail();
         await client.PostAsJsonAsync("/api/auth/register", new RegisterRequest(email, "Str0ng!Passw0rd", "Test User"));
+        await _factory.ConfirmUserAsync(email);
         var loginResponse = await client.PostAsJsonAsync("/api/auth/login", new LoginRequest(email, "Str0ng!Passw0rd"));
         var loginBody = await loginResponse.Content.ReadFromJsonAsync<LoginResponse>();
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", loginBody!.AccessToken);

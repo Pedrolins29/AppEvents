@@ -65,7 +65,7 @@ export function RsvpForm({ slug, theme, demoMode = false }: RsvpFormProps) {
           empty by humans, often auto-filled by bots - a non-empty value fails validation. */}
       <input
         type="text"
-        name="website"
+        name="hp_confirm_token"
         value={honeypotField}
         onChange={(e) => setHoneypotField(e.target.value)}
         tabIndex={-1}
