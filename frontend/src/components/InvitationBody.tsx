@@ -109,7 +109,14 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
             >
               {t("gallery")}
             </h2>
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {/* Horizontal, swipeable strip (keyboard-scrollable when focused) — the next photo
+                peeks in at the edge to signal there's more to scroll. */}
+            <div
+              className="photo-strip -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 focus-visible:outline-none"
+              tabIndex={0}
+              role="group"
+              aria-label={t("gallery")}
+            >
               {event.galleryImageUrls.map((url) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -117,7 +124,7 @@ export function InvitationBody({ event, theme, demoRsvp = false }: InvitationBod
                   src={absoluteImageUrl(url)}
                   alt=""
                   loading="lazy"
-                  className="aspect-square w-full rounded-md object-cover"
+                  className="aspect-[4/5] w-60 shrink-0 snap-center rounded-md object-cover sm:w-64"
                 />
               ))}
             </div>

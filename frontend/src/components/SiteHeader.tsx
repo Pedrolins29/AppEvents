@@ -7,7 +7,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function DiamondMark() {
   return (
-    <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden className="text-[#A16207]">
+    <svg width="11" height="11" viewBox="0 0 10 10" aria-hidden className="text-[var(--gold)]">
       <path d="M5 0L10 5L5 10L0 5Z" fill="currentColor" />
     </svg>
   );
@@ -46,10 +46,10 @@ function NavLink({ href, label, onClick }: { href: string; label: string; onClic
     <Link
       href={href}
       onClick={onClick}
-      className="group relative text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
+      className="group relative text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)]"
     >
       {label}
-      <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[#0F766E] transition-transform duration-200 group-hover:scale-x-100" />
+      <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-200 group-hover:scale-x-100" />
     </Link>
   );
 }
@@ -59,7 +59,7 @@ export function SiteHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-10 border-b border-[#E2DFD3] bg-[#FDFBF7]/90 backdrop-blur">
+    <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--porcelain)_88%,transparent)] backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link
           href="/"
@@ -67,7 +67,9 @@ export function SiteHeader() {
           onClick={() => setIsMenuOpen(false)}
         >
           <DiamondMark />
-          <span className="text-sm font-semibold tracking-wide text-[#14211D]">AppEvents</span>
+          <span className="font-display text-lg font-medium tracking-wide text-[var(--ink)]">
+            AppEvents
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 sm:flex">
@@ -77,13 +79,13 @@ export function SiteHeader() {
           <LanguageSwitcher />
           <Link
             href="/login"
-            className="text-sm text-[#5B6B67] transition-colors duration-150 hover:text-[#14211D]"
+            className="text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)]"
           >
             {t("logIn")}
           </Link>
           <Link
             href="/register"
-            className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#0C5C56] hover:shadow-md"
+            className="rounded-full bg-[var(--pinewood)] px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#0C4F48] hover:shadow-md"
           >
             {t("getStarted")}
           </Link>
@@ -94,14 +96,14 @@ export function SiteHeader() {
           onClick={() => setIsMenuOpen((open) => !open)}
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
-          className="flex items-center justify-center rounded-md p-2 text-[#14211D] transition-colors duration-150 hover:text-[#0F766E] sm:hidden"
+          className="flex items-center justify-center rounded-md p-2 text-[var(--ink)] transition-colors duration-150 hover:text-[var(--pinewood)] sm:hidden"
         >
           <MenuIcon open={isMenuOpen} />
         </button>
       </div>
 
       <div
-        className={`origin-top overflow-hidden border-t border-[#E2DFD3] bg-[#FDFBF7] transition-all duration-150 sm:hidden ${
+        className={`origin-top overflow-hidden border-t border-[var(--border)] bg-[var(--porcelain)] transition-all duration-150 sm:hidden ${
           isMenuOpen ? "max-h-96 scale-y-100 opacity-100" : "max-h-0 scale-y-95 opacity-0"
         }`}
       >
@@ -111,7 +113,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMenuOpen(false)}
-              className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
+              className="rounded-md px-2 py-2 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)]"
             >
               {t(link.labelKey)}
             </Link>
@@ -119,14 +121,14 @@ export function SiteHeader() {
           <Link
             href="/login"
             onClick={() => setIsMenuOpen(false)}
-            className="rounded-md px-2 py-2 text-sm text-[#5B6B67] transition-colors duration-150 hover:bg-[#0F766E]/5 hover:text-[#14211D]"
+            className="rounded-md px-2 py-2 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)]"
           >
             {t("logIn")}
           </Link>
           <Link
             href="/register"
             onClick={() => setIsMenuOpen(false)}
-            className="mt-2 rounded-full bg-[#0F766E] px-4 py-2 text-center text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
+            className="mt-2 rounded-full bg-[var(--pinewood)] px-4 py-2 text-center text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C4F48]"
           >
             {t("getStarted")}
           </Link>

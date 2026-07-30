@@ -77,11 +77,21 @@
       "hide": "Hide",
       "passwordHint": "At least 10 characters, with uppercase, lowercase, a digit, and a special character.",
       "passwordChecks": [
-        { "label": "At least 10 characters" },
-        { "label": "One uppercase letter" },
-        { "label": "One lowercase letter" },
-        { "label": "One number" },
-        { "label": "One special character" }
+        {
+          "label": "At least 10 characters"
+        },
+        {
+          "label": "One uppercase letter"
+        },
+        {
+          "label": "One lowercase letter"
+        },
+        {
+          "label": "One number"
+        },
+        {
+          "label": "One special character"
+        }
       ],
       "passwordsMismatch": "Passwords do not match.",
       "creatingAccount": "Creating account...",
@@ -201,38 +211,80 @@
           "description": "Two families, one celebration. Join us for an evening of vows, dancing, and everything in between.",
           "dressCode": "Black tie optional",
           "timeline": [
-            { "time": "16:00", "label": "Ceremony" },
-            { "time": "17:00", "label": "Cocktail hour" },
-            { "time": "18:30", "label": "Dinner" },
-            { "time": "20:00", "label": "Dancing" }
+            {
+              "time": "16:00",
+              "label": "Ceremony"
+            },
+            {
+              "time": "17:00",
+              "label": "Cocktail hour"
+            },
+            {
+              "time": "18:30",
+              "label": "Dinner"
+            },
+            {
+              "time": "20:00",
+              "label": "Dancing"
+            }
           ]
         },
         "minimalist": {
           "description": "Four years, countless late nights, and one very big day. Come celebrate with us.",
           "dressCode": "Academic regalia, or smart casual",
           "timeline": [
-            { "time": "10:00", "label": "Processional" },
-            { "time": "10:30", "label": "Ceremony" },
-            { "time": "12:00", "label": "Reception" }
+            {
+              "time": "10:00",
+              "label": "Processional"
+            },
+            {
+              "time": "10:30",
+              "label": "Ceremony"
+            },
+            {
+              "time": "12:00",
+              "label": "Reception"
+            }
           ]
         },
         "floral": {
           "description": "A little one is on the way. Join us for an afternoon of tea, games, and good wishes.",
           "dressCode": "Garden pastels",
           "timeline": [
-            { "time": "13:00", "label": "Arrival" },
-            { "time": "13:30", "label": "Games" },
-            { "time": "14:30", "label": "Lunch" },
-            { "time": "15:30", "label": "Gifts" }
+            {
+              "time": "13:00",
+              "label": "Arrival"
+            },
+            {
+              "time": "13:30",
+              "label": "Games"
+            },
+            {
+              "time": "14:30",
+              "label": "Lunch"
+            },
+            {
+              "time": "15:30",
+              "label": "Gifts"
+            }
           ]
         },
         "modern": {
           "description": "Thirty years in the making. Music, drinks, and a night to remember.",
           "dressCode": "All black, everything",
           "timeline": [
-            { "time": "19:00", "label": "Arrival" },
-            { "time": "20:00", "label": "Dinner" },
-            { "time": "22:00", "label": "Dancing" }
+            {
+              "time": "19:00",
+              "label": "Arrival"
+            },
+            {
+              "time": "20:00",
+              "label": "Dinner"
+            },
+            {
+              "time": "22:00",
+              "label": "Dancing"
+            }
           ]
         }
       }
@@ -284,12 +336,18 @@
   "landing": {
     "hero": {
       "eyebrow": "Digital Invitations",
-      "title": "Every celebration deserves its own page.",
-      "subtitle": "Pick a designer theme, add your story and photos, and share one link with a live countdown and map built in.",
+      "title": "An invitation worth opening.",
+      "subtitle": "Choose a designer theme, add your story and photos, and share one link — with a live countdown, RSVP, and map built in.",
       "ctaCreate": "Create your invitation",
       "ctaBrowse": "Browse themes",
       "tagline": "Four designer themes · Live countdown · Photo gallery · Maps built in",
-      "mockupDescription": "Two families, one celebration. Join us for an evening of vows and dancing."
+      "mockupDescription": "Two families, one celebration. Join us for an evening of vows and dancing.",
+      "proof": [
+        "3 languages",
+        "No app to install",
+        "RSVP built in"
+      ],
+      "envelopeLabel": "A wax-sealed invitation opening to reveal a live event page on a phone."
     },
     "features": [
       {
@@ -311,11 +369,13 @@
     ],
     "chooseYourStyle": {
       "heading": "Choose your style",
-      "seeAll": "See all templates →"
+      "seeAll": "See all templates →",
+      "eyebrow": "Templates"
     },
     "showcase": {
       "heading": "See it in action",
-      "subtitle": "Weddings, graduations, parties, baby showers — a look at the countdown, maps, timeline, dress code, and photo features on real AppEvents themes."
+      "subtitle": "Weddings, graduations, parties, baby showers — a look at the countdown, maps, timeline, dress code, and photo features on real AppEvents themes.",
+      "eyebrow": "Live preview"
     },
     "howItWorks": {
       "heading": "How it works",
@@ -332,7 +392,8 @@
           "title": "Share the link",
           "body": "Publish when you're ready and send one link. Everyone sees the same page."
         }
-      ]
+      ],
+      "eyebrow": "Three steps"
     },
     "faq": {
       "heading": "Questions",
@@ -357,11 +418,123 @@
           "question": "Is there a limit on guests?",
           "answer": "No — share your one link with as many guests as you like."
         }
-      ]
+      ],
+      "eyebrow": "Answers"
     },
     "finalCta": {
       "title": "Your invitation, live in minutes.",
       "subtitle": "Pick a theme, add your details, and share the link when you're ready."
+    },
+    "demo": {
+      "tapToOpen": "Tap to open",
+      "envelopeLabel": "Tap to open the invitation",
+      "invitedLine": "We are getting married!",
+      "letterHeading": "Dear friends and family,",
+      "letter": "As we get ready to say “I do,” we can’t help but thank the wonderful people around us. Your love means the world to us — it would be an honour to have you close as our new life begins.",
+      "locationsHeading": "Where",
+      "ceremonyLabel": "Ceremony",
+      "receptionLabel": "Reception",
+      "ceremonyName": "Chapel of Santo Antônio",
+      "ceremonyAddress": "Av. das Hortênsias 90, Campos do Jordão",
+      "receptionName": "Fazenda da Serra",
+      "receptionAddress": "Estrada da Serra km 12, Campos do Jordão",
+      "howToGetThere": "Get directions",
+      "timelineHeading": "The day’s schedule",
+      "photosHeading": "Our moments",
+      "swipe": "swipe",
+      "dressCodeValue": "Garden formal — soft pastels",
+      "timeline": [
+        {
+          "time": "16:00",
+          "label": "Doors open"
+        },
+        {
+          "time": "16:30",
+          "label": "Ceremony"
+        },
+        {
+          "time": "18:00",
+          "label": "Cocktail hour"
+        },
+        {
+          "time": "20:30",
+          "label": "Dinner"
+        },
+        {
+          "time": "23:00",
+          "label": "Party & open bar"
+        }
+      ],
+      "revealDate": "Tap to reveal the date"
+    },
+    "sales": {
+      "hero": {
+        "badge": "No fees on the gift list · RSVP on WhatsApp · Ready in 3 min",
+        "title": "The interactive digital invitation your guests will love.",
+        "subtitle": "Pick an elegant design, add your story, photos and music, and share one link. No monthly fees, no commission on your gifts.",
+        "ctaPrimary": "Create my invitation free",
+        "ctaPrimaryNote": "No credit card · See it before you pay",
+        "ctaSecondary": "See a live example"
+      },
+      "personas": {
+        "heading": "Made for your kind of celebration",
+        "items": [
+          {
+            "audience": "Couples",
+            "pain": "Steep commissions on gift lists and chasing guests for RSVPs.",
+            "solution": "Gifts 100% in your account and RSVPs organised automatically."
+          },
+          {
+            "audience": "Baby shower & gender reveal",
+            "pain": "Managing guesses and diaper sizes by hand is chaos.",
+            "solution": "A live guessing game and gift organisation in one link."
+          },
+          {
+            "audience": "Graduation & corporate",
+            "pain": "A PDF invite and door check-in look unprofessional.",
+            "solution": "An elegant interactive invite and QR-code check-in."
+          }
+        ]
+      },
+      "comparison": {
+        "heading": "Why AppEvents?",
+        "feature": "Feature",
+        "you": "AppEvents",
+        "others": "Other platforms",
+        "pdf": "Static PDF",
+        "footnote": "General comparison. Third-party features and prices may vary — verify before deciding.",
+        "rows": [
+          {
+            "feature": "Gift-list fee",
+            "you": "0% — straight to your account",
+            "others": "Charge a commission on your gifts",
+            "pdf": "No gift list"
+          },
+          {
+            "feature": "Opening the invite",
+            "you": "Interactive envelope with animation",
+            "others": "A plain website link",
+            "pdf": "Heavy, dull PDF"
+          },
+          {
+            "feature": "RSVP",
+            "you": "Built-in RSVP + organised list",
+            "others": "Internal dashboard only",
+            "pdf": "Loose messages in chat"
+          },
+          {
+            "feature": "Languages",
+            "you": "Portuguese, English and Spanish",
+            "others": "Usually just one",
+            "pdf": "—"
+          }
+        ]
+      },
+      "finalCta": {
+        "title": "Your invitation, ready in minutes.",
+        "subtitle": "Create it free and see the result before you pay.",
+        "cta": "Create my invitation free"
+      }
     }
   }
 }

@@ -1,15 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fdfbf7;
-  --foreground: #14211d;
-  --primary: #0f766e;
+  /* Brand palette — elevated editorial luxury.
+     Porcelain = warm paper base; Ink = warm near-black (text + deep anchor bands);
+     Pinewood = deepened teal; Gold = antique/foil gold (rules + accents, never big fills);
+     Champagne = pale-gold for hairlines/glow on dark sections. */
+  --porcelain: #fbf8f2;
+  --ink: #16130e;
+  --pinewood: #0e5c54;
+  --gold: #b08d4c;
+  --champagne: #e8d9bc;
+
+  /* Semantic tokens mapped onto the palette. */
+  --background: var(--porcelain);
+  --foreground: var(--ink);
+  --primary: var(--pinewood);
   --primary-foreground: #ffffff;
-  --accent: #a16207;
+  --accent: var(--gold);
   --accent-foreground: #ffffff;
-  --muted: #f2efe7;
-  --muted-foreground: #5b6b67;
-  --border: #e2dfd3;
+  --muted: #f1ece1;
+  --muted-foreground: #6a6357;
+  --border: #e6dfd0;
+  /* Hairline for the dark Ink bands — a translucent champagne. */
+  --border-invert: rgba(232, 217, 188, 0.18);
 }
 
 @theme inline {
@@ -22,8 +35,16 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+
+  --color-porcelain: var(--porcelain);
+  --color-ink: var(--ink);
+  --color-pinewood: var(--pinewood);
+  --color-gold: var(--gold);
+  --color-champagne: var(--champagne);
+
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
+  --font-display: var(--font-cormorant);
 }
 
 body {
@@ -49,8 +70,45 @@ html {
   animation: phone-scroll 14s ease-in-out infinite;
 }
 
+/* Antique-gold foil sheen for the wax seal / accents. */
+@keyframes seal-sheen {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.7; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .phone-scroll {
     animation: none;
   }
+  .seal-sheen {
+    animation: none;
+  }
+}
+
+.seal-sheen {
+  animation: seal-sheen 4s ease-in-out infinite;
+}
+
+/* Thin, subtle scrollbar for the interactive invitation inside the hero phone mockup. */
+.invitation-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.22) transparent;
+}
+.invitation-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.invitation-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 4px;
+}
+.invitation-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Horizontal photo strip: hide the scrollbar, keep scroll-snap + swipe. */
+.photo-strip {
+  scrollbar-width: none;
+}
+.photo-strip::-webkit-scrollbar {
+  display: none;
 }

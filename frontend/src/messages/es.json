@@ -77,11 +77,21 @@
       "hide": "Ocultar",
       "passwordHint": "Al menos 10 caracteres, con mayúscula, minúscula, un número y un carácter especial.",
       "passwordChecks": [
-        { "label": "Al menos 10 caracteres" },
-        { "label": "Una letra mayúscula" },
-        { "label": "Una letra minúscula" },
-        { "label": "Un número" },
-        { "label": "Un carácter especial" }
+        {
+          "label": "Al menos 10 caracteres"
+        },
+        {
+          "label": "Una letra mayúscula"
+        },
+        {
+          "label": "Una letra minúscula"
+        },
+        {
+          "label": "Un número"
+        },
+        {
+          "label": "Un carácter especial"
+        }
       ],
       "passwordsMismatch": "Las contraseñas no coinciden.",
       "creatingAccount": "Creando cuenta...",
@@ -201,38 +211,80 @@
           "description": "Dos familias, una celebración. Únete a nosotros para una noche de votos, baile y todo lo demás.",
           "dressCode": "Formal opcional",
           "timeline": [
-            { "time": "16:00", "label": "Ceremonia" },
-            { "time": "17:00", "label": "Cóctel" },
-            { "time": "18:30", "label": "Cena" },
-            { "time": "20:00", "label": "Baile" }
+            {
+              "time": "16:00",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "17:00",
+              "label": "Cóctel"
+            },
+            {
+              "time": "18:30",
+              "label": "Cena"
+            },
+            {
+              "time": "20:00",
+              "label": "Baile"
+            }
           ]
         },
         "minimalist": {
           "description": "Cuatro años, incontables noches en vela, y un gran día. Ven a celebrar con nosotros.",
           "dressCode": "Toga académica, o casual elegante",
           "timeline": [
-            { "time": "10:00", "label": "Procesión" },
-            { "time": "10:30", "label": "Ceremonia" },
-            { "time": "12:00", "label": "Recepción" }
+            {
+              "time": "10:00",
+              "label": "Procesión"
+            },
+            {
+              "time": "10:30",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "12:00",
+              "label": "Recepción"
+            }
           ]
         },
         "floral": {
           "description": "Un pequeño está en camino. Únete a nosotros para una tarde de té, juegos y buenos deseos.",
           "dressCode": "Tonos pastel de jardín",
           "timeline": [
-            { "time": "13:00", "label": "Llegada" },
-            { "time": "13:30", "label": "Juegos" },
-            { "time": "14:30", "label": "Almuerzo" },
-            { "time": "15:30", "label": "Regalos" }
+            {
+              "time": "13:00",
+              "label": "Llegada"
+            },
+            {
+              "time": "13:30",
+              "label": "Juegos"
+            },
+            {
+              "time": "14:30",
+              "label": "Almuerzo"
+            },
+            {
+              "time": "15:30",
+              "label": "Regalos"
+            }
           ]
         },
         "modern": {
           "description": "Treinta años en camino. Música, tragos y una noche para recordar.",
           "dressCode": "Todo de negro",
           "timeline": [
-            { "time": "19:00", "label": "Llegada" },
-            { "time": "20:00", "label": "Cena" },
-            { "time": "22:00", "label": "Baile" }
+            {
+              "time": "19:00",
+              "label": "Llegada"
+            },
+            {
+              "time": "20:00",
+              "label": "Cena"
+            },
+            {
+              "time": "22:00",
+              "label": "Baile"
+            }
           ]
         }
       }
@@ -284,12 +336,18 @@
   "landing": {
     "hero": {
       "eyebrow": "Invitaciones Digitales",
-      "title": "Toda celebración merece su propia página.",
-      "subtitle": "Elige un tema exclusivo, agrega tu historia y fotos, y comparte un solo enlace con cuenta regresiva y mapa incluidos.",
+      "title": "Una invitación que vale la pena abrir.",
+      "subtitle": "Elige un tema de autor, añade tu historia y fotos, y comparte un solo enlace — con cuenta regresiva en vivo, RSVP y mapa integrados.",
       "ctaCreate": "Crear mi invitación",
       "ctaBrowse": "Ver plantillas",
       "tagline": "Cuatro plantillas exclusivas · Cuenta regresiva · Galería de fotos · Mapas incluidos",
-      "mockupDescription": "Dos familias, una celebración. Únete a nosotros para una noche de votos y baile."
+      "mockupDescription": "Dos familias, una celebración. Únete a nosotros para una noche de votos y baile.",
+      "proof": [
+        "3 idiomas",
+        "Sin app que instalar",
+        "RSVP integrado"
+      ],
+      "envelopeLabel": "Una invitación lacrada abriéndose para revelar una página de evento en vivo en el móvil."
     },
     "features": [
       {
@@ -311,11 +369,13 @@
     ],
     "chooseYourStyle": {
       "heading": "Elige tu estilo",
-      "seeAll": "Ver todas las plantillas →"
+      "seeAll": "Ver todas las plantillas →",
+      "eyebrow": "Plantillas"
     },
     "showcase": {
       "heading": "Véalo en acción",
-      "subtitle": "Bodas, graduaciones, fiestas, baby showers — mira la cuenta regresiva, mapas, línea de tiempo, código de vestimenta y fotos en plantillas reales de AppEvents."
+      "subtitle": "Bodas, graduaciones, fiestas, baby showers — mira la cuenta regresiva, mapas, línea de tiempo, código de vestimenta y fotos en plantillas reales de AppEvents.",
+      "eyebrow": "Vista previa"
     },
     "howItWorks": {
       "heading": "Cómo funciona",
@@ -332,7 +392,8 @@
           "title": "Comparte el enlace",
           "body": "Publica cuando estés listo y envía un solo enlace. Todos ven la misma página."
         }
-      ]
+      ],
+      "eyebrow": "Tres pasos"
     },
     "faq": {
       "heading": "Preguntas",
@@ -357,11 +418,123 @@
           "question": "¿Hay un límite de invitados?",
           "answer": "No — comparte tu enlace con tantos invitados como quieras."
         }
-      ]
+      ],
+      "eyebrow": "Respuestas"
     },
     "finalCta": {
       "title": "Tu invitación, en línea en minutos.",
       "subtitle": "Elige un tema, agrega los detalles y comparte el enlace cuando estés listo."
+    },
+    "demo": {
+      "tapToOpen": "Toca para abrir",
+      "envelopeLabel": "Toca para abrir la invitación",
+      "invitedLine": "¡Nos casamos!",
+      "letterHeading": "Queridos amigos y familia,",
+      "letter": "Mientras nos preparamos para decir “sí, acepto”, no podemos dejar de agradecer a las personas maravillosas que nos rodean. Su cariño significa el mundo para nosotros, y sería un honor tenerlos cerca cuando comience nuestra vida juntos.",
+      "locationsHeading": "Dónde",
+      "ceremonyLabel": "Ceremonia",
+      "receptionLabel": "Recepción",
+      "ceremonyName": "Capilla de San Antonio",
+      "ceremonyAddress": "Av. das Hortênsias 90, Campos do Jordão",
+      "receptionName": "Fazenda da Serra",
+      "receptionAddress": "Estrada da Serra km 12, Campos do Jordão",
+      "howToGetThere": "Cómo llegar",
+      "timelineHeading": "El programa del día",
+      "photosHeading": "Nuestros momentos",
+      "swipe": "desliza",
+      "dressCodeValue": "Etiqueta de jardín — tonos pastel",
+      "timeline": [
+        {
+          "time": "16:00",
+          "label": "Apertura de puertas"
+        },
+        {
+          "time": "16:30",
+          "label": "Ceremonia"
+        },
+        {
+          "time": "18:00",
+          "label": "Cóctel y brindis"
+        },
+        {
+          "time": "20:30",
+          "label": "Cena"
+        },
+        {
+          "time": "23:00",
+          "label": "Fiesta y barra libre"
+        }
+      ],
+      "revealDate": "Toca para revelar la fecha"
+    },
+    "sales": {
+      "hero": {
+        "badge": "Sin comisiones en la lista de regalos · RSVP por WhatsApp · Listo en 3 min",
+        "title": "La invitación digital interactiva que tus invitados van a amar.",
+        "subtitle": "Elige un diseño elegante, añade tu historia, fotos y música, y comparte un enlace. Sin mensualidades, sin comisión sobre tus regalos.",
+        "ctaPrimary": "Crear mi invitación gratis",
+        "ctaPrimaryNote": "Sin tarjeta · Míralo antes de pagar",
+        "ctaSecondary": "Ver un ejemplo en vivo"
+      },
+      "personas": {
+        "heading": "Hecho para tu tipo de celebración",
+        "items": [
+          {
+            "audience": "Novios",
+            "pain": "Comisiones altas en las listas de regalos y perseguir a los invitados para confirmar.",
+            "solution": "Regalos 100% en tu cuenta y confirmaciones organizadas automáticamente."
+          },
+          {
+            "audience": "Baby shower y revelación",
+            "pain": "Gestionar apuestas y tallas de pañales a mano es un caos.",
+            "solution": "Un juego de apuestas en vivo y organización de regalos en un solo enlace."
+          },
+          {
+            "audience": "Graduación y corporativo",
+            "pain": "Una invitación en PDF y el registro en la puerta se ven poco profesionales.",
+            "solution": "Una invitación interactiva elegante y check-in con código QR."
+          }
+        ]
+      },
+      "comparison": {
+        "heading": "¿Por qué AppEvents?",
+        "feature": "Función",
+        "you": "AppEvents",
+        "others": "Otras plataformas",
+        "pdf": "PDF estático",
+        "footnote": "Comparación general. Las funciones y precios de terceros pueden variar — verifica antes de decidir.",
+        "rows": [
+          {
+            "feature": "Comisión en la lista de regalos",
+            "you": "0% — directo a tu cuenta",
+            "others": "Cobran comisión sobre tus regalos",
+            "pdf": "Sin lista de regalos"
+          },
+          {
+            "feature": "Apertura de la invitación",
+            "you": "Sobre interactivo con animación",
+            "others": "Un enlace de web común",
+            "pdf": "PDF pesado y sin gracia"
+          },
+          {
+            "feature": "Confirmación de asistencia",
+            "you": "RSVP integrado + lista organizada",
+            "others": "Solo panel interno",
+            "pdf": "Mensajes sueltos en el chat"
+          },
+          {
+            "feature": "Idiomas",
+            "you": "Portugués, inglés y español",
+            "others": "Normalmente solo uno",
+            "pdf": "—"
+          }
+        ]
+      },
+      "finalCta": {
+        "title": "Tu invitación, lista en minutos.",
+        "subtitle": "Créala gratis y ve el resultado antes de pagar.",
+        "cta": "Crear mi invitación gratis"
+      }
     }
   }
 }
