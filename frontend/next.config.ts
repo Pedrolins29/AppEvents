@@ -28,6 +28,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Pins the workspace root to this project — without it, Turbopack's auto-detection picks up
+  // an unrelated package-lock.json in the user's home directory (a parent of this repo) and
+  // warns on every dev-server start.
+  turbopack: {
+    root: process.cwd(),
+  },
   async headers() {
     if (process.env.NODE_ENV !== "production") {
       return [];
