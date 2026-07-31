@@ -5,6 +5,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { CopyInviteLink } from "@/components/CopyInviteLink";
 import { useAuth } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { Skeleton } from "@/components/Skeleton";
@@ -152,6 +153,9 @@ export default function EventsPage() {
                   </p>
                 </div>
                 <div className="flex gap-3 text-sm">
+                  {event.isPublished && (
+                    <CopyInviteLink slug={event.slug} eventName={event.name} variant="compact" />
+                  )}
                   <Link
                     href={`/events/${event.id}/preview`}
                     className="font-medium text-[#0F766E] underline transition-colors duration-150"

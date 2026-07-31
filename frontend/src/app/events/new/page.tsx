@@ -29,8 +29,8 @@ function NewEventForm() {
     : undefined;
 
   async function handleSubmit(request: CreateEventRequest) {
-    await eventsApi.create(request);
-    router.push("/events");
+    const event = await eventsApi.create(request);
+    router.push(`/events/${event.id}/edit`);
   }
 
   return <EventForm initialValues={initialValues} onSubmit={handleSubmit} submitLabel={t("createEvent")} />;

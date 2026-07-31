@@ -1,3 +1,4 @@
+import { slugify } from "@/lib/slugify";
 import type { EventType } from "@/types/event";
 
 // Ponto 3 follow-up (Sprint 17): the InstantPreview widget stages only serializable fields here
@@ -36,14 +37,7 @@ export function consumeInstantPreviewDraft(): InstantPreviewDraft | null {
 }
 
 export function buildDraftSlug(name: string): string {
-  const base =
-    name
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "")
-      .slice(0, 60) || "convite";
+  const base = slugify(name) || "convite";
   const suffix = Math.random().toString(36).slice(2, 8);
   return `${base}-${suffix}`;
 }

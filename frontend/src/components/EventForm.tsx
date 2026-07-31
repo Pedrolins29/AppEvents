@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ApiError } from "@/lib/auth-context";
+import { slugify } from "@/lib/slugify";
 import { templatesApi } from "@/lib/templatesApi";
 import { TemplateCard } from "@/components/TemplateCard";
 import { TimelineItemsEditor } from "@/components/TimelineItemsEditor";
@@ -25,6 +26,14 @@ export interface EventFormValues {
   dressCode: string;
   timelineItems: TimelineItemRecord[];
   templateId: string | null;
+}
+
+// Mirrors the backend's CreateEventRequestValidator regex exactly — surfaced here as inline
+// feedback instead of only after a round-trip to the API.
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+function todayIsoDate(): string {
+  return new Date().toISOString().slice(0, 10);
 }
 
 const EMPTY_VALUES: EventFormValues = {
@@ -52,6 +61,11 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
   const [templates, setTemplates] = useState<TemplateRecord[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Once the user has ever had a real slug (editing an existing event) or has typed in the slug
+  // field directly, stop auto-syncing it from the name — never clobber something already live or
+  // deliberately customized.
+  const [slugTouched, setSlugTouched] = useState(Boolean(initialValues?.slug));
+  const [slugError, setSlugError] = useState<string | null>(null);
 
   useEffect(() => {
     templatesApi.list().then(setTemplates).catch(() => setTemplates([]));
@@ -61,9 +75,29 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
     setValues((prev) => ({ ...prev, [key]: value }));
   }
 
+  function handleNameChange(name: string) {
+    setValues((prev) => ({ ...prev, name, slug: slugTouched ? prev.slug : slugify(name) }));
+  }
+
+  function handleSlugChange(rawSlug: string) {
+    setSlugTouched(true);
+    setSlugError(null);
+    update("slug", rawSlug.toLowerCase());
+  }
+
+  function handleSlugBlur() {
+    if (values.slug && !SLUG_PATTERN.test(values.slug)) {
+      setSlugError(t("slugInvalid"));
+    }
+  }
+
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
+    if (!SLUG_PATTERN.test(values.slug)) {
+      setSlugError(t("slugInvalid"));
+      return;
+    }
     setIsSubmitting(true);
     try {
       await onSubmit({
@@ -102,7 +136,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           type="text"
           required
           value={values.name}
-          onChange={(e) => update("name", e.target.value)}
+          onChange={(e) => handleNameChange(e.target.value)}
           className="w-full border border-[#E2DFD3] px-3 py-2"
         />
       </div>
@@ -116,10 +150,16 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           required
           placeholder={t("slugPlaceholder")}
           value={values.slug}
-          onChange={(e) => update("slug", e.target.value.toLowerCase())}
+          onChange={(e) => handleSlugChange(e.target.value)}
+          onBlur={handleSlugBlur}
+          aria-invalid={slugError ? true : undefined}
           className="w-full border border-[#E2DFD3] px-3 py-2"
         />
-        <p className="mt-1 text-xs text-[#5B6B67]">{t("slugHint")}</p>
+        {slugError ? (
+          <p className="mt-1 text-xs text-red-600">{slugError}</p>
+        ) : (
+          <p className="mt-1 text-xs text-[#5B6B67]">{t("slugHint")}</p>
+        )}
       </div>
       <div>
         <label htmlFor="eventType" className="mb-1 block text-sm font-medium text-[#14211D]">
@@ -146,6 +186,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
           id="eventDate"
           type="date"
           required
+          min={todayIsoDate()}
           value={values.eventDate}
           onChange={(e) => update("eventDate", e.target.value)}
           className="w-full border border-[#E2DFD3] px-3 py-2"

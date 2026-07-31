@@ -25,3 +25,10 @@ export function buildWhatsappLink(rawPhone: string, message: string): string | n
   }
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
+
+// No target phone — opens WhatsApp's own contact/chat picker with the message pre-filled, for
+// sharing the main invitation link (the organizer chooses who to send it to), as opposed to
+// buildWhatsappLink's per-guest nudge which already knows the recipient.
+export function buildWhatsappShareLink(message: string): string {
+  return `https://wa.me/?text=${encodeURIComponent(message)}`;
+}

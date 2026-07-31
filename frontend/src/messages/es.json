@@ -148,7 +148,8 @@
       "template": "Plantilla (opcional)",
       "none": "Ninguna",
       "saving": "Guardando...",
-      "genericError": "Algo salió mal. Inténtalo de nuevo."
+      "genericError": "Algo salió mal. Inténtalo de nuevo.",
+      "slugInvalid": "Usa solo letras minúsculas, números y guiones (sin espacios)."
     },
     "edit": {
       "heading": "Editar evento",
@@ -166,7 +167,14 @@
       "publishError": "No se pudo actualizar el estado de publicación.",
       "uploadError": "No se pudo subir la imagen.",
       "galleryUploadError": "No se pudo subir una o más imágenes.",
-      "saveChanges": "Guardar cambios"
+      "saveChanges": "Guardar cambios",
+      "justPublished": "¡Tu invitación está publicada! Enlace copiado — compártelo ahora."
+    },
+    "shareLink": {
+      "copyLink": "Copiar enlace",
+      "linkCopied": "¡Enlace copiado!",
+      "whatsappShare": "Compartir en WhatsApp",
+      "whatsappMessage": "Mira la invitación de mi evento \"{name}\": {link}"
     },
     "timelineEditor": {
       "label": "Línea de tiempo (opcional)",
@@ -337,17 +345,26 @@
   },
   "landing": {
     "hero": {
-      "eyebrow": "Invitaciones Digitales",
+      "eyebrow": "✦ Invitaciones Digitales Elegantes",
       "title": "Una invitación que vale la pena abrir.",
-      "subtitle": "Elige un tema de autor, añade tu historia y fotos, y comparte un solo enlace — con cuenta regresiva en vivo, RSVP y mapa integrados.",
+      "subtitle": "Elige un diseño de autor, personalízalo con tus fotos y comparte un solo enlace — con confirmación de asistencia (RSVP), mapa interactivo del lugar y recordatorios rápidos por WhatsApp para tus invitados.",
       "ctaCreate": "Crear mi invitación",
       "ctaBrowse": "Ver plantillas",
       "tagline": "Cuatro plantillas exclusivas · Cuenta regresiva · Galería de fotos · Mapas incluidos",
       "mockupDescription": "Dos familias, una celebración. Únete a nosotros para una noche de votos y baile.",
       "proof": [
-        "3 idiomas",
+        "Confirmación de Asistencia (RSVP)",
         "Sin app que instalar",
-        "RSVP integrado"
+        "Recordatorios por WhatsApp",
+        "Mapa Waze/Google Integrado"
+      ],
+      "pills": [
+        "Boda",
+        "Cumpleaños",
+        "Graduación",
+        "Quince Años",
+        "Baby Shower / Revelación",
+        "Eventos Corporativos"
       ],
       "envelopeLabel": "Una invitación lacrada abriéndose para revelar una página de evento en vivo en el móvil."
     },
@@ -419,6 +436,10 @@
         {
           "question": "¿Hay un límite de invitados?",
           "answer": "No — comparte tu enlace con tantos invitados como quieras."
+        },
+        {
+          "question": "¿La invitación está disponible en otros idiomas?",
+          "answer": "Sí — portugués, inglés y español. Cada invitado elige su idioma directamente en la página de la invitación."
         }
       ],
       "eyebrow": "Respuestas"

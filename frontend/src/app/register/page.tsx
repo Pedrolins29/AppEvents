@@ -47,6 +47,9 @@ export default function RegisterPage() {
     setIsSubmitting(true);
     try {
       await register({ fullName, email, password, honeypotField: honeypotField || null, locale });
+      window.fbq?.("track", "CompleteRegistration", { status: true });
+      window.gtag?.("event", "sign_up");
+      window.ttq?.track?.("CompleteRegistration");
       setSubmittedEmail(email);
     } catch (err) {
       if (err instanceof ApiError) {

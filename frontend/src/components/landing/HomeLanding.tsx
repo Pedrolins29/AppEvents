@@ -185,6 +185,10 @@ export async function HomeLanding() {
   const steps = t.raw("howItWorks.steps") as { title: string; body: string }[];
   const faqItems = t.raw("faq.items") as { question: string; answer: string }[];
   const proof = t.raw("hero.proof") as string[];
+  // Deliberately not derived from EVENT_TYPES — these are display-only groupings for the hero
+  // (e.g. baby shower + gender reveal merged into one pill, plus a "Corporate Events" pill that
+  // has no backing EventType yet — see Sprints/sprint19.md).
+  const heroPills = t.raw("hero.pills") as string[];
   const eventTypesJoined = EVENT_TYPES.map((type) => eventTypeLabels[type]).join(", ");
   const miniCountdownLabels = [countdownT("days"), countdownT("hours"), countdownT("min")];
 
@@ -232,12 +236,12 @@ export async function HomeLanding() {
               </ul>
 
               <div className="mt-8 flex flex-wrap justify-center gap-2 lg:justify-start">
-                {EVENT_TYPES.map((type) => (
+                {heroPills.map((pill) => (
                   <span
-                    key={type}
+                    key={pill}
                     className="rounded-full border border-[color-mix(in_srgb,var(--gold)_32%,transparent)] px-3 py-1 text-xs text-[#C9BFA9]"
                   >
-                    {eventTypeLabels[type]}
+                    {pill}
                   </span>
                 ))}
               </div>

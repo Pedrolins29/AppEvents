@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
+import { CopyInviteLink } from "@/components/CopyInviteLink";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
 import { GuestListManager } from "@/components/GuestListManager";
 import { PhotoUpload } from "@/components/PhotoUpload";
@@ -11,6 +12,7 @@ import { Skeleton } from "@/components/Skeleton";
 import { UpsellBanner } from "@/components/UpsellBanner";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
+import { buildInviteUrl } from "@/lib/inviteUrl";
 import type { CreateEventRequest, EventImageRecord, EventRecord } from "@/types/event";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://localhost:5001";
@@ -34,6 +36,7 @@ export default function EditEventPage() {
   const [isPublished, setIsPublished] = useState(false);
   const [isPublishToggling, setIsPublishToggling] = useState(false);
   const [publishError, setPublishError] = useState<string | null>(null);
+  const [justPublished, setJustPublished] = useState(false);
   const [galleryImages, setGalleryImages] = useState<EventImageRecord[]>([]);
   const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
   const [galleryError, setGalleryError] = useState<string | null>(null);
@@ -155,11 +158,27 @@ export default function EditEventPage() {
   async function handleTogglePublish() {
     setPublishError(null);
     setIsPublishToggling(true);
+    const wasPublished = isPublished;
     try {
       const updated = isPublished
         ? await eventsApi.unpublish(params.id)
         : await eventsApi.publish(params.id);
       setIsPublished(updated.isPublished);
+
+      if (!wasPublished && updated.isPublished) {
+        // A fresh publish (not an unpublish) — this is the "aha moment": get the link into the
+        // organizer's clipboard immediately instead of leaving them to find/copy it themselves.
+        try {
+          await navigator.clipboard.writeText(buildInviteUrl(updated.slug));
+          setJustPublished(true);
+          setTimeout(() => setJustPublished(false), 5000);
+        } catch {
+          /* clipboard unavailable — the manual copy/share buttons below still work */
+        }
+        window.fbq?.("trackCustom", "InvitationPublished");
+        window.gtag?.("event", "invitation_published");
+        window.ttq?.track?.("InvitationPublished");
+      }
     } catch {
       setPublishError(t("publishError"));
     } finally {
@@ -278,6 +297,12 @@ export default function EditEventPage() {
             </button>
           </div>
           {publishError && <p className="mt-2 text-xs text-red-600">{publishError}</p>}
+          {justPublished && <p className="mt-2 text-sm text-[#0F766E]">{t("justPublished")}</p>}
+          {isPublished && initialValues && (
+            <div className="mt-3">
+              <CopyInviteLink slug={initialValues.slug} eventName={initialValues.name} />
+            </div>
+          )}
         </div>
 
         {initialValues && <UpsellBanner eventId={params.id} eventType={initialValues.eventType} />}
