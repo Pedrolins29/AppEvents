@@ -69,3 +69,7 @@ All optional, all blank/unset by default — see `.env.example`.
   each fires an automatic page view plus an "initiate checkout"-equivalent event on the upsell
   CTA click; true purchase-conversion tracking additionally needs Lastlink's checkout to redirect
   back to `/obrigado` after payment (unverified whether it supports a configurable redirect URL).
+- `NEXT_PUBLIC_R2_PUBLIC_BASE_URL` — set once the backend's `Storage:Provider` is switched to `R2`
+  (see backend's `Storage:R2:*` appsettings section), to the same value as
+  `Storage:R2:PublicBaseUrl`. Adds that origin to the CSP `img-src` so uploaded images actually
+  render; unset means the CSP stays at today's local-storage-only baseline.

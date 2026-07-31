@@ -29,6 +29,13 @@ if (process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID) {
   connectSrcExtra.push("analytics.tiktok.com");
 }
 
+// Sprint 18: once the backend's Storage:Provider is switched to R2, uploaded images are served
+// from a different origin than the API — without this, the browser silently blocks those <img>
+// tags under CSP even though the HTML renders fine.
+if (process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL) {
+  imgSrcExtra.push(new URL(process.env.NEXT_PUBLIC_R2_PUBLIC_BASE_URL).origin);
+}
+
 // Dev mode's HMR client injects inline scripts that a strict script-src would break, so these
 // headers only apply to production builds — the backend already draws the same Dev/Prod line
 // for exception detail (see AppEvents.Api's GlobalExceptionHandler).

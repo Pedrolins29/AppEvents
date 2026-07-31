@@ -7,15 +7,7 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RsvpForm } from "@/components/RsvpForm";
 import { absoluteImageUrl } from "@/lib/absoluteImageUrl";
 import type { InvitationViewModel } from "@/lib/invitationViewModel";
-import type { GuestPrefill } from "@/types/rsvp";
-
-function mapsLinks(address: string) {
-  const query = encodeURIComponent(address);
-  return {
-    googleMaps: `https://www.google.com/maps/search/?api=1&query=${query}`,
-    waze: `https://waze.com/ul?q=${query}&navigate=yes`,
-  };
-}
+import { mapsLinks } from "@/lib/mapsLinks";
 
 interface InvitationBodyProps {
   event: InvitationViewModel;
@@ -24,10 +16,9 @@ interface InvitationBodyProps {
    * demo/preview surfaces (template previews, an owner's own event preview) where a real
    * submission would be meaningless or unwanted. */
   demoRsvp?: boolean;
-  /** Set when a guest opened their personal link (/e/{slug}?g={token}) — prefills the RSVP form
-   * and ties the submission to that specific pending guest. */
+  /** Set when a guest opened their personal link (/e/{slug}?g={token}) — RsvpForm fetches that
+   * guest's own details client-side to prefill the form and tie the submission to them. */
   inviteToken?: string;
-  guestPrefill?: GuestPrefill;
 }
 
 // The section stack shared by the real public invitation page (/e/[slug]) and the authenticated
@@ -40,7 +31,7 @@ interface InvitationBodyProps {
 // exactly this way for SiteFooter.tsx earlier in this sprint. useTranslations (client-side) avoids
 // that class of bug and works fine when rendered from the two Server Component consumers too
 // (e/[slug], templates/[theme]), since a Server Component rendering a Client Component is normal.
-export function InvitationBody({ event, theme, demoRsvp = false, inviteToken, guestPrefill }: InvitationBodyProps) {
+export function InvitationBody({ event, theme, demoRsvp = false, inviteToken }: InvitationBodyProps) {
   const t = useTranslations("invitation");
   const links = event.address ? mapsLinks(event.address) : null;
 
@@ -197,7 +188,7 @@ export function InvitationBody({ event, theme, demoRsvp = false, inviteToken, gu
         >
           {t("rsvp.heading")}
         </h2>
-        <RsvpForm slug={event.slug} theme={theme} demoMode={demoRsvp} inviteToken={inviteToken} prefill={guestPrefill} />
+        <RsvpForm slug={event.slug} theme={theme} demoMode={demoRsvp} inviteToken={inviteToken} />
       </section>
 
       {event.featuredPhotoUrl && (

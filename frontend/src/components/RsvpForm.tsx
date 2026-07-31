@@ -1,32 +1,54 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ThemeStyle } from "@/components/InvitationHero";
+import { publicEventsApi } from "@/lib/publicEventsApi";
 import { rsvpApi } from "@/lib/rsvpApi";
-import type { GuestPrefill, RsvpStatus } from "@/types/rsvp";
+import type { RsvpStatus } from "@/types/rsvp";
 
 interface RsvpFormProps {
   slug: string;
   theme: ThemeStyle;
   /** Preview-page use only: skips the real network call, going straight to the success state. */
   demoMode?: boolean;
-  /** Set when the guest opened their personal link (?g=token) — prefills the form and ties the
-   *  submission to that pending guest. */
+  /** Set when the guest opened their personal link (?g=token) — this component fetches that
+   *  guest's own details client-side (the surrounding page is ISR-cached and guest-agnostic, so
+   *  this can't be baked into the server-rendered HTML) to prefill the form and tie the
+   *  submission to them. An unknown/expired token quietly falls back to the open form. */
   inviteToken?: string;
-  prefill?: GuestPrefill;
 }
 
-export function RsvpForm({ slug, theme, demoMode = false, inviteToken, prefill }: RsvpFormProps) {
+export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFormProps) {
   const t = useTranslations("invitation.rsvp");
-  const [guestName, setGuestName] = useState(prefill?.guestName ?? "");
-  const [guestEmail, setGuestEmail] = useState(prefill?.guestEmail ?? "");
-  const [guestPhone, setGuestPhone] = useState(prefill?.guestPhone ?? "");
+  const [guestName, setGuestName] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
   const [status, setStatus] = useState<RsvpStatus>("Confirmed");
   const [honeypotField, setHoneypotField] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!inviteToken) {
+      return;
+    }
+    let cancelled = false;
+    publicEventsApi.getGuestPrefill(slug, inviteToken).then((prefill) => {
+      if (cancelled || !prefill) {
+        return;
+      }
+      // Only fill fields still at their empty default, so a fast typist's input during the
+      // round-trip is never clobbered.
+      setGuestName((current) => current || prefill.guestName);
+      setGuestEmail((current) => current || prefill.guestEmail || "");
+      setGuestPhone((current) => current || prefill.guestPhone || "");
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug, inviteToken]);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();

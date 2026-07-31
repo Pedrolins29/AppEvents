@@ -6,7 +6,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://localhost:
 export const publicEventsApi = {
   get: async (slug: string): Promise<PublicEventRecord | null> => {
     const response = await fetch(`${API_BASE_URL}/api/public/events/${encodeURIComponent(slug)}`, {
-      cache: "no-store",
+      next: { revalidate: 60 },
     });
     if (response.status === 404) {
       return null;

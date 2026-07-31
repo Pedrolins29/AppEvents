@@ -34,13 +34,28 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
     {
-        var allowedOrigin = builder.Configuration["Cors:AllowedOrigin"] ?? "http://localhost:3000";
-        policy.WithOrigins(allowedOrigin)
+        policy.WithOrigins(ResolveAllowedOrigins(builder.Configuration))
             .WithHeaders("Content-Type", "Authorization", "X-Requested-With")
             .WithMethods("GET", "POST", "PUT", "DELETE")
             .AllowCredentials();
     });
 });
+
+// Vercel deploys (and any future preview/production frontend origin) need to be addable via
+// config without a code change — WithOrigins takes params string[], so a comma-separated list
+// covers that. Falls back to the older singular key, then a hardcoded local dev default, so no
+// existing environment's config needs to change just because this became plural.
+static string[] ResolveAllowedOrigins(IConfiguration configuration)
+{
+    var plural = configuration["Cors:AllowedOrigins"];
+    if (!string.IsNullOrWhiteSpace(plural))
+    {
+        return plural.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    }
+
+    var singular = configuration["Cors:AllowedOrigin"];
+    return [singular ?? "http://localhost:3000"];
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

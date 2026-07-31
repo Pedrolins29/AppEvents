@@ -9,6 +9,12 @@ import type { InvitationViewModel } from "@/lib/invitationViewModel";
 import { publicEventsApi } from "@/lib/publicEventsApi";
 import { getEventTypeLabels } from "@/types/event";
 
+// ISR: the public invitation page is guest-facing and cacheable — a burst of guests opening the
+// same link on event day should hit Vercel's edge cache, not the .NET API, on every visit. The
+// per-guest personal-link prefill (?g=token) can't be baked into this shared cache, so it's fetched
+// client-side instead (see RsvpForm.tsx).
+export const revalidate = 60;
+
 interface PageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ g?: string }>;
@@ -50,10 +56,6 @@ export default async function PublicEventPage({ params, searchParams }: PageProp
   if (!event) {
     notFound();
   }
-
-  // Personal-link visit (?g=token): fetch that guest's own details to prefill the RSVP form and
-  // tie the submission to them. An unknown token quietly falls back to the open form.
-  const guestPrefill = inviteToken ? await publicEventsApi.getGuestPrefill(slug, inviteToken) : null;
 
   const locale = await getLocale();
   const eventTypeLabels = getEventTypeLabels(await getTranslations("eventTypes"));
@@ -97,12 +99,7 @@ export default async function PublicEventPage({ params, searchParams }: PageProp
         // prematurely close this tag.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <InvitationBody
-        event={viewModel}
-        theme={theme}
-        inviteToken={guestPrefill ? inviteToken : undefined}
-        guestPrefill={guestPrefill ?? undefined}
-      />
+      <InvitationBody event={viewModel} theme={theme} inviteToken={inviteToken} />
     </>
   );
 }
