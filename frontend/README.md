@@ -5,10 +5,13 @@ Next.js (App Router) + TypeScript + Tailwind CSS.
 ```
 src/
   app/
-    page.tsx           Landing page
-    register/page.tsx  Registration form
-    login/page.tsx     Login form
-    dashboard/page.tsx Protected placeholder — calls GET /api/users/me
+    page.tsx                    Landing page (HomeLanding, or SalesLanding behind SALES_LANDING)
+    register/, login/,
+      verify-email/page.tsx     Auth flow (register requires email confirmation before login)
+    criar-convite/              SEO hub + category landing pages with the InstantPreview widget
+    events/                     Authenticated dashboard: list, new, [id]/edit, [id]/preview
+    e/[slug]/page.tsx           Public invitation page (ISR-cached, RSVP form)
+    templates/                  Theme gallery + per-theme preview
   lib/
     apiClient.ts        fetch wrapper: attaches the access token, retries once on 401 via silent refresh
     authApi.ts          register / login / refresh / logout / getMe
