@@ -1,26 +1,51 @@
-Engenharia da Secretária Virtual de RSVP (.NET + PostgreSQL)
-Objetivo: Implementar o motor de automação em .NET / C# com tarefas agendadas (CronJob) para disparar réguas de lembrete de confirmação de presença via WhatsApp e E-mail.
+SPRINT 15: Secretária Virtual de RSVP & High-Margin Order Bump
+Objetivo Estratégico: Implementar o motor de automação de lembretes e cobrança de presença (WhatsApp + E-mail), integrando a captura de pagamento via Order Bump da Lastlink, execução assíncrona performática no .NET e interface de controle no Dashboard do VOWLA.
 
-1. Modelagem do Banco de Dados (PostgreSQL / Entity Framework)
-Expandir a entidade Invitation e criar a estrutura de controle de disparos:
+1. Visão de Negócio & Growth (Order Bump & ARPU)
+O Produto: "Secretária Virtual VOWLA" (Módulo de Automação de RSVP).
+
+Posicionamento de Preço: Vendido como Order Bump no Checkout (R$ 39,00 a R$ 49,00 avulso) ou Incluso no VOWLA Premium/Pro.
+
+Economia da Unidade (Unit Economics): Disparo de e-mails com custo irrisório e WhatsApp estratégico agendado via régua lógica, gerando um aumento imediato de +20% a +25% no Ticket Médio (ARPU) sem aumentar o Custo de Aquisição de Cliente (CAC).
+
+Loop Viral (Aquisição Passiva): Cada mensagem enviada para o WhatsApp do convidado leva a assinatura: “Organizando seu próprio evento? Conheça a Secretária VOWLA.”
+
+2. Modelagem do Banco de Dados (PostgreSQL / Entity Framework Core)
+Para suportar resiliência, timezone e idempotência de pagamentos, expandimos as tabelas de convites e convidados e adicionamos a tabela de auditoria de Webhooks.
 
 SQL
+-- DDL de Atualização das Tabelas Existentes
 ALTER TABLE "Invitations" 
-ADD COLUMN "IsRsvpAutomationEnabled" BOOLEAN DEFAULT FALSE,
-ADD COLUMN "RsvpAutomationFrequencyDays" INT DEFAULT 7,
-ADD COLUMN "LastRsvpReminderSentAt" TIMESTAMP WITH TIME ZONE NULL;
+ADD COLUMN IF NOT EXISTS "IsRsvpAutomationEnabled" BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS "RsvpAutomationFrequencyDays" INT DEFAULT 7,
+ADD COLUMN IF NOT EXISTS "LastRsvpReminderSentAt" TIMESTAMP WITH TIME ZONE NULL;
 
 ALTER TABLE "Guests" 
-ADD COLUMN "LastReminderSentAt" TIMESTAMP WITH TIME ZONE NULL,
-ADD COLUMN "ReminderCount" INT DEFAULT 0;
-2. Arquitetura do Job Diário (.NET / Quartz.NET ou Hangfire)
-Criar um serviço em segundo plano no .NET que executa uma vez ao dia (ex: 09:00 AM) com a Régua de Countdown Triggers (30 dias, 15 dias e 7 dias antes do evento):
+ADD COLUMN IF NOT EXISTS "LastReminderSentAt" TIMESTAMP WITH TIME ZONE NULL,
+ADD COLUMN IF NOT EXISTS "ReminderCount" INT DEFAULT 0;
+
+-- Tabela de Idempotência Crítica para Webhooks Financeiros
+CREATE TABLE IF NOT EXISTS "WebhookLogs" (
+    "Id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    "TransactionId" VARCHAR(100) NOT NULL UNIQUE,
+    "Provider" VARCHAR(50) DEFAULT 'Lastlink',
+    "ProcessedAt" TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS "IX_Guests_Automation_Pending" 
+ON "Guests" ("InvitationId", "Status", "LastReminderSentAt");
+3. Engenharia de Backend Otimizada (.NET 8/9 + Quartz.NET)
+Refatoramos o Job para rodar em lotes (batching) de até 500 registros, prevenindo estouro de memória RAM do servidor, com persistência atômica por lote e timezone UTC seguro.
 
 C#
+using Microsoft.EntityFrameworkCore;
+using Quartz;
+
 public class RsvpReminderJob : IJob
 {
     private readonly IApplicationDbContext _context;
     private readonly INotificationQueueService _queueService;
+    private const int BATCH_SIZE = 500;
 
     public RsvpReminderJob(IApplicationDbContext context, INotificationQueueService queueService)
     {
@@ -32,55 +57,143 @@ public class RsvpReminderJob : IJob
     {
         var today = DateTime.UtcNow.Date;
 
-        // Busca convites ativos que compraram o Order Bump de Automação
-        var activeInvitations = await _context.Invitations
-            .Where(i => i.IsPaid && i.IsRsvpAutomationEnabled && i.EventDate > today)
+        // Query Eficiente e Paginada: Busca direto os convidados pendentes de convites elegíveis
+        var pendingGuests = await _context.Guests
+            .Include(g => g.Invitation)
+            .Where(g => g.Invitation.IsPaid 
+                     && g.Invitation.IsRsvpAutomationEnabled 
+                     && g.Invitation.EventDate > today
+                     && g.Status == RsvpStatus.Pending
+                     && (g.LastReminderSentAt == null || g.LastReminderSentAt < today.AddDays(-5)))
+            .Take(BATCH_SIZE)
             .ToListAsync();
 
-        foreach (var invitation in activeInvitations)
-        {
-            var daysUntilEvent = (invitation.EventDate - today).Days;
+        if (!pendingGuests.Any()) return;
 
-            // Gatilhos de disparo: 30, 15 ou 7 dias antes do evento
+        foreach (var guest in pendingGuests)
+        {
+            var daysUntilEvent = (guest.Invitation.EventDate.Date - today).Days;
+
+            // Régua Estratégica: Gatilhos em 30 dias, 15 dias e 7 dias (ou menos)
             if (daysUntilEvent == 30 || daysUntilEvent == 15 || daysUntilEvent <= 7)
             {
-                var pendingGuests = await _context.Guests
-                    .Where(g => g.InvitationId == invitation.Id 
-                             && g.Status == RsvpStatus.Pending
-                             && (g.LastReminderSentAt == null || g.LastReminderSentAt < today.AddDays(-5)))
-                    .ToListAsync();
+                // Enfileira disparo (WhatsApp / E-mail) via Message Broker ou Background Queue
+                await _queueService.EnqueueRsvpReminderAsync(guest.Invitation, guest, daysUntilEvent);
 
-                foreach (var guest in pendingGuests)
-                {
-                    await _queueService.EnqueueRsvpReminderAsync(invitation, guest, daysUntilEvent);
-                    guest.LastReminderSentAt = DateTime.UtcNow;
-                    guest.ReminderCount++;
-                }
+                guest.LastReminderSentAt = DateTime.UtcNow;
+                guest.ReminderCount++;
             }
         }
 
+        // Persistência Atômica do Lote
         await _context.SaveChangesAsync();
     }
 }
-3. Endpoint de Webhook da Lastlink (/v1/webhooks/lastlink)
-Criar o controller idempotente em .NET que escuta a aprovação do pagamento, extrai o custom_id (ID do convite) e ativa as Features e Order Bumps comprados:
+4. Endpoint Idempotente de Webhook da Lastlink (/v1/webhooks/lastlink)
+Controller preparado para falhas de rede e retentativas da Lastlink, garantindo que o cliente nunca tenha a funcionalidade ativada em duplicidade ou perdida.
 
 C#
-[HttpPost("lastlink")]
-public async Task<IActionResult> HandleLastlinkWebhook([FromBody] LastlinkPayload payload)
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+[ApiController]
+[Route("v1/webhooks")]
+public class LastlinkWebhookController : ControllerBase
 {
-    if (payload.Status != "approved") return Ok();
+    private readonly IApplicationDbContext _context;
+    private readonly IInvitationService _invitationService;
 
-    var invitationId = payload.CustomId;
-    var purchasedSkus = payload.Items.Select(i => i.Sku).ToList();
-
-    await _invitationService.ActivateInvitationAsync(invitationId);
-
-    // Se o SKU do Order Bump de Automação de RSVP foi comprado:
-    if (purchasedSkus.Contains("SKU_ORDERBUMP_RSVP_AUTOMATION"))
+    public LastlinkWebhookController(IApplicationDbContext context, IInvitationService invitationService)
     {
-        await _invitationService.EnableRsvpAutomationAsync(invitationId);
+        _context = context;
+        _invitationService = invitationService;
     }
 
-    return Ok();
+    [HttpPost("lastlink")]
+    public async Task<IActionResult> HandleLastlinkWebhook([FromBody] LastlinkPayload payload)
+    {
+        // 1. Validação de Status do Pagamento
+        if (payload.Status != "approved") return Ok();
+
+        // 2. Trava de Idempotência: Verifica se a transação já foi processada
+        var isProcessed = await _context.WebhookLogs
+            .AnyAsync(w => w.TransactionId == payload.TransactionId);
+
+        if (isProcessed) return Ok();
+
+        var invitationId = payload.CustomId;
+        var purchasedSkus = payload.Items.Select(i => i.Sku).ToList();
+
+        // 3. Ativação do Convite Principal
+        await _invitationService.ActivateInvitationAsync(invitationId);
+
+        // 4. Verificação e Ativação do Order Bump de Automação de RSVP
+        if (purchasedSkus.Contains("SKU_ORDERBUMP_RSVP_AUTOMATION"))
+        {
+            await _invitationService.EnableRsvpAutomationAsync(invitationId);
+        }
+
+        // 5. Registro do Log de Auditoria
+        _context.WebhookLogs.Add(new WebhookLog 
+        { 
+            TransactionId = payload.TransactionId,
+            Provider = "Lastlink",
+            ProcessedAt = DateTime.UtcNow
+        });
+
+        await _context.SaveChangesAsync();
+
+        return Ok();
+    }
 }
+5. UI/UX e Engenharia de Conversão (Frontend)
+A. O Order Bump no Checkout (Geração de Caixa Imediato)
+Caixa de seleção visualmente destacada na tela de pagamento (Checkout Lastlink / Custom):
+
+┌───────────────────────────────────────────────────────────────────┐
+│ ⚡ OFERTA VIP: EVITE A CHATEAÇÃO DE COBRAR CONVIDADOS            │
+│                                                                   │
+│ [X] SIM! Quero ativar a Secretária Virtual VOWLA (+R$ 39,00)      │
+│                                                                   │
+│ Economize horas de estresse. A VOWLA envia lembretes automáticos  │
+│ e elegantes via WhatsApp e E-mail para os convidados que          │
+│ esquecerem de confirmar presença.                                 │
+└───────────────────────────────────────────────────────────────────┘
+B. Painel de Gestão no Dashboard (Transparência & Valor)
+No painel do anfitrião, exibimos o status claro da automação e o fallback manual de 1-Clique:
+
+Badge Status: 🟢 Secretária Virtual Ativa (ou CTA "Ativar Secretária" caso não tenha comprado o Order Bump).
+
+Card de Métricas de RSVP:
+
+"Confirmados: 82 | Pendentes: 28 | Recusados: 4"
+
+"Próximo disparo automático em: 15 dias para o evento"
+
+Fallback Manual (Disparo 1-Clique): Ao lado de cada convidado com status Pendente, existe o botão [ Cobrar via WhatsApp ]. Ao clicar, ele gera um link [https://wa.me/PHONE?text=](https://wa.me/PHONE?text=)... com a mensagem pré-formatada para o anfitrião disparar do próprio aparelho se desejar.
+
+6. Régua Persuasiva de Copywriting para WhatsApp
+As mensagens são desenhadas com tom de assistência profissional, removendo o peso de "cobrança" dos noivos ou organizadores.
+
+📩 Disparo 1 (D-30 antes do evento) — Cortesia & Primeiro Alerta
+"Olá, [NomeConvidado]! Sou a assistente virtual dos noivos [Noiva] & [Noivo] 💍.
+
+Passando para lembrar que o grande dia está chegando! Para nos ajudar a organizar o buffet e a acomodação de todos com carinho, confirme sua presença em 5 segundos no link abaixo:
+
+🔗 [LinkDoConvite]"
+
+📩 Disparo 2 (D-15 antes do evento) — Chamada Direta à Ação
+"Olá, [NomeConvidado]! Tudo bem?
+
+Faltam apenas 15 dias para o evento de [Noiva] & [Noivo]! Precisamos fechar a lista oficial até o final desta semana.
+
+Clique no link para confirmar (ou avisar que não poderá ir):
+
+🔗 [LinkDoConvite]"
+
+📩 Disparo 3 (D-7 antes do evento) — Urgência Elegante & Encerramento
+"Olá, [NomeConvidado]! Último aviso:
+
+A lista de convidados do evento de [Noiva] & [Noivo] será encerrada em breve. Para não ficar de fora da lista de entrada, confirme sua presença agora mesmo:
+
+🔗 [LinkDoConvite]

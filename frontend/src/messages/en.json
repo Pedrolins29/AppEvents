@@ -536,5 +536,17 @@
         "cta": "Create my invitation free"
       }
     }
+  },
+  "payments": {
+    "upsell": {
+      "heading": "Unlock premium features",
+      "body": "Coming soon: a fee-free gift list, automatic WhatsApp RSVPs, and more — exclusive to invitations already created.",
+      "cta": "See the offer"
+    },
+    "thankYou": {
+      "title": "Thank you for your purchase!",
+      "body": "Your premium features will unlock shortly.",
+      "backToEvents": "Back to my events"
+    }
   }
 }

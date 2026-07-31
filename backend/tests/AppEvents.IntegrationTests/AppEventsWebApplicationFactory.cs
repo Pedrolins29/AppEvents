@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using AppEvents.Application.Common.Interfaces;
+using AppEvents.Domain.Payments;
 using AppEvents.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -19,6 +20,11 @@ namespace AppEvents.IntegrationTests;
 /// </summary>
 public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
+    // A fixed, known secret so PaymentsEndpointsTests can compute a valid HMAC signature for a
+    // synthetic webhook payload - the base appsettings.json value is blank (fail-closed by
+    // design, see HmacWebhookSignatureVerifier), which would make every webhook test 401.
+    public const string TestWebhookSecret = "test-webhook-secret";
+
     private readonly string _uploadsPath = Path.Combine(Path.GetTempPath(), $"appevents-test-uploads-{Guid.NewGuid():N}");
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -32,6 +38,10 @@ public class AppEventsWebApplicationFactory : WebApplicationFactory<Program>, IA
             configBuilder.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["Storage:LocalPath"] = _uploadsPath,
+                ["Lastlink:WebhookSecret"] = TestWebhookSecret,
+                // Matches PaymentsEndpointsTests.MappedProductKey - lets that suite exercise a
+                // real product-key -> feature-key mapping without depending on real Lastlink data.
+                ["Lastlink:ProductKeyMap:test-bump-groomsmen"] = PremiumFeatureKeys.WeddingGroomsmenManual,
             });
         });
 

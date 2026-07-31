@@ -46,3 +46,26 @@ developer runs this once); `npm run dev`/`build`/`start` point Node at it via
 npm run build   # production build
 npm run lint    # ESLint
 ```
+
+## Feature flags & environment variables
+
+All optional, all blank/unset by default — see `.env.example`.
+
+- `SALES_LANDING` (server-only) — `"true"` renders the PLG sales landing (`/`) instead of the
+  default, fully-truthful landing. Off until the features its copy sells (see below) actually ship.
+- `NEXT_PUBLIC_PREMIUM_UPSELL` — `"true"` shows an optional "unlock premium features" banner next
+  to the publish button on the event editor. Never blocks publishing either way; only worth
+  turning on once at least one `NEXT_PUBLIC_LASTLINK_CHECKOUT_*` URL below is also set (see
+  `lib/checkoutUrls.ts`), otherwise the banner has nothing to link to and stays hidden.
+- `NEXT_PUBLIC_LASTLINK_CHECKOUT_WEDDING` / `_BABY_SHOWER` / `_BIRTHDAY_GRADUATION` /
+  `_CORPORATE` — the Lastlink hosted checkout URL for each event-type segment, created in the
+  Lastlink dashboard (not by this codebase). `_CORPORATE` is reserved but currently unused — there
+  is no `Corporate` `EventType` yet. `getCheckoutUrl()` appends `?appeventsRef={userId}.{eventId}`
+  so a paid webhook can (best-effort, unverified) be traced back to the purchasing user/event —
+  see the backend's `Lastlink:` appsettings section and `PaymentWebhookProcessorService`.
+- `NEXT_PUBLIC_META_PIXEL_ID` / `NEXT_PUBLIC_GOOGLE_ADS_ID` / `NEXT_PUBLIC_TIKTOK_PIXEL_ID` — ad
+  pixel IDs (`components/AdPixels.tsx`). Each is independent; an unset id means that pixel's
+  script never renders and its domains are never added to the CSP (`next.config.ts`). When set,
+  each fires an automatic page view plus an "initiate checkout"-equivalent event on the upsell
+  CTA click; true purchase-conversion tracking additionally needs Lastlink's checkout to redirect
+  back to `/obrigado` after payment (unverified whether it supports a configurable redirect URL).

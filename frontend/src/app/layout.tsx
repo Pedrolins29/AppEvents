@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import { AdPixels } from "@/components/AdPixels";
 import { AuthProvider } from "@/lib/auth-context";
 import "./globals.css";
 
@@ -71,6 +72,7 @@ export default async function RootLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>{children}</AuthProvider>
         </NextIntlClientProvider>
+        <AdPixels />
       </body>
     </html>
   );

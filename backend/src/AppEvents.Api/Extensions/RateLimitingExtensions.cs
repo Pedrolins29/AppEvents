@@ -10,6 +10,8 @@ public static class RateLimitingExtensions
     public const string UploadPolicy = "upload";
     public const string ResendConfirmationPolicy = "resend-confirmation";
 
+    public const string WebhookPolicy = "webhook";
+
     /// <summary>
     /// The "Testing" environment (used by AppEventsWebApplicationFactory) gets much higher
     /// limits — integration tests fire many requests from the same loopback IP in quick
@@ -79,6 +81,19 @@ public static class RateLimitingExtensions
                     {
                         PermitLimit = isTesting ? 10_000 : 3,
                         Window = TimeSpan.FromMinutes(15),
+                        QueueLimit = 0,
+                    }));
+
+            // IP-partitioned as a rough guard only — Lastlink's real source IPs are unknown, so
+            // this isn't a meaningful allowlist. The actual security boundary for this endpoint
+            // is the webhook signature check in IWebhookSignatureVerifier, not this limit.
+            options.AddPolicy(WebhookPolicy, httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: GetClientIp(httpContext),
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = isTesting ? 10_000 : 30,
+                        Window = TimeSpan.FromSeconds(60),
                         QueueLimit = 0,
                     }));
         });

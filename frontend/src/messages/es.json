@@ -536,5 +536,17 @@
         "cta": "Crear mi invitación gratis"
       }
     }
+  },
+  "payments": {
+    "upsell": {
+      "heading": "Desbloquea funciones premium",
+      "body": "Próximamente: lista de regalos sin comisión, RSVP automático por WhatsApp y más — exclusivo para invitaciones ya creadas.",
+      "cta": "Ver la oferta"
+    },
+    "thankYou": {
+      "title": "¡Gracias por tu compra!",
+      "body": "Tus funciones premium se activarán en breve.",
+      "backToEvents": "Volver a mis eventos"
+    }
   }
 }

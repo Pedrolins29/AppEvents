@@ -3,6 +3,8 @@ using AppEvents.Application.Events.Interfaces;
 using AppEvents.Application.Events.Services;
 using AppEvents.Application.Identity.Interfaces;
 using AppEvents.Application.Identity.Services;
+using AppEvents.Application.Payments.Interfaces;
+using AppEvents.Application.Payments.Services;
 using AppEvents.Application.Rsvp.Interfaces;
 using AppEvents.Application.Rsvp.Services;
 using AppEvents.Application.Templates.Interfaces;
@@ -11,6 +13,7 @@ using AppEvents.Infrastructure.Common;
 using AppEvents.Infrastructure.Email;
 using AppEvents.Infrastructure.Events;
 using AppEvents.Infrastructure.Identity;
+using AppEvents.Infrastructure.Payments;
 using AppEvents.Infrastructure.Persistence;
 using AppEvents.Infrastructure.Rsvp;
 using AppEvents.Infrastructure.Storage;
@@ -48,6 +51,14 @@ public static class DependencyInjection
 
         services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<IEmailConfirmationLinkBuilder, EmailConfirmationLinkBuilder>();
+
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IEntitlementRepository, EntitlementRepository>();
+        services.AddScoped<IEntitlementService, EntitlementService>();
+        services.AddScoped<IWebhookSignatureVerifier, HmacWebhookSignatureVerifier>();
+        services.AddScoped<IWebhookPayloadParser, LastlinkWebhookPayloadParser>();
+        services.AddScoped<IPremiumProductCatalog, PremiumProductCatalog>();
+        services.AddScoped<IPaymentWebhookProcessor, PaymentWebhookProcessorService>();
 
         return services;
     }

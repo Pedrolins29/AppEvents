@@ -7,6 +7,7 @@ import { AppHeader } from "@/components/AppHeader";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { Skeleton } from "@/components/Skeleton";
+import { UpsellBanner } from "@/components/UpsellBanner";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
 import { rsvpApi } from "@/lib/rsvpApi";
@@ -285,6 +286,8 @@ export default function EditEventPage() {
           </div>
           {publishError && <p className="mt-2 text-xs text-red-600">{publishError}</p>}
         </div>
+
+        {initialValues && <UpsellBanner eventId={params.id} eventType={initialValues.eventType} />}
 
         {attendance && (
           <div className="mb-6 border border-[#E2DFD3] p-4">

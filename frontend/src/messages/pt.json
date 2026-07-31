@@ -536,5 +536,17 @@
         "cta": "Criar meu convite grátis"
       }
     }
+  },
+  "payments": {
+    "upsell": {
+      "heading": "Desbloqueie recursos premium",
+      "body": "Em breve: lista de presentes sem taxas, RSVP automático no WhatsApp e muito mais — exclusivo para quem já tem um convite criado.",
+      "cta": "Ver oferta"
+    },
+    "thankYou": {
+      "title": "Obrigado pela sua compra!",
+      "body": "Seus recursos premium serão liberados em instantes.",
+      "backToEvents": "Voltar aos meus eventos"
+    }
   }
 }
