@@ -25,7 +25,7 @@ public class AppEventsDbContext : DbContext
 
     public DbSet<Template> Templates => Set<Template>();
 
-    public DbSet<RsvpResponse> RsvpResponses => Set<RsvpResponse>();
+    public DbSet<Guest> Guests => Set<Guest>();
 
     public DbSet<Order> Orders => Set<Order>();
 

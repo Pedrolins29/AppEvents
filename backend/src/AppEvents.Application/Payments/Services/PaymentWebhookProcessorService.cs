@@ -112,6 +112,14 @@ public class PaymentWebhookProcessorService : IPaymentWebhookProcessor
                     featureKey, userId, payload.ExternalOrderId);
             }
         }
+        else if (status == OrderStatus.Refunded && userId is not null)
+        {
+            // Symmetric to the grant path: a refund/chargeback revokes the same feature(s) it
+            // originally unlocked. We match on the refunded payload's product keys (mapped to
+            // feature keys) rather than the source order, since the provider's refund and purchase
+            // are separate transactions we can't assume to be linked.
+            await RevokeEntitlementsAsync(userId.Value, eventId, payload.ProductKeys, now, payload.ExternalOrderId, cancellationToken);
+        }
         else if (status == OrderStatus.Unmatched)
         {
             _logger.LogWarning(
@@ -123,6 +131,35 @@ public class PaymentWebhookProcessorService : IPaymentWebhookProcessor
         await _orderRepository.SaveChangesAsync(cancellationToken);
 
         return WebhookProcessResult.Processed;
+    }
+
+    private async Task RevokeEntitlementsAsync(
+        Guid userId, Guid? eventId, IReadOnlyList<string> productKeys, DateTime now, string externalOrderId, CancellationToken cancellationToken)
+    {
+        var featureKeys = productKeys
+            .Select(_productCatalog.ResolveFeatureKey)
+            .Where(key => key is not null)
+            .Select(key => key!)
+            .ToHashSet();
+
+        if (featureKeys.Count == 0)
+        {
+            return;
+        }
+
+        var entitlements = await _entitlementRepository.GetByUserIdAsync(userId, cancellationToken);
+        foreach (var entitlement in entitlements)
+        {
+            if (entitlement.IsActive(now)
+                && featureKeys.Contains(entitlement.FeatureKey)
+                && (entitlement.EventId is null || entitlement.EventId == eventId))
+            {
+                entitlement.RevokedAtUtc = now;
+                _logger.LogInformation(
+                    "Audit: revoked entitlement {FeatureKey} from user {UserId} due to refunded order {ExternalOrderId}",
+                    entitlement.FeatureKey, userId, externalOrderId);
+            }
+        }
     }
 
     // Expected shape: "{userId}.{eventId}" or a bare "{userId}" - appended as

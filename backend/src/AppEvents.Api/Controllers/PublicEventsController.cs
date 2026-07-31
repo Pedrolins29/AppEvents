@@ -13,12 +13,12 @@ namespace AppEvents.Api.Controllers;
 public class PublicEventsController : ControllerBase
 {
     private readonly IPublicEventService _publicEventService;
-    private readonly IRsvpService _rsvpService;
+    private readonly IGuestService _guestService;
 
-    public PublicEventsController(IPublicEventService publicEventService, IRsvpService rsvpService)
+    public PublicEventsController(IPublicEventService publicEventService, IGuestService guestService)
     {
         _publicEventService = publicEventService;
-        _rsvpService = rsvpService;
+        _guestService = guestService;
     }
 
     [HttpGet("{slug}")]
@@ -28,11 +28,20 @@ public class PublicEventsController : ControllerBase
         return Ok(response);
     }
 
+    // Prefill for a guest who opened their personal link (/e/{slug}?g={token}) - returns only that
+    // one guest's own details.
+    [HttpGet("{slug}/guest/{token}")]
+    public async Task<ActionResult<GuestPrefillDto>> GetGuestPrefill(string slug, string token, CancellationToken cancellationToken)
+    {
+        var response = await _guestService.GetPrefillByTokenAsync(slug, token, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPost("{slug}/rsvp")]
     [EnableRateLimiting(RateLimitingExtensions.RsvpPolicy)]
-    public async Task<ActionResult<RsvpResponseDto>> SubmitRsvp(string slug, CreateRsvpRequest request, CancellationToken cancellationToken)
+    public async Task<ActionResult<GuestDto>> SubmitRsvp(string slug, CreateRsvpRequest request, CancellationToken cancellationToken)
     {
-        var response = await _rsvpService.SubmitAsync(slug, request, cancellationToken);
+        var response = await _guestService.SubmitAsync(slug, request, cancellationToken);
         return StatusCode(StatusCodes.Status201Created, response);
     }
 }

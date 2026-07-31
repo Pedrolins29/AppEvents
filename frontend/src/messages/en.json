@@ -39,7 +39,8 @@
   },
   "rsvpStatus": {
     "Confirmed": "Confirmed",
-    "Declined": "Declined"
+    "Declined": "Declined",
+    "Pending": "Pending"
   },
   "templateThemeNames": {
     "elegant": "Elegant",
@@ -548,5 +549,32 @@
       "body": "Your premium features will unlock shortly.",
       "backToEvents": "Back to my events"
     }
+  },
+  "guests": {
+    "heading": "Guest list",
+    "subtitle": "Add your guests and track who has confirmed. Each one gets a personal confirmation link.",
+    "total": "total",
+    "pending": "pending",
+    "confirmed": "confirmed",
+    "declined": "declined",
+    "namePlaceholder": "Guest name",
+    "phonePlaceholder": "WhatsApp (with country code)",
+    "emailPlaceholder": "Email (optional)",
+    "addButton": "Add",
+    "adding": "Adding...",
+    "addError": "Could not add the guest.",
+    "empty": "No guests yet. Add your first one above.",
+    "copyLink": "Copy personal link",
+    "linkCopied": "Link copied!",
+    "remindWhatsapp": "Nudge on WhatsApp",
+    "remindEmail": "Remind by email",
+    "reminderSending": "Sending...",
+    "reminderSent": "Reminder sent!",
+    "remindedCount": "{count} reminder(s)",
+    "reminderError": "Could not send the reminder.",
+    "noPhoneForWhatsapp": "This guest has no phone number.",
+    "remove": "Remove",
+    "removeConfirm": "Remove this guest from the list?",
+    "whatsappMessage": "Hi {name}! Just a note about our event \"{event}\". Please confirm your attendance here: {link}"
   }
 }

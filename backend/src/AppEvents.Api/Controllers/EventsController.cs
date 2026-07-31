@@ -19,13 +19,13 @@ public class EventsController : ControllerBase
 {
     private readonly IEventService _eventService;
     private readonly IImageStorageService _imageStorageService;
-    private readonly IRsvpService _rsvpService;
+    private readonly IGuestService _guestService;
 
-    public EventsController(IEventService eventService, IImageStorageService imageStorageService, IRsvpService rsvpService)
+    public EventsController(IEventService eventService, IImageStorageService imageStorageService, IGuestService guestService)
     {
         _eventService = eventService;
         _imageStorageService = imageStorageService;
-        _rsvpService = rsvpService;
+        _guestService = guestService;
     }
 
     [HttpPost]
@@ -160,10 +160,38 @@ public class EventsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("{id:guid}/rsvps")]
-    public async Task<ActionResult<AttendanceResponse>> GetAttendance(Guid id, CancellationToken cancellationToken)
+    [HttpGet("{id:guid}/guests")]
+    public async Task<ActionResult<GuestListResponse>> GetGuests(Guid id, CancellationToken cancellationToken)
     {
-        var response = await _rsvpService.GetAttendanceAsync(GetUserId(), id, cancellationToken);
+        var response = await _guestService.GetGuestListAsync(GetUserId(), id, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPost("{id:guid}/guests")]
+    public async Task<ActionResult<GuestDto>> AddGuest(Guid id, AddGuestRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _guestService.AddGuestAsync(GetUserId(), id, request, cancellationToken);
+        return StatusCode(StatusCodes.Status201Created, response);
+    }
+
+    [HttpPut("{id:guid}/guests/{guestId:guid}")]
+    public async Task<ActionResult<GuestDto>> UpdateGuest(Guid id, Guid guestId, UpdateGuestRequest request, CancellationToken cancellationToken)
+    {
+        var response = await _guestService.UpdateGuestAsync(GetUserId(), id, guestId, request, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpDelete("{id:guid}/guests/{guestId:guid}")]
+    public async Task<IActionResult> RemoveGuest(Guid id, Guid guestId, CancellationToken cancellationToken)
+    {
+        await _guestService.RemoveGuestAsync(GetUserId(), id, guestId, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("{id:guid}/guests/{guestId:guid}/remind-email")]
+    public async Task<ActionResult<GuestDto>> RemindGuestByEmail(Guid id, Guid guestId, CancellationToken cancellationToken)
+    {
+        var response = await _guestService.SendReminderEmailAsync(GetUserId(), id, guestId, cancellationToken);
         return Ok(response);
     }
 

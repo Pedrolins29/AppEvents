@@ -89,6 +89,18 @@ public class CreateRsvpRequestValidatorTests
     }
 
     [Fact]
+    public void Validate_WithPendingStatus_HasError()
+    {
+        // "Pending" is an organizer-only state - a guest can never submit it.
+        var request = ValidRequest() with { Status = RsvpStatus.Pending };
+
+        var result = _sut.Validate(request);
+
+        result.IsValid.Should().BeFalse();
+        result.Errors.Should().Contain(e => e.PropertyName == nameof(CreateRsvpRequest.Status));
+    }
+
+    [Fact]
     public void Validate_WithFilledHoneypot_HasError()
     {
         var request = ValidRequest() with { HoneypotField = "I am a bot" };

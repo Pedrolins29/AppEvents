@@ -5,14 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { AppHeader } from "@/components/AppHeader";
 import { EventForm, type EventFormValues } from "@/components/EventForm";
+import { GuestListManager } from "@/components/GuestListManager";
 import { PhotoUpload } from "@/components/PhotoUpload";
 import { Skeleton } from "@/components/Skeleton";
 import { UpsellBanner } from "@/components/UpsellBanner";
 import { ApiError } from "@/lib/auth-context";
 import { eventsApi } from "@/lib/eventsApi";
-import { rsvpApi } from "@/lib/rsvpApi";
 import type { CreateEventRequest, EventImageRecord, EventRecord } from "@/types/event";
-import { getRsvpStatusLabels, type AttendanceResponse } from "@/types/rsvp";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://localhost:5001";
 
@@ -22,7 +21,6 @@ export default function EditEventPage() {
   const t = useTranslations("events.edit");
   const listT = useTranslations("events.list");
   const photoT = useTranslations("photoUpload");
-  const rsvpStatusLabels = getRsvpStatusLabels(useTranslations("rsvpStatus"));
   const [initialValues, setInitialValues] = useState<EventFormValues | null>(null);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
@@ -40,7 +38,6 @@ export default function EditEventPage() {
   const [galleryPreviewUrls, setGalleryPreviewUrls] = useState<string[]>([]);
   const [galleryError, setGalleryError] = useState<string | null>(null);
   const [isGalleryUploading, setIsGalleryUploading] = useState(false);
-  const [attendance, setAttendance] = useState<AttendanceResponse | null>(null);
   const coverPreviewRef = useRef<string | null>(null);
   const featuredPhotoPreviewRef = useRef<string | null>(null);
 
@@ -74,10 +71,6 @@ export default function EditEventPage() {
         }
       });
   }, [params.id, t]);
-
-  useEffect(() => {
-    rsvpApi.getAttendance(params.id).then(setAttendance).catch(() => setAttendance(null));
-  }, [params.id]);
 
   useEffect(() => {
     return () => {
@@ -289,45 +282,8 @@ export default function EditEventPage() {
 
         {initialValues && <UpsellBanner eventId={params.id} eventType={initialValues.eventType} />}
 
-        {attendance && (
-          <div className="mb-6 border border-[#E2DFD3] p-4">
-            <p className="mb-3 font-medium text-[#14211D]">{t("attendance")}</p>
-            <div className="mb-3 flex gap-4 text-sm">
-              <span className="text-[#14211D]">
-                <strong>{attendance.summary.total}</strong> {t("total")}
-              </span>
-              <span className="text-emerald-700">
-                <strong>{attendance.summary.confirmed}</strong> {t("confirmed")}
-              </span>
-              <span className="text-[#5B6B67]">
-                <strong>{attendance.summary.declined}</strong> {t("declined")}
-              </span>
-            </div>
-            {attendance.responses.length > 0 && (
-              <ul className="flex max-h-56 flex-col gap-2 overflow-y-auto text-sm">
-                {attendance.responses.map((response) => (
-                  <li key={response.id} className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-[#14211D]">{response.guestName}</p>
-                      <p className="text-xs text-[#5B6B67]">
-                        {response.guestEmail}
-                        {response.guestPhone && <> &middot; {response.guestPhone}</>}
-                      </p>
-                    </div>
-                    <span
-                      className={
-                        response.status === "Confirmed"
-                          ? "text-emerald-700"
-                          : "text-[#5B6B67]"
-                      }
-                    >
-                      {rsvpStatusLabels[response.status]}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+        {initialValues && (
+          <GuestListManager eventId={params.id} slug={initialValues.slug} eventName={initialValues.name} />
         )}
 
         <PhotoUpload

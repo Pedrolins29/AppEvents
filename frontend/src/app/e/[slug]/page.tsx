@@ -11,6 +11,7 @@ import { getEventTypeLabels } from "@/types/event";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ g?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -41,13 +42,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function PublicEventPage({ params }: PageProps) {
+export default async function PublicEventPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const { g: inviteToken } = await searchParams;
   const event = await publicEventsApi.get(slug);
 
   if (!event) {
     notFound();
   }
+
+  // Personal-link visit (?g=token): fetch that guest's own details to prefill the RSVP form and
+  // tie the submission to them. An unknown token quietly falls back to the open form.
+  const guestPrefill = inviteToken ? await publicEventsApi.getGuestPrefill(slug, inviteToken) : null;
 
   const locale = await getLocale();
   const eventTypeLabels = getEventTypeLabels(await getTranslations("eventTypes"));
@@ -91,7 +97,12 @@ export default async function PublicEventPage({ params }: PageProps) {
         // prematurely close this tag.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
-      <InvitationBody event={viewModel} theme={theme} />
+      <InvitationBody
+        event={viewModel}
+        theme={theme}
+        inviteToken={guestPrefill ? inviteToken : undefined}
+        guestPrefill={guestPrefill ?? undefined}
+      />
     </>
   );
 }

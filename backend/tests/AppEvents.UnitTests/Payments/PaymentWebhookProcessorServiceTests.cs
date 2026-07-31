@@ -132,4 +132,57 @@ public class PaymentWebhookProcessorServiceTests
             Arg.Any<CancellationToken>());
         await _entitlementRepository.DidNotReceive().AddAsync(Arg.Any<Entitlement>(), Arg.Any<CancellationToken>());
     }
+
+    [Fact]
+    public async Task ProcessAsync_WhenRefunded_RevokesMatchingActiveEntitlement()
+    {
+        var sut = CreateSut();
+        var userId = Guid.NewGuid();
+        var eventId = Guid.NewGuid();
+        var payload = Payload(status: "refunded", reference: $"{userId}.{eventId}", productKeys: ["bump-groomsmen"]);
+        _payloadParser.Parse(Arg.Any<string>()).Returns(payload);
+        _orderRepository.GetByExternalOrderIdAsync("order-1", Arg.Any<CancellationToken>()).Returns((Order?)null);
+        _productCatalog.ResolveFeatureKey("bump-groomsmen").Returns(PremiumFeatureKeys.WeddingGroomsmenManual);
+
+        var entitlement = new Entitlement
+        {
+            UserId = userId,
+            EventId = eventId,
+            FeatureKey = PremiumFeatureKeys.WeddingGroomsmenManual,
+            SourceOrderId = Guid.NewGuid(),
+            GrantedAtUtc = _now.AddDays(-2),
+        };
+        _entitlementRepository.GetByUserIdAsync(userId, Arg.Any<CancellationToken>()).Returns([entitlement]);
+
+        var result = await sut.ProcessAsync("{}", "sig");
+
+        result.Should().Be(WebhookProcessResult.Processed);
+        entitlement.RevokedAtUtc.Should().Be(_now);
+        entitlement.IsActive(_now).Should().BeFalse();
+        await _orderRepository.Received(1).AddAsync(Arg.Is<Order>(o => o.Status == OrderStatus.Refunded), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ProcessAsync_WhenRefunded_DoesNotRevokeEntitlementForADifferentFeature()
+    {
+        var sut = CreateSut();
+        var userId = Guid.NewGuid();
+        var payload = Payload(status: "refunded", reference: userId.ToString(), productKeys: ["bump-groomsmen"]);
+        _payloadParser.Parse(Arg.Any<string>()).Returns(payload);
+        _orderRepository.GetByExternalOrderIdAsync("order-1", Arg.Any<CancellationToken>()).Returns((Order?)null);
+        _productCatalog.ResolveFeatureKey("bump-groomsmen").Returns(PremiumFeatureKeys.WeddingGroomsmenManual);
+
+        var unrelated = new Entitlement
+        {
+            UserId = userId,
+            FeatureKey = PremiumFeatureKeys.BabyShowerGenderGuessGame,
+            SourceOrderId = Guid.NewGuid(),
+            GrantedAtUtc = _now.AddDays(-2),
+        };
+        _entitlementRepository.GetByUserIdAsync(userId, Arg.Any<CancellationToken>()).Returns([unrelated]);
+
+        await sut.ProcessAsync("{}", "sig");
+
+        unrelated.RevokedAtUtc.Should().BeNull();
+    }
 }

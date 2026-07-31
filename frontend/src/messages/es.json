@@ -39,7 +39,8 @@
   },
   "rsvpStatus": {
     "Confirmed": "Confirmado",
-    "Declined": "Rechazado"
+    "Declined": "Rechazado",
+    "Pending": "Pendiente"
   },
   "templateThemeNames": {
     "elegant": "Elegante",
@@ -548,5 +549,32 @@
       "body": "Tus funciones premium se activarán en breve.",
       "backToEvents": "Volver a mis eventos"
     }
+  },
+  "guests": {
+    "heading": "Lista de invitados",
+    "subtitle": "Añade a tus invitados y controla quién ha confirmado. Cada uno recibe un enlace personal de confirmación.",
+    "total": "total",
+    "pending": "pendientes",
+    "confirmed": "confirmados",
+    "declined": "rechazados",
+    "namePlaceholder": "Nombre del invitado",
+    "phonePlaceholder": "WhatsApp (con código de país)",
+    "emailPlaceholder": "Correo (opcional)",
+    "addButton": "Añadir",
+    "adding": "Añadiendo...",
+    "addError": "No se pudo añadir al invitado.",
+    "empty": "Aún no hay invitados. Añade el primero arriba.",
+    "copyLink": "Copiar enlace personal",
+    "linkCopied": "¡Enlace copiado!",
+    "remindWhatsapp": "Recordar por WhatsApp",
+    "remindEmail": "Recordar por correo",
+    "reminderSending": "Enviando...",
+    "reminderSent": "¡Recordatorio enviado!",
+    "remindedCount": "{count} recordatorio(s)",
+    "reminderError": "No se pudo enviar el recordatorio.",
+    "noPhoneForWhatsapp": "Este invitado no tiene teléfono.",
+    "remove": "Eliminar",
+    "removeConfirm": "¿Eliminar a este invitado de la lista?",
+    "whatsappMessage": "¡Hola {name}! Un recordatorio sobre nuestro evento \"{event}\". Confirma tu asistencia aquí: {link}"
   }
 }

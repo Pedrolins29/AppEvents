@@ -1,5 +1,6 @@
 using AppEvents.Application.Events.Validators;
 using AppEvents.Application.Rsvp.Dtos;
+using AppEvents.Domain.Rsvp;
 using FluentValidation;
 
 namespace AppEvents.Application.Rsvp.Validators;
@@ -24,8 +25,16 @@ public class CreateRsvpRequestValidator : AbstractValidator<CreateRsvpRequest>
             .NoHtmlTags()
             .When(x => !string.IsNullOrEmpty(x.GuestPhone));
 
+        // A guest submission is always a decision - "Pending" is an organizer-only state a guest
+        // can never post back.
         RuleFor(x => x.Status)
-            .IsInEnum();
+            .IsInEnum()
+            .Must(status => status is RsvpStatus.Confirmed or RsvpStatus.Declined)
+            .WithMessage("Status must be Confirmed or Declined.");
+
+        RuleFor(x => x.InviteToken)
+            .MaximumLength(64)
+            .When(x => !string.IsNullOrEmpty(x.InviteToken));
 
         RuleFor(x => x.HoneypotField)
             .Empty()

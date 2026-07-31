@@ -1,8 +1,9 @@
-export type RsvpStatus = "Confirmed" | "Declined";
+export type RsvpStatus = "Pending" | "Confirmed" | "Declined";
 
 // Same pattern as getEventTypeLabels in types/event.ts — needs a translator instance from the caller.
 export function getRsvpStatusLabels(t: (key: RsvpStatus) => string): Record<RsvpStatus, string> {
   return {
+    Pending: t("Pending"),
     Confirmed: t("Confirmed"),
     Declined: t("Declined"),
   };
@@ -14,24 +15,16 @@ export interface CreateRsvpRequest {
   guestPhone: string | null;
   status: RsvpStatus;
   honeypotField: string | null;
+  // Present when the guest opened their personal link (/e/{slug}?g={token}); the submission then
+  // updates that pre-existing pending guest instead of creating a new one.
+  inviteToken?: string | null;
 }
 
-export interface RsvpRecord {
-  id: string;
+// Public prefill for a guest opening their own personal link.
+export interface GuestPrefill {
   guestName: string;
-  guestEmail: string;
+  guestEmail: string | null;
   guestPhone: string | null;
   status: RsvpStatus;
-  createdAtUtc: string;
-}
-
-export interface AttendanceSummary {
-  total: number;
-  confirmed: number;
-  declined: number;
-}
-
-export interface AttendanceResponse {
-  summary: AttendanceSummary;
-  responses: RsvpRecord[];
+  hasResponded: boolean;
 }

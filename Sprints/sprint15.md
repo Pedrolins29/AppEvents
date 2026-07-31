@@ -197,3 +197,60 @@ Clique no link para confirmar (ou avisar que não poderá ir):
 A lista de convidados do evento de [Noiva] & [Noivo] será encerrada em breve. Para não ficar de fora da lista de entrada, confirme sua presença agora mesmo:
 
 🔗 [LinkDoConvite]
+
+---
+
+## Implementação — Parte A (o que foi feito)
+
+O brief pressupõe tabelas `Invitations`/`Guests` com status "Pendente" e uma lista de convidados
+prévia — **nada disso existia**: o app só guardava uma resposta de RSVP *depois* que o convidado
+confirmava (status só `Confirmed`/`Declined`, sem `Pending`), sem nenhum conceito de lista de
+convidados, sem agendador de jobs e sem integração de WhatsApp. Ou seja, "lembrar quem ainda não
+respondeu" era impossível sem antes construir a **fundação de lista de convidados**. Foi isso que
+esta sprint entregou (Parte A); o **motor automático** (job diário 30/15/7 dias, atrás da
+entitlement paga) ficou especificado como **Parte B**, para uma sprint seguinte — construir tudo
+junto seria 2–3× uma sprint normal, e o WhatsApp **automático** é impossível sem uma Business API
+(que não existe aqui).
+
+### Fundação: RsvpResponse → Guest (fonte única de verdade)
+- `RsvpResponse` virou **`Guest`**; `RsvpStatus` ganhou **`Pending`** (novo padrão). Cada guest tem
+  um **`InviteToken`** único (link pessoal `/e/{slug}?g={token}`), `RespondedAtUtc`, `ReminderCount`,
+  `LastReminderSentAtUtc`. Migração `AddGuestList` escrita à mão como **rename preservando dados**
+  (não o drop+create que o EF gera): as respostas existentes viram guests já respondidos, com token
+  gerado e `RespondedAtUtc = CreatedAtUtc`.
+- **`GuestService`** unifica os dois caminhos: submissão pública (com token → atualiza aquele guest
+  pendente; sem token → cria um "walk-in") e a gestão do organizador (adicionar/editar/remover,
+  listar, lembrete por e-mail). Endpoints novos em `EventsController` (`/guests` CRUD +
+  `/guests/{id}/remind-email`) e `PublicEventsController` (`/{slug}/guest/{token}` para prefill).
+
+### Lembretes manuais (grátis, sem depender de pagamento)
+- **WhatsApp = link `wa.me` manual**: o organizador clica "Cobrar no WhatsApp", abre o WhatsApp com a
+  mensagem já pronta (incluindo o link pessoal do convidado) e envia do próprio aparelho. Zero
+  dependência externa, funciona de verdade hoje. (`lib/whatsappLink.ts`)
+- **E-mail**: botão "Lembrar por e-mail" dispara um e-mail real (infra `IEmailSender` já existente)
+  com o link pessoal, e incrementa o contador de lembretes.
+- **UI**: o bloco de presença read-only virou um **gerenciador de lista de convidados**
+  (`GuestListManager`) na página de edição — adicionar convidado, badges de status (Pendente/
+  Confirmado/Recusado), copiar link pessoal, cobrar via WhatsApp, lembrar por e-mail, remover.
+  Página pública lê `?g=token` e pré-preenche o formulário, amarrando a submissão àquele convidado.
+- i18n `guests.*` + `rsvpStatus.Pending` em pt/en/es (PT como voz principal).
+
+### Melhoria da Sprint 14 (feita)
+O webhook concedia entitlements no `Paid` mas **não revogava no `Refunded`/chargeback** (os campos
+`Entitlement.RevokedAtUtc`/`IsActive()` existiam sem uso nesse caminho). Adicionado: um reembolso
+com referência resolvível revoga as entitlements ativas correspondentes do usuário (+ log de
+auditoria + testes).
+
+### Escopo confirmado / decisões
+- **Parte B adiada** (motor automático, atrás da entitlement `wedding.rsvp-whatsapp-reminders` da
+  Sprint 14 + toggle por evento). O webhook da Sprint 14 já concede essa entitlement quando o SKU do
+  order bump for mapeado — nenhum código novo de webhook necessário.
+- Publicar o convite continua **grátis** (modelo das sprints 13/14); o `Invitation.IsPaid` do brief
+  não se aplica. Só a automação (Parte B) será paga.
+
+### Verificação
+`dotnet test`: **145 unitários + 84 integração, todos passando** (incluindo `GuestServiceTests`,
+`GuestEndpointsTests` cobrindo lista de convidados, link pessoal, prefill por token, lembrete por
+e-mail, e toda a regressão do rename RSVP→Guest). `tsc`/`eslint`/`build` do frontend limpos.
+Endpoints verificados ao vivo (guests sem auth → 401; prefill desconhecido → 404; submit com
+`Pending` → 400).

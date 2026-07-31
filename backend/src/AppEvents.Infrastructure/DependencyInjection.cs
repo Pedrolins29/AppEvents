@@ -46,11 +46,12 @@ public static class DependencyInjection
         services.AddScoped<ITemplateService, TemplateService>();
         services.AddScoped<IImageStorageService, LocalImageStorageService>();
 
-        services.AddScoped<IRsvpRepository, RsvpRepository>();
-        services.AddScoped<IRsvpService, RsvpService>();
+        services.AddScoped<IGuestRepository, GuestRepository>();
+        services.AddScoped<IGuestService, GuestService>();
 
         services.AddScoped<IEmailSender, SmtpEmailSender>();
         services.AddScoped<IEmailConfirmationLinkBuilder, EmailConfirmationLinkBuilder>();
+        services.AddScoped<IGuestInviteLinkBuilder, GuestInviteLinkBuilder>();
 
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IEntitlementRepository, EntitlementRepository>();
