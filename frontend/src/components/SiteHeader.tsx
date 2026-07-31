@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -57,6 +58,7 @@ function NavLink({ href, label, onClick }: { href: string; label: string; onClic
 export function SiteHeader() {
   const t = useTranslations("siteHeader");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   return (
     <header className="sticky top-0 z-20 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--porcelain)_88%,transparent)] backdrop-blur">
@@ -83,12 +85,27 @@ export function SiteHeader() {
           >
             {t("logIn")}
           </Link>
-          <Link
-            href="/register"
-            className="rounded-full bg-[var(--pinewood)] px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-[#0C4F48] hover:shadow-md"
+          <motion.div
+            className="rounded-full"
+            animate={
+              reduceMotion
+                ? undefined
+                : {
+                    boxShadow: [
+                      "0 0 0 0 color-mix(in srgb, var(--gold) 45%, transparent)",
+                      "0 0 0 7px color-mix(in srgb, var(--gold) 0%, transparent)",
+                    ],
+                  }
+            }
+            transition={reduceMotion ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeOut" }}
           >
-            {t("getStarted")}
-          </Link>
+            <Link
+              href="/criar-convite"
+              className="rounded-full bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md"
+            >
+              {t("getStarted")}
+            </Link>
+          </motion.div>
         </nav>
 
         <button
@@ -126,9 +143,9 @@ export function SiteHeader() {
             {t("logIn")}
           </Link>
           <Link
-            href="/register"
+            href="/criar-convite"
             onClick={() => setIsMenuOpen(false)}
-            className="mt-2 rounded-full bg-[var(--pinewood)] px-4 py-2 text-center text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C4F48]"
+            className="mt-2 rounded-full bg-[var(--gold)] px-4 py-2 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:shadow-md"
           >
             {t("getStarted")}
           </Link>

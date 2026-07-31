@@ -209,7 +209,7 @@ export async function HomeLanding() {
               </p>
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
-                  href="/register"
+                  href="/criar-convite"
                   className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
                 >
                   {t("hero.ctaCreate")}
@@ -468,7 +468,7 @@ export async function HomeLanding() {
                 {t("finalCta.subtitle")}
               </p>
               <Link
-                href="/register"
+                href="/criar-convite"
                 className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
               >
                 {t("hero.ctaCreate")}

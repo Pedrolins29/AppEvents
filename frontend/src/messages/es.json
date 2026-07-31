@@ -10,7 +10,7 @@
     "howItWorks": "Cómo Funciona",
     "qa": "Preguntas",
     "logIn": "Iniciar sesión",
-    "getStarted": "Empezar",
+    "getStarted": "Crear Ahora",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú"
   },
@@ -27,7 +27,8 @@
   "siteFooter": {
     "templates": "Plantillas",
     "logIn": "Iniciar sesión",
-    "getStarted": "Empezar"
+    "getStarted": "Empezar",
+    "criarConvite": "Crear Invitación"
   },
   "eventTypes": {
     "Wedding": "Boda",
@@ -576,5 +577,158 @@
     "remove": "Eliminar",
     "removeConfirm": "¿Eliminar a este invitado de la lista?",
     "whatsappMessage": "¡Hola {name}! Un recordatorio sobre nuestro evento \"{event}\". Confirma tu asistencia aquí: {link}"
+  },
+  "criarConvite": {
+    "hub": {
+      "eyebrow": "Invitaciones Digitales",
+      "heading": "Crea tu invitación digital",
+      "subtitle": "Elige el tipo de celebración y mírala en vivo, al instante — gratis para empezar.",
+      "metaTitle": "Crear Invitación Digital | AppEvents",
+      "metaDescription": "Crea una invitación digital para boda, cumpleaños, graduación, quince años o baby shower. Gratis para empezar.",
+      "breadcrumbHome": "Inicio",
+      "breadcrumbHub": "Crear Invitación",
+      "cardCta": "Toca para ver las plantillas",
+      "otherEventsTitle": "Otros Eventos",
+      "otherEventsSubtitle": "Ve todos los temas disponibles"
+    },
+    "categories": {
+      "Wedding": {
+        "metaTitle": "Invitación de Boda Online e Interactiva | AppEvents",
+        "metaDescription": "Crea una invitación de boda digital con sobre interactivo, cuenta regresiva, RSVP y recordatorios automáticos. Gratis para empezar.",
+        "heroEyebrow": "Boda",
+        "heroHeading": "La invitación de boda que tus invitados van a abrir de verdad",
+        "heroSubtitle": "Un sobre digital interactivo, cronograma de ceremonia y recepción, y confirmaciones organizadas — todo en un solo enlace.",
+        "painPoint": "Lista de invitados dispersa en grupos de WhatsApp, sin saber realmente quién confirmó.",
+        "solution": "RSVP organizado automáticamente, con recordatorios por correo y un aviso fácil por WhatsApp para quien aún no respondió.",
+        "showcaseHeading": "Bodas creadas en AppEvents",
+        "faq": [
+          {
+            "question": "¿Tengo que pagar para crear la invitación?",
+            "answer": "No. Crear y publicar tu invitación de boda es gratis."
+          },
+          {
+            "question": "¿Los invitados necesitan instalar una app?",
+            "answer": "No — la invitación abre directo en el navegador, desde un solo enlace, en cualquier celular."
+          },
+          {
+            "question": "¿Puedo saber quién ya confirmó?",
+            "answer": "Sí. Puedes ver la lista de invitados en tiempo real y enviar recordatorios por correo o WhatsApp a quien no haya respondido."
+          }
+        ]
+      },
+      "Birthday": {
+        "metaTitle": "Invitación de Cumpleaños Digital | AppEvents",
+        "metaDescription": "Crea una invitación de cumpleaños online en minutos: fotos, cuenta regresiva y confirmaciones organizadas. Gratis para empezar.",
+        "heroEyebrow": "Cumpleaños",
+        "heroHeading": "Invitación de cumpleaños digital, lista en minutos",
+        "heroSubtitle": "Elige un estilo, añade fotos y comparte un enlace elegante — sin invitación de papel, sin complicaciones.",
+        "painPoint": "Una invitación de papel cara, o un mensaje sin gracia perdido en el grupo familiar.",
+        "solution": "Una invitación con identidad visual real, fotos de la fiesta y una lista de confirmados siempre actualizada.",
+        "showcaseHeading": "Cumpleaños creados en AppEvents",
+        "faq": [
+          {
+            "question": "¿Tengo que pagar para crear la invitación?",
+            "answer": "No. Crear y publicar tu invitación de cumpleaños es gratis."
+          },
+          {
+            "question": "¿Puedo usar fotos del cumpleañero?",
+            "answer": "Sí, puedes añadir una foto de portada y una galería de fotos a la invitación."
+          },
+          {
+            "question": "¿Cómo sé quién va a asistir?",
+            "answer": "La invitación tiene confirmación de asistencia integrada, y puedes ver los confirmados desde tu panel."
+          }
+        ]
+      },
+      "Graduation": {
+        "metaTitle": "Invitación de Graduación Online e Interactiva | AppEvents",
+        "metaDescription": "Reemplaza el PDF de graduación por una invitación digital con cronograma, dirección con mapa y RSVP. Gratis para empezar.",
+        "heroEyebrow": "Graduación",
+        "heroHeading": "Invitación de graduación sin PDF pesado en WhatsApp",
+        "heroSubtitle": "Un solo enlace, con cronograma completo de la ceremonia, dirección con mapa y confirmaciones organizadas.",
+        "painPoint": "Un PDF pesado que traba WhatsApp, y nadie sabe con certeza el horario de la ceremonia.",
+        "solution": "Una invitación con cronograma completo del evento, mapa integrado y lista de confirmados siempre visible.",
+        "showcaseHeading": "Graduaciones creadas en AppEvents",
+        "faq": [
+          {
+            "question": "¿Tengo que pagar para crear la invitación?",
+            "answer": "No. Crear y publicar tu invitación de graduación es gratis."
+          },
+          {
+            "question": "¿Puedo poner el horario de la ceremonia y la recepción?",
+            "answer": "Sí, la invitación incluye una línea de tiempo con los momentos clave del evento."
+          },
+          {
+            "question": "¿Los invitados pueden ver la ubicación en el mapa?",
+            "answer": "Sí, la dirección incluye enlaces directos a Google Maps y Waze."
+          }
+        ]
+      },
+      "FifteenYearsParty": {
+        "metaTitle": "Invitación de Quince Años Online | AppEvents",
+        "metaDescription": "Crea una invitación digital elegante para los quince años, con cronograma de la fiesta, código de vestimenta y cuenta regresiva. Gratis para empezar.",
+        "heroEyebrow": "Quince Años",
+        "heroHeading": "Invitación de quince años digital y elegante",
+        "heroSubtitle": "Cronograma completo de la fiesta, código de vestimenta y cuenta regresiva — una invitación a la altura de la ocasión.",
+        "painPoint": "Invitación impresa costosa, sin espacio para explicar el cronograma de la fiesta (vals, cena, homenajes).",
+        "solution": "Una invitación con línea de tiempo del evento, código de vestimenta destacado y cuenta regresiva que emociona a los invitados.",
+        "showcaseHeading": "Quince años creados en AppEvents",
+        "faq": [
+          {
+            "question": "¿Tengo que pagar para crear la invitación?",
+            "answer": "No. Crear y publicar la invitación de quince años es gratis."
+          },
+          {
+            "question": "¿Puedo indicar el código de vestimenta de la fiesta?",
+            "answer": "Sí, la invitación tiene un campo dedicado para el traje esperado."
+          },
+          {
+            "question": "¿Puedo mostrar el programa de la fiesta (vals, cena, etc.)?",
+            "answer": "Sí, puedes armar una línea de tiempo con los momentos clave de la noche."
+          }
+        ]
+      },
+      "BabyShower": {
+        "metaTitle": "Invitación de Baby Shower Digital | AppEvents",
+        "metaDescription": "Crea una invitación de baby shower online con lista de invitados organizada y recordatorios automáticos de confirmación. Gratis para empezar.",
+        "heroEyebrow": "Baby Shower",
+        "heroHeading": "Invitación de baby shower sin caos en el grupo de WhatsApp",
+        "heroSubtitle": "Lista de invitados organizada, recordatorios automáticos por correo y un aviso fácil por WhatsApp para quien aún no respondió.",
+        "painPoint": "Un grupo de WhatsApp lleno de mensajes, sin saber realmente quién va a asistir.",
+        "solution": "Una lista de invitados real, con el estado de cada uno y recordatorios automáticos — sin tener que perseguir a nadie en privado.",
+        "showcaseHeading": "Baby showers creados en AppEvents",
+        "faq": [
+          {
+            "question": "¿Tengo que pagar para crear la invitación?",
+            "answer": "No. Crear y publicar tu invitación de baby shower es gratis."
+          },
+          {
+            "question": "¿Cómo recuerdo a quienes no han confirmado?",
+            "answer": "Puedes enviar un recordatorio por correo desde tu panel, o usar un enlace de WhatsApp con el mensaje ya redactado."
+          },
+          {
+            "question": "¿Puedo añadir fotos?",
+            "answer": "Sí, la invitación tiene espacio para una foto de portada y una galería de fotos."
+          }
+        ]
+      }
+    },
+    "instantPreview": {
+      "heading": "Mírala en vivo, con sus propios nombres",
+      "nameLabel": "Nombre en la invitación",
+      "namePlaceholder": "Ej: Ana & Juan",
+      "dateLabel": "Fecha del evento",
+      "datePlaceholder": "Elige la fecha",
+      "themeLabel": "Estilo",
+      "eventTypeLabel": "Tipo de evento",
+      "addressLabel": "Lugar del evento",
+      "addressPlaceholder": "Ej: Calle Falsa 123 — Ciudad de México",
+      "openGoogleMaps": "Ver en Google Maps",
+      "openWaze": "Abrir en Waze",
+      "photosLabel": "Fotos (hasta 3)",
+      "photosHint": "Solo para esta vista previa — no se sube nada hasta que crees tu cuenta.",
+      "ctaCreate": "Crear la mía de verdad",
+      "disclaimer": "Vista previa — no se guarda nada hasta que crees tu cuenta."
+    }
   }
 }

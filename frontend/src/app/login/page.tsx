@@ -28,8 +28,8 @@ export default function LoginPage() {
     setResendSent(false);
     setIsSubmitting(true);
     try {
-      await login({ email, password });
-      router.push("/events");
+      const { claimedEventId } = await login({ email, password });
+      router.push(claimedEventId ? `/events/${claimedEventId}/edit` : "/events");
     } catch (err) {
       if (err instanceof ApiError) {
         setError(err.message);

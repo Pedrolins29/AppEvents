@@ -10,7 +10,7 @@
     "howItWorks": "Como Funciona",
     "qa": "Perguntas",
     "logIn": "Entrar",
-    "getStarted": "Começar",
+    "getStarted": "Criar Agora",
     "openMenu": "Abrir menu",
     "closeMenu": "Fechar menu"
   },
@@ -27,7 +27,8 @@
   "siteFooter": {
     "templates": "Modelos",
     "logIn": "Entrar",
-    "getStarted": "Começar"
+    "getStarted": "Começar",
+    "criarConvite": "Criar Convite"
   },
   "eventTypes": {
     "Wedding": "Casamento",
@@ -576,5 +577,158 @@
     "remove": "Remover",
     "removeConfirm": "Remover este convidado da lista?",
     "whatsappMessage": "Olá, {name}! Passando para lembrar do nosso evento \"{event}\". Confirme sua presença aqui: {link}"
+  },
+  "criarConvite": {
+    "hub": {
+      "eyebrow": "Convites Digitais",
+      "heading": "Crie seu convite digital",
+      "subtitle": "Escolha o tipo de celebração e veja como fica, na hora — grátis para começar.",
+      "metaTitle": "Criar Convite Digital | AppEvents",
+      "metaDescription": "Crie um convite digital para casamento, aniversário, formatura, debutante ou chá de bebê. Grátis para começar.",
+      "breadcrumbHome": "Início",
+      "breadcrumbHub": "Criar Convite",
+      "cardCta": "Toque para ver os modelos",
+      "otherEventsTitle": "Outros Eventos",
+      "otherEventsSubtitle": "Veja todos os temas disponíveis"
+    },
+    "categories": {
+      "Wedding": {
+        "metaTitle": "Convite de Casamento Online e Interativo | AppEvents",
+        "metaDescription": "Crie um convite de casamento digital com envelope interativo, contagem regressiva, RSVP e lembretes automáticos. Grátis para começar.",
+        "heroEyebrow": "Casamento",
+        "heroHeading": "O convite de casamento que seus convidados vão abrir de verdade",
+        "heroSubtitle": "Um envelope digital interativo, cronograma da cerimônia e recepção, e confirmação de presença organizada — tudo em um único link.",
+        "painPoint": "Lista de convidados bagunçada em grupos de WhatsApp e ninguém sabe ao certo quem confirmou.",
+        "solution": "RSVP organizado automaticamente, com lembretes por e-mail e cobrança fácil via WhatsApp para quem ainda não respondeu.",
+        "showcaseHeading": "Casamentos criados no AppEvents",
+        "faq": [
+          {
+            "question": "Preciso pagar para criar o convite?",
+            "answer": "Não. Criar e publicar seu convite de casamento é gratuito."
+          },
+          {
+            "question": "Os convidados precisam instalar algum aplicativo?",
+            "answer": "Não — o convite abre direto no navegador, em um único link, em qualquer celular."
+          },
+          {
+            "question": "Consigo saber quem já confirmou presença?",
+            "answer": "Sim. Você acompanha a lista de convidados em tempo real e pode mandar lembretes por e-mail ou WhatsApp para quem ainda não respondeu."
+          }
+        ]
+      },
+      "Birthday": {
+        "metaTitle": "Convite de Aniversário Digital | AppEvents",
+        "metaDescription": "Crie um convite de aniversário online em minutos: fotos, contagem regressiva e confirmação de presença organizada. Grátis para começar.",
+        "heroEyebrow": "Aniversário",
+        "heroHeading": "Convite de aniversário digital, pronto em minutos",
+        "heroSubtitle": "Escolha um tema, adicione fotos e compartilhe um link elegante — sem convite de papel, sem complicação.",
+        "painPoint": "Convite de papel caro ou uma mensagem sem graça espalhada no grupo da família.",
+        "solution": "Um convite com identidade visual de verdade, fotos da festa e uma lista de confirmados sempre atualizada.",
+        "showcaseHeading": "Aniversários criados no AppEvents",
+        "faq": [
+          {
+            "question": "Preciso pagar para criar o convite?",
+            "answer": "Não. Criar e publicar seu convite de aniversário é gratuito."
+          },
+          {
+            "question": "Posso usar fotos do aniversariante?",
+            "answer": "Sim, você pode adicionar uma foto de capa e uma galeria de fotos ao convite."
+          },
+          {
+            "question": "Como sei quem vai comparecer?",
+            "answer": "O convite tem confirmação de presença embutida, e você acompanha os confirmados direto no painel."
+          }
+        ]
+      },
+      "Graduation": {
+        "metaTitle": "Convite de Formatura Online e Interativo | AppEvents",
+        "metaDescription": "Substitua o PDF de formatura por um convite digital com cronograma, endereço com mapa e confirmação de presença. Grátis para começar.",
+        "heroEyebrow": "Formatura",
+        "heroHeading": "Convite de formatura sem PDF pesado no WhatsApp",
+        "heroSubtitle": "Um link só, com cronograma da cerimônia, endereço com mapa e confirmação de presença organizada.",
+        "painPoint": "PDF pesado que trava no WhatsApp e ninguém sabe o horário certo da cerimônia.",
+        "solution": "Um convite com cronograma completo do evento, mapa integrado e lista de confirmados sempre visível.",
+        "showcaseHeading": "Formaturas criadas no AppEvents",
+        "faq": [
+          {
+            "question": "Preciso pagar para criar o convite?",
+            "answer": "Não. Criar e publicar seu convite de formatura é gratuito."
+          },
+          {
+            "question": "Dá para colocar o horário da cerimônia e da recepção?",
+            "answer": "Sim, o convite tem uma linha do tempo com os principais momentos do evento."
+          },
+          {
+            "question": "Os convidados conseguem ver a localização no mapa?",
+            "answer": "Sim, o endereço vem com links diretos para o Google Maps e o Waze."
+          }
+        ]
+      },
+      "FifteenYearsParty": {
+        "metaTitle": "Convite de Debutante (15 Anos) Online | AppEvents",
+        "metaDescription": "Crie um convite de 15 anos digital e elegante, com cronograma da festa, dress code e contagem regressiva. Grátis para começar.",
+        "heroEyebrow": "Debutante",
+        "heroHeading": "Convite de 15 anos digital e elegante",
+        "heroSubtitle": "Cronograma completo da festa, dress code e contagem regressiva — tudo em um convite à altura da ocasião.",
+        "painPoint": "Convite impresso caro, sem espaço para explicar o cronograma da festa (valsa, jantar, homenagens).",
+        "solution": "Um convite com linha do tempo do evento, dress code em destaque e contagem regressiva animando os convidados.",
+        "showcaseHeading": "Debutantes criadas no AppEvents",
+        "faq": [
+          {
+            "question": "Preciso pagar para criar o convite?",
+            "answer": "Não. Criar e publicar o convite de 15 anos é gratuito."
+          },
+          {
+            "question": "Consigo colocar o dress code da festa?",
+            "answer": "Sim, o convite tem um campo dedicado para o traje esperado."
+          },
+          {
+            "question": "Dá para mostrar a programação da festa (valsa, jantar etc.)?",
+            "answer": "Sim, você pode montar uma linha do tempo com os principais momentos da noite."
+          }
+        ]
+      },
+      "BabyShower": {
+        "metaTitle": "Convite de Chá de Bebê Digital | AppEvents",
+        "metaDescription": "Crie um convite de chá de bebê online com lista de convidados organizada e lembretes automáticos de confirmação. Grátis para começar.",
+        "heroEyebrow": "Chá de Bebê",
+        "heroHeading": "Convite de chá de bebê sem bagunça no grupo de WhatsApp",
+        "heroSubtitle": "Lista de convidados organizada, lembretes automáticos por e-mail e cobrança fácil via WhatsApp para quem ainda não respondeu.",
+        "painPoint": "Grupo de WhatsApp lotado de mensagens e ninguém sabe ao certo quem vai comparecer.",
+        "solution": "Uma lista de convidados de verdade, com status de cada um e lembretes automáticos — sem precisar cobrar ninguém no particular.",
+        "showcaseHeading": "Chás de bebê criados no AppEvents",
+        "faq": [
+          {
+            "question": "Preciso pagar para criar o convite?",
+            "answer": "Não. Criar e publicar seu convite de chá de bebê é gratuito."
+          },
+          {
+            "question": "Como faço para lembrar quem ainda não confirmou?",
+            "answer": "Você pode enviar um lembrete por e-mail pelo próprio painel, ou usar o link direto para o WhatsApp com a mensagem já pronta."
+          },
+          {
+            "question": "Dá para colocar fotos do chá?",
+            "answer": "Sim, o convite tem espaço para foto de capa e uma galeria de fotos."
+          }
+        ]
+      }
+    },
+    "instantPreview": {
+      "heading": "Veja como fica, com o nome de vocês",
+      "nameLabel": "Nome no convite",
+      "namePlaceholder": "Ex: Ana & João",
+      "dateLabel": "Data do evento",
+      "datePlaceholder": "Escolha a data",
+      "themeLabel": "Estilo",
+      "eventTypeLabel": "Tipo de evento",
+      "addressLabel": "Local do evento",
+      "addressPlaceholder": "Ex: Rua das Flores, 123 — São Paulo",
+      "openGoogleMaps": "Ver no Google Maps",
+      "openWaze": "Abrir no Waze",
+      "photosLabel": "Fotos (até 3)",
+      "photosHint": "Só para essa prévia — nada é enviado até você criar sua conta.",
+      "ctaCreate": "Criar o meu de verdade",
+      "disclaimer": "Pré-visualização — nada é salvo até você criar sua conta."
+    }
   }
 }

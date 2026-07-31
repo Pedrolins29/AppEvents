@@ -17,13 +17,16 @@ export function SiteFooter() {
           <span className="text-[#8A8272]">&copy; {new Date().getFullYear()}</span>
         </Link>
         <div className="flex items-center gap-6">
+          <Link href="/criar-convite" className="transition-colors duration-150 hover:text-[var(--porcelain)]">
+            {t("criarConvite")}
+          </Link>
           <Link href="/templates" className="transition-colors duration-150 hover:text-[var(--porcelain)]">
             {t("templates")}
           </Link>
           <Link href="/login" className="transition-colors duration-150 hover:text-[var(--porcelain)]">
             {t("logIn")}
           </Link>
-          <Link href="/register" className="transition-colors duration-150 hover:text-[var(--porcelain)]">
+          <Link href="/criar-convite" className="transition-colors duration-150 hover:text-[var(--porcelain)]">
             {t("getStarted")}
           </Link>
         </div>

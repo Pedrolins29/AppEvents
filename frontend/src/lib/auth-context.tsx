@@ -3,12 +3,21 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ApiError, configureApiClient } from "@/lib/apiClient";
 import { authApi } from "@/lib/authApi";
+import { eventsApi } from "@/lib/eventsApi";
+import { buildDraftSlug, consumeInstantPreviewDraft } from "@/lib/instantPreviewDraft";
 import type { LoginRequest, RegisterRequest, UserProfile } from "@/types/auth";
+
+export interface LoginResult {
+  /** Set when an InstantPreview draft (see instantPreviewDraft.ts) was staged and successfully
+   * turned into a real event on this login — callers can redirect straight into its editor
+   * instead of the default post-login destination. */
+  claimedEventId: string | null;
+}
 
 interface AuthContextValue {
   user: UserProfile | null;
   isLoading: boolean;
-  login: (request: LoginRequest) => Promise<void>;
+  login: (request: LoginRequest) => Promise<LoginResult>;
   register: (request: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -62,11 +71,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [refresh]);
 
-  const login = useCallback(async (request: LoginRequest) => {
+  const login = useCallback(async (request: LoginRequest): Promise<LoginResult> => {
     const result = await authApi.login(request);
     accessTokenRef.current = result.accessToken;
     setUser(result.user);
     localStorage.setItem(SESSION_HINT_KEY, "1");
+
+    const draft = consumeInstantPreviewDraft();
+    if (!draft || !draft.name.trim() || !draft.eventDate) {
+      return { claimedEventId: null };
+    }
+    try {
+      const event = await eventsApi.create({
+        name: draft.name.trim(),
+        slug: buildDraftSlug(draft.name),
+        eventType: draft.eventType,
+        eventDate: draft.eventDate,
+        description: null,
+        address: draft.address.trim() || null,
+        dressCode: null,
+        timelineItems: [],
+        templateId: null,
+      });
+      return { claimedEventId: event.id };
+    } catch {
+      // Best-effort: a failed auto-claim (slug collision, transient error, etc.) should never
+      // block a real login — the visitor just lands on the normal events list instead.
+      return { claimedEventId: null };
+    }
   }, []);
 
   const register = useCallback(async (request: RegisterRequest) => {

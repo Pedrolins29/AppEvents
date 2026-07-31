@@ -10,7 +10,7 @@
     "howItWorks": "How It Works",
     "qa": "Q&A",
     "logIn": "Log in",
-    "getStarted": "Get started",
+    "getStarted": "Create Now",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
   },
@@ -27,7 +27,8 @@
   "siteFooter": {
     "templates": "Templates",
     "logIn": "Log in",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "criarConvite": "Create Invitation"
   },
   "eventTypes": {
     "Wedding": "Wedding",
@@ -576,5 +577,158 @@
     "remove": "Remove",
     "removeConfirm": "Remove this guest from the list?",
     "whatsappMessage": "Hi {name}! Just a note about our event \"{event}\". Please confirm your attendance here: {link}"
+  },
+  "criarConvite": {
+    "hub": {
+      "eyebrow": "Digital Invitations",
+      "heading": "Create your digital invitation",
+      "subtitle": "Pick the type of celebration and see it live, right away — free to start.",
+      "metaTitle": "Create a Digital Invitation | AppEvents",
+      "metaDescription": "Create a digital invitation for a wedding, birthday, graduation, quinceanera or baby shower. Free to start.",
+      "breadcrumbHome": "Home",
+      "breadcrumbHub": "Create Invitation",
+      "cardCta": "Tap to see the templates",
+      "otherEventsTitle": "Other Events",
+      "otherEventsSubtitle": "See all available themes"
+    },
+    "categories": {
+      "Wedding": {
+        "metaTitle": "Online Wedding Invitation, Interactive | AppEvents",
+        "metaDescription": "Create a digital wedding invitation with an interactive envelope, countdown, RSVP and automatic reminders. Free to start.",
+        "heroEyebrow": "Wedding",
+        "heroHeading": "The wedding invitation your guests will actually open",
+        "heroSubtitle": "An interactive digital envelope, a full ceremony-and-reception timeline, and organized RSVPs — all in one link.",
+        "painPoint": "A guest list scattered across WhatsApp groups, with no clear picture of who is confirmed.",
+        "solution": "RSVPs organized automatically, with email reminders and an easy WhatsApp nudge for anyone who has not responded yet.",
+        "showcaseHeading": "Weddings created on AppEvents",
+        "faq": [
+          {
+            "question": "Do I have to pay to create the invitation?",
+            "answer": "No. Creating and publishing your wedding invitation is free."
+          },
+          {
+            "question": "Do guests need to install an app?",
+            "answer": "No — the invitation opens straight in the browser, from a single link, on any phone."
+          },
+          {
+            "question": "Can I see who has confirmed?",
+            "answer": "Yes. You track the guest list in real time and can send email or WhatsApp reminders to anyone who has not responded."
+          }
+        ]
+      },
+      "Birthday": {
+        "metaTitle": "Digital Birthday Invitation | AppEvents",
+        "metaDescription": "Create an online birthday invitation in minutes: photos, countdown and organized RSVPs. Free to start.",
+        "heroEyebrow": "Birthday",
+        "heroHeading": "A digital birthday invitation, ready in minutes",
+        "heroSubtitle": "Pick a theme, add photos, and share an elegant link — no paper invite, no hassle.",
+        "painPoint": "An expensive paper invite, or a plain message lost in the family group chat.",
+        "solution": "An invitation with a real visual identity, party photos, and a guest list that is always up to date.",
+        "showcaseHeading": "Birthdays created on AppEvents",
+        "faq": [
+          {
+            "question": "Do I have to pay to create the invitation?",
+            "answer": "No. Creating and publishing your birthday invitation is free."
+          },
+          {
+            "question": "Can I use photos of the birthday person?",
+            "answer": "Yes, you can add a cover photo and a photo gallery to the invitation."
+          },
+          {
+            "question": "How do I know who is coming?",
+            "answer": "The invitation has built-in RSVP, and you track confirmations right from your dashboard."
+          }
+        ]
+      },
+      "Graduation": {
+        "metaTitle": "Online Graduation Invitation, Interactive | AppEvents",
+        "metaDescription": "Replace the graduation PDF with a digital invitation with a timeline, mapped address and RSVP. Free to start.",
+        "heroEyebrow": "Graduation",
+        "heroHeading": "A graduation invitation without a heavy PDF on WhatsApp",
+        "heroSubtitle": "One link, with a full ceremony timeline, a mapped address, and organized RSVPs.",
+        "painPoint": "A heavy PDF that jams up WhatsApp, and no one is sure of the actual ceremony time.",
+        "solution": "An invitation with a full event timeline, an integrated map, and a guest list that is always visible.",
+        "showcaseHeading": "Graduations created on AppEvents",
+        "faq": [
+          {
+            "question": "Do I have to pay to create the invitation?",
+            "answer": "No. Creating and publishing your graduation invitation is free."
+          },
+          {
+            "question": "Can I add the ceremony and reception times?",
+            "answer": "Yes, the invitation includes a timeline for the event's key moments."
+          },
+          {
+            "question": "Can guests see the location on a map?",
+            "answer": "Yes, the address links directly to Google Maps and Waze."
+          }
+        ]
+      },
+      "FifteenYearsParty": {
+        "metaTitle": "Online Quinceanera / 15th Birthday Invitation | AppEvents",
+        "metaDescription": "Create an elegant digital invitation for a 15th birthday, with an event timeline, dress code and countdown. Free to start.",
+        "heroEyebrow": "15th Birthday",
+        "heroHeading": "An elegant digital invitation for the big day",
+        "heroSubtitle": "A full event timeline, a dress code section, and a countdown — an invitation worthy of the occasion.",
+        "painPoint": "An expensive printed invite with no room to explain the night's schedule (waltz, dinner, tributes).",
+        "solution": "An invitation with an event timeline, a dedicated dress code section, and a countdown building anticipation.",
+        "showcaseHeading": "15th birthdays created on AppEvents",
+        "faq": [
+          {
+            "question": "Do I have to pay to create the invitation?",
+            "answer": "No. Creating and publishing the invitation is free."
+          },
+          {
+            "question": "Can I add the party's dress code?",
+            "answer": "Yes, the invitation has a dedicated field for the expected attire."
+          },
+          {
+            "question": "Can I show the night's schedule (waltz, dinner, etc.)?",
+            "answer": "Yes, you can build a timeline with the key moments of the night."
+          }
+        ]
+      },
+      "BabyShower": {
+        "metaTitle": "Digital Baby Shower Invitation | AppEvents",
+        "metaDescription": "Create an online baby shower invitation with an organized guest list and automatic RSVP reminders. Free to start.",
+        "heroEyebrow": "Baby Shower",
+        "heroHeading": "A baby shower invitation without WhatsApp group chaos",
+        "heroSubtitle": "An organized guest list, automatic email reminders, and an easy WhatsApp nudge for anyone who has not responded yet.",
+        "painPoint": "A WhatsApp group full of messages, with no clear picture of who is actually coming.",
+        "solution": "A real guest list, with each person's status tracked, and automatic reminders — no need to chase anyone individually.",
+        "showcaseHeading": "Baby showers created on AppEvents",
+        "faq": [
+          {
+            "question": "Do I have to pay to create the invitation?",
+            "answer": "No. Creating and publishing your baby shower invitation is free."
+          },
+          {
+            "question": "How do I remind guests who have not confirmed?",
+            "answer": "You can send an email reminder right from your dashboard, or use a ready-made WhatsApp link with the message already written."
+          },
+          {
+            "question": "Can I add photos?",
+            "answer": "Yes, the invitation has room for a cover photo and a photo gallery."
+          }
+        ]
+      }
+    },
+    "instantPreview": {
+      "heading": "See it live, with your own names",
+      "nameLabel": "Name on the invitation",
+      "namePlaceholder": "E.g. Ana & John",
+      "dateLabel": "Event date",
+      "datePlaceholder": "Pick a date",
+      "themeLabel": "Theme",
+      "eventTypeLabel": "Event type",
+      "addressLabel": "Event location",
+      "addressPlaceholder": "E.g. 123 Main St — New York",
+      "openGoogleMaps": "View on Google Maps",
+      "openWaze": "Open in Waze",
+      "photosLabel": "Photos (up to 3)",
+      "photosHint": "Just for this preview — nothing is uploaded until you create an account.",
+      "ctaCreate": "Create mine for real",
+      "disclaimer": "Live preview — nothing is saved until you create an account."
+    }
   }
 }

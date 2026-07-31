@@ -1,183 +1,269 @@
-Redesenho do Fluxo de Lead (PLG Sandbox, Soft Auth Gate & Pixel Tracking)
-Objetivo Estratégico: Eliminar o atrito de entrada aumentando a taxa de ativação de visitantes em até 300%, permitindo a edição imediata do convite no frontend (sem tocar no banco de dados) e capturando o cadastro/pagamento apenas no momento de salvar o progresso.
+Esta refatoração une o melhor dos dois mundos: Velocidade Lean de Lançamento (utilizando o InvitationPhoneMockup para a pré-visualização instantânea sem sobrecarregar a engenharia) e uma Estratégia Agressiva de Retargeting Multi-Channel (Pixel do Meta, Google e TikTok) para transformar todo visitante indeciso que experimentou o mockup, mas não concluiu o cadastro, em um cliente de alto valor.Abaixo está o documento oficial e completo da Sprint 17 (Revisada & Lean).🚀 SPRINT 17 (REVISADA & LEAN): Experimento de Pré-Visualização, Soft Gate & Pixel Retargeting de AbandonoObjetivo Estratégico: Maximizar a taxa de ativação no topo/meio de funil permitindo que o visitante personalize o convite em tempo real na página de modelos (InvitationPhoneMockup) sem criar conta ou fazer uploads pesados. Caso o usuário não conclua o cadastro no Soft Gate, ele será marcado por Pixels de Rastreamento para campanhas de retargeting de alto ROI.1. Mapeamento do Funil Lean & Psicologia de ConversãoPlaintext┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   JORNADA LEAN DE ALTA CONVERSÃO VOWLA                                  │
+│                                                                                                        │
+│ [ 1. LANDING/SEO ] ──> [ 2. PREVIEW NO MOCKUP ] ──> [ 3. SOFT GATE EMAIL ] ──> [ 4. CHECKOUT LASTLINK ] │
+│  Ex: /convite-casamento   Digitou Nome/Data (Sem DB)    Formulário Simples          Order Bump R$ 39 (RSVP) │
+│                                  │                                                                     │
+│                                  └────── (Se fechar sem cadastrar) ──> [ 🔥 PIXEL DE RETARGETING ]       │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+Entrada por SEO Programático / Ads: O visitante chega via Landing Page de Categoria (ex: /criar-convite-de-casamento)."Efeito IKEA" Instantâneo (Preview no Mockup): Na própria vitrine de temas, o visitante digita Nome do Evento + Data diretamente no componente InvitationPhoneMockup. O convite se atualiza visualmente em tempo real. Zero chamadas de escrita no PostgreSQL.Soft Gate de Cadastro (E-mail/Senha Tradicional): Ao clicar em [ Salvar e Continuar ], abre-se o modal solicitando apenas E-mail + Senha. (Observação: O Google OAuth/One Tap está mapeado e adia-se para a Sprint 17B após configuração do Google Cloud Console).Rede de Segurança (Pixel Tracking de Abandono): Se o usuário digitar os dados no mockup mas fechar a aba sem se cadastrar, o evento CustomizeProduct com os parâmetros do convite já foi disparado. Ele entrará em um público customizado de Retargeting de Alta Intenção.2. Especificação do Frontend (React / Next.js)A. Componente de Pré-Visualização Dinâmica (InvitationPhoneMockup.jsx)O estado da pré-visualização fica isolado na memória do componente (React.useState) ou no LocalStorage leve.JavaScriptimport { useState } from 'react';
+import SoftGateModal from './SoftGateModal';
+import { trackPreviewInteraction, trackSoftGateTriggered } from '@/lib/pixelEvents';
 
-1. Visão do Funil de Vendas & Psicologia do Lead (CRO)
-O Novo Funil de 5 Passos:
-Plaintext
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
-│ 1. HERO SECTION │ ──> │ 2. EDITOR SANDBOX│ ──> │ 3. SOFT GATE    │ ──> │ 4. CHECKOUT      │ ──> │ 5. DASHBOARD    │
-│ (Escolha Categ) │     │ (State Local)    │     │ (Login 1-Clique)│     │ (Order Bumps)    │     │ (Link Ativo)    │
-└─────────────────┘     └──────────────────┘     └─────────────────┘     └──────────────────┘     └─────────────────┘
-Atração (Landing Page): O usuário escolhe a categoria (Casamento, 15 Anos, Corporativo) ou clica em Criar meu convite.
+export default function InvitationPhoneMockup({ selectedTemplate }) {
+  const [guestName, setGuestName] = useState('Isabella & Marco');
+  const [eventDate, setEventDate] = useState('2026-09-13');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-Experimentação Instantânea (Sandbox Editor): Abre o editor visual imediatamente. O usuário edita fotos, nomes e cores. Nenhuma requisição de escrita vai para a API ainda.
+  const handleInputChange = (field, value) => {
+    if (field === 'name') setGuestName(value);
+    if (field === 'date') setEventDate(value);
 
-Engajamento & Soft Gate (O "Aha! Moment"): Ao clicar em [ Publicar Convite ] ou [ Ver Como Fica ], um modal elegante bloqueia a tela com visual premium:
+    // Dispara disparo leve do Pixel no primeiro caractere digitado (Engajamento do Lead)
+    trackPreviewInteraction(selectedTemplate.category, selectedTemplate.id);
+  };
 
-Copywriting do Modal:
+  const handleOpenSoftGate = () => {
+    // Dispara o Pixel de Intenção de Compra (Lead Frio -> Lead Morno)
+    trackSoftGateTriggered(selectedTemplate.id);
+    setIsModalOpen(true);
+  };
 
-"Seu VOWLA ficou incrível! ✨"
+  return (
+    <div className="phone-mockup-wrapper">
+      {/* Controles do Sandbox Simplificado */}
+      <div className="preview-controls bg-[#1A1A1A] p-4 rounded-t-xl space-y-3">
+        <input 
+          type="text" 
+          value={guestName} 
+          onChange={(e) => handleInputChange('name', e.target.value)}
+          placeholder="Nome do Evento / Casal"
+          className="w-full bg-[#0D0D0D] border border-gray-700 text-white p-2 rounded"
+        />
+        <input 
+          type="date" 
+          value={eventDate} 
+          onChange={(e) => handleInputChange('date', e.target.value)}
+          className="w-full bg-[#0D0D0D] border border-gray-700 text-white p-2 rounded"
+        />
+      </div>
 
-"Crie sua conta em 3 segundos para salvar suas alterações e gerar seu link de compartilhamento."
+      {/* Renderização do Convite no Mockup Existente */}
+      <div className="phone-screen">
+        <h2 className="template-title">{guestName}</h2>
+        <p className="template-date">{eventDate}</p>
+      </div>
 
-[ G ] Continuar com o Google | [ ✉️ ] Continuar com E-mail
+      <button 
+        onClick={handleOpenSoftGate}
+        className="w-full bg-[#C5A059] hover:bg-[#b08d48] text-black font-bold py-3 rounded-b-xl transition-all"
+      >
+        Salvar meu VOWLA e Continuar →
+      </button>
 
-Conversão Financera (Checkout Lastlink): Conta criada → Redirecionamento instantâneo para o Checkout com Order Bump da Secretária Virtual (Sprint 15).
-
-Ativação: Pagamento aprovado via Webhook → Link público final gerado (vowla.app/c/luna-e-rafael).
-
-2. Especificação do Frontend (React / Next.js / UI-UX)
-A. Gerenciamento de Estado no Cliente (Sandbox Mode)
-Todo o progresso do convite não autenticado fica no LocalStorage / Zustand / React Context da sessão do navegador.
-
-Chave de Armazenamento Local: vowla_draft_invitation
-
-Estrutura do JSON Local:
-
-JSON
-{
-  "templateId": "heritage-gold-01",
-  "category": "Casamento",
-  "title": "Isabella & Marco",
-  "eventDate": "2026-09-13T18:00:00Z",
-  "location": {
-    "name": "Espaço Das Américas",
-    "address": "Av. Francisco Matarazzo, 774",
-    "googleMapsUrl": "https://maps.google.com/..."
-  },
-  "customColors": {
-    "primary": "#C5A059",
-    "background": "#0D0D0D"
+      {/* Modal Soft Gate (E-mail e Senha) */}
+      <SoftGateModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        draftData={{ templateId: selectedTemplate.id, guestName, eventDate }}
+      />
+    </div>
+  );
+}
+3. Rastreamento de Pixels & Estratégia de Retargeting (A "Rede de Segurança")Como não exigimos login imediato, os Pixels do Meta Ads, Google Ads e TikTok Ads atuam como nosso imã de captura secundário.Plaintext┌────────────────────────────────────────────────────────────────────────────────────────┐
+│                          MAQUINA DE RETARGETING DE VISITANTES                          │
+│                                                                                        │
+│  [ Visitante digita Nome no Mockup ] ──> Dispara Pixel: 'CustomizeProduct'             │
+│  [ Abandona a página sem cadastrar ] ──> Cai no Público Personalizado (3 dias)        │
+│                                                                                        │
+│  🔥 CAMPANHA DE ADS NO INSTAGRAM / TIKTOK:                                            │
+│  Copy: "Seu convite VOWLA está te esperando. Clique para concluir em 1 minuto."        │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+A. Mapeamento de Eventos no Frontend (/lib/pixelEvents.js)JavaScript// 1. Disparado quando o usuário altera o Nome ou Data no Mockup (Interação Real)
+export function trackPreviewInteraction(category, templateId) {
+  // Meta Pixel (Facebook)
+  if (typeof window.fbq !== 'undefined') {
+    window.fbq('trackCustom', 'InteractedWithPreview', {
+      content_category: category,
+      content_ids: [templateId]
+    });
+  }
+  // Google Analytics 4 / Google Ads
+  if (typeof window.gtag !== 'undefined') {
+    window.gtag('event', 'select_content', {
+      content_type: 'template_preview',
+      item_id: templateId
+    });
   }
 }
-B. O Modal "Soft Auth Gate" (UI Premium)
-Trigger: Disparado ao clicar em [ Publicar Convite ], [ Salvar Progresso ] ou ao tentar editar opções VIP.
 
-Comportamento: Blur fosco sobre a tela do editor (backdrop-filter: blur(8px)), mantendo o convite do usuário visível ao fundo para reforçar o sentimento de posse.
+// 2. Disparado quando clica em "Salvar meu VOWLA" (Abertura do Modal Soft Gate)
+export function trackSoftGateTriggered(templateId) {
+  if (typeof window.fbq !== 'undefined') {
+    window.fbq('track', 'Lead', { content_ids: [templateId] });
+  }
+  if (typeof window.gtag !== 'undefined') {
+    window.gtag('event', 'generate_lead');
+  }
+}
 
-Componente de Auth: Integração com Google OAuth (One Tap / Popup) para cadastro em 1 clique sem senha.
-
-3. Especificação do Backend (.NET 8/9 API)
-Para evitar contas "fantasmas" ou registros incompletos no banco de dados PostgreSQL, a gravação de usuário e convite ocorre em uma única transação atômica na primeira autenticação.
-
-Endpoint Principal de Reivindicação do Rascunho (/v1/invitations/claim)
-C#
-[HttpPost("v1/invitations/claim")]
-[Authorize] // Requer o Bearer Token gerado após o login/OAuth
-public async Task<IActionResult> ClaimDraftInvitation([FromBody] ClaimDraftRequest request)
+// 3. Disparado quando conclui o cadastro no Soft Gate
+export function trackRegistrationComplete(userId) {
+  if (typeof window.fbq !== 'undefined') {
+    window.fbq('track', 'CompleteRegistration');
+  }
+  if (typeof window.gtag !== 'undefined') {
+    window.gtag('event', 'sign_up', { method: 'Email' });
+  }
+}
+B. Copywriting das Campanhas de Retargeting (Ads)Para os usuários que dispararam InteractedWithPreview mas NÃO dispararam CompleteRegistration:Anúncio no Instagram Stories / Reels (Vídeo/Carrossel):Criativo: Mockup do celular rodando a animação do selo de cera abrindo o convite.Headline: "Não deixe seu convite no rascunho."Primary Text: "Você começou a personalizar o seu VOWLA. Finalize agora para garantir seu link com confirmação de presença (RSVP) e mapa integrado."CTA: "Concluir meu Convite"4. Especificação do Backend (.NET 8/9) & Banco de DadosA. Controller de Cadastro Unificado + Reivindicação do Rascunho (/v1/auth/register-draft)C#[ApiController]
+[Route("v1/auth")]
+public class AuthController : ControllerBase
 {
-    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-    if (string.IsNullOrEmpty(userId)) return Unauthorized();
+    private readonly IApplicationDbContext _context;
+    private readonly ITokenService _tokenService;
 
-    // Inicia Transação Atômica no PostgreSQL
-    using var transaction = await _context.Database.BeginTransactionAsync();
-
-    try
+    public AuthController(IApplicationDbContext context, ITokenService tokenService)
     {
-        // 1. Cria ou recupera a entidade do Convite a partir do Payload vindo do LocalStorage
-        var invitation = new Invitation
+        _context = context;
+        _tokenService = tokenService;
+    }
+
+    [HttpPost("register-draft")]
+    public async Task<IActionResult> RegisterWithDraft([FromBody] RegisterWithDraftRequest request)
+    {
+        // 1. Verifica se o e-mail já está cadastrado
+        var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (existingUser != null)
         {
-            Id = Guid.NewGuid(),
-            UserId = Guid.Parse(userId),
-            TemplateId = request.TemplateId,
-            Title = request.Title,
-            EventDate = request.EventDate,
-            LocationName = request.Location.Name,
-            Address = request.Location.Address,
-            GoogleMapsUrl = request.Location.GoogleMapsUrl,
-            Status = InvitationStatus.Draft,
-            IsPaid = false,
-            CreatedAt = DateTime.UtcNow
-        };
+            return BadRequest(new { Message = "Este e-mail já possui conta. Faça login para continuar." });
+        }
 
-        _context.Invitations.Add(invitation);
-        await _context.SaveChangesAsync();
+        using var transaction = await _context.Database.BeginTransactionAsync();
 
-        // 2. Confirma a Transação no PostgreSQL
-        await transaction.CommitAsync();
+        try
+        {
+            // 2. Cria o Usuário com PasswordHash (Fluxo E-mail/Senha Tradicional)
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                Email = request.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                FullName = request.FullName,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Users.Add(user);
 
-        // 3. Retorna o ID e a URL para o Frontend direcionar para o Checkout da Lastlink
-        return Ok(new { 
-            InvitationId = invitation.Id, 
-            CheckoutUrl = $"https://pay.lastlink.com/vowla?custom_id={invitation.Id}" 
-        });
-    }
-    catch (Exception ex)
-    {
-        await transaction.RollbackAsync();
-        return StatusCode(500, new { Message = "Erro ao salvar o convite.", Error = ex.Message });
+            // 3. Grava o Convite criado na pré-visualização
+            var invitation = new Invitation
+            {
+                Id = Guid.NewGuid(),
+                UserId = user.Id,
+                TemplateId = request.DraftData.TemplateId,
+                Title = request.DraftData.GuestName,
+                EventDate = DateTime.SpecifyKind(request.DraftData.EventDate, DateTimeKind.Utc),
+                Status = InvitationStatus.Draft,
+                IsPaid = false,
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Invitations.Add(invitation);
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            // 4. Gera JWT de sessão
+            var token = _tokenService.GenerateJwtToken(user);
+
+            return Ok(new
+            {
+                vowlaAuthToken = token,
+                invitationId = invitation.Id,
+                checkoutUrl = $"https://pay.lastlink.com/vowla?custom_id={invitation.Id}"
+            });
+        }
+        catch (Exception ex)
+        {
+            await transaction.RollbackAsync();
+            return StatusCode(500, new { Message = "Erro ao processar cadastro.", Error = ex.Message });
+        }
     }
 }
-4. Modelagem do Banco de Dados (PostgreSQL + EF Core)
-Com este fluxo Sandbox, o PostgreSQL permanece 100% limpo de curiosos. Apenas leads que concluíram o Soft Gate gravam registros no banco.
-
-SQL
--- DDL para Vinculação de Rascunhos e Status de Publicação
+B. Schema do PostgreSQL (Mantido Limpo)SQL-- Estrutura de Suporte aos Convites e Usuários
 ALTER TABLE "Invitations" 
-ADD COLUMN IF NOT EXISTS "Status" VARCHAR(20) DEFAULT 'Draft', -- 'Draft', 'Active', 'Archived'
-ADD COLUMN IF NOT EXISTS "DraftClaimedAt" TIMESTAMP WITH TIME ZONE NULL;
+ADD COLUMN IF NOT EXISTS "Status" VARCHAR(20) DEFAULT 'Draft';
 
--- Índice para busca rápida de convites em rascunho por usuário
-CREATE INDEX IF NOT EXISTS "IX_Invitations_User_Status" 
+CREATE INDEX IF NOT EXISTS "IX_Invitations_Status_User" 
 ON "Invitations" ("UserId", "Status");
-5. Estratégia de Rastreamento de Pixels & CAPI (Meta, Google e TikTok Ads)
-Para otimizar os algoritmos de tráfego pago (Meta Ads, Google Ads e TikTok Ads), mapearemos a jornada completa. Isso garantirá que as campanhas inteligentes entreguem anúncios para quem realmente interage com o editor.
+5. Integração com SEO ProgramáticoAs landing pages de categoria construídas com base no Sprint 13 (/criar-convite-de-casamento, /criar-convite-de-15-anos, etc.) alimentarão este funil diretamente:Ao acessar /criar-convite-de-casamento, o InvitationPhoneMockup da primeira dobra da página já carrega automaticamente com um template pré-selecionado de Casamento e o título fictício "Sofia & Gabriel".O visitante altera os dados no mockup em 5 segundos, dispara os Pixels de Engajamento e entra na esteira de conversão da VOWLA.🎯 Resumo de Execução do Sprint 17 (Revisada)FuncionalidadeStatus / AçãoPreview no MockupAtivo (Fase 1 Lean) — Usa InvitationPhoneMockup com inputs de Nome e Data.Google OAuth / One TapAdiado (Sprint 17B) — Mantido Soft Gate via E-mail e Senha tradicional por enquanto.Pixel TrackingAtivo — Mapeamento de interações para campanhas de Retargeting de visitantes indecisos.SEO ProgramáticoAtivo — Landing pages de categoria alimentando o mockup da Hero Section.
 
-┌─────────────────────────────────────────────────────────────────────────────────┐
-│                           JORNADA DE RASTREAMENTO (PIXELS)                      │
-│                                                                                 │
-│ [ Landing Page ] ──────────────> Evento: PageView                               │
-│        │                                                                        │
-│        ▼                                                                        │
-│ [ Entrou no Editor ] ──────────> Evento: CustomizeProduct (ou ViewContent)     │
-│        │                                                                        │
-│        ▼                                                                        │
-│ [ Atingiu Soft Gate ] ─────────> Evento: Lead                                   │
-│        │                                                                        │
-│        ▼                                                                        │
-│ [ Login Concluído ] ───────────> Evento: CompleteRegistration                   │
-│        │                                                                        │
-│        ▼                                                                        │
-│ [ Abriu Checkout ] ────────────> Evento: InitiateCheckout                       │
-│        │                                                                        │
-│        ▼                                                                        │
-│ [ Pagamento Aprovado ] ────────> Evento: Purchase (com Valor Monetário + Currency)│
-└─────────────────────────────────────────────────────────────────────────────────┘
-Código de Implementação dos Disparos no Frontend (JavaScript / Tag Manager)
-JavaScript
-// 1. Quando o usuário clica em "Criar Convite" e abre o Editor Sandbox
-function trackEditorStarted(categoryName) {
-  // Meta Pixel
-  fbq('track', 'CustomizeProduct', { content_category: categoryName });
-  // Google Analytics 4
-  gtag('event', 'select_content', { content_type: 'template', item_id: categoryName });
-  // TikTok Pixel
-  ttq.track('ViewContent', { content_name: categoryName });
-}
+---
 
-// 2. Quando o Modal "Soft Gate" abre após edições significativas
-function trackSoftGateReached() {
-  fbq('track', 'Lead', { value: 0.00, currency: 'BRL' });
-  gtag('event', 'generate_lead', { value: 0.00, currency: 'BRL' });
-  ttq.track('Subscribe');
-}
+## Implementação (o que foi feito)
 
-// 3. Quando o cadastro via Google/E-mail é confirmado
-function trackAccountCreated(userId) {
-  fbq('track', 'CompleteRegistration', { status: true });
-  gtag('event', 'sign_up', { method: 'Google' });
-  ttq.track('CompleteRegistration');
-}
+Este brief ("Revisada & Lean") já reflete a reconciliação feita anteriormente com o brief original
+de sandbox completo (editor sem login + OAuth do Google + endpoint de claim atômico) — aquele brief
+assumia capacidades que não existiam no código (OAuth, editor visual pré-auth, biblioteca de estado
+client-side, upload de fotos sem `eventId`). O que segue é exatamente o que foi construído, mapeado
+contra este documento.
 
-// 4. Quando o usuário redireciona para a Lastlink
-function trackInitiateCheckout(invitationId, estimatedValue) {
-  fbq('track', 'InitiateCheckout', { value: estimatedValue, currency: 'BRL' });
-  gtag('event', 'begin_checkout', { value: estimatedValue, currency: 'BRL' });
-  ttq.track('InitiateCheckout', { value: estimatedValue, currency: 'BRL' });
-}
-📈 Impacto Esperado no Scaling da VOWLA
-Redução do CAC (Custo de Aquisição): O custo por Lead qualificado despenca, pois mais pessoas entram no funil sem a barreira do login imediato.
+### Piece A — Páginas de SEO programático por categoria (Ativo, como descrito)
+- Hub `/criar-convite` + rota parametrizada `/criar-convite/[categoria]` (um arquivo só, não 6/5
+  páginas separadas — evita duplicação e o risco de "doorway pages" apontado na skill de pSEO).
+  Slugs: `casamento`, `aniversario`, `formatura`, `debutantes`, `cha-de-bebe` — mapeados 1:1 para os
+  `EventType` reais (`frontend/src/lib/inviteCategories.ts`).
+- **`GenderReveal` foi propositalmente deixado de fora**: `SHOWCASE_ENTRIES` não tem nenhuma entrada
+  para esse tipo e não existe foto correspondente em `public/showcase/` — lançar essa página com uma
+  vitrine vazia/placeholder seria pior que não lançá-la. Fica como fast-follow quando existir um
+  showcase real.
+- Cada página tem copy própria (não é texto genérico com a categoria trocada), reaproveita
+  `SHOWCASE_ENTRIES`/`InvitationPhoneMockup` (Sprint 13) para a vitrine "veja ao vivo", FAQ real
+  (vira `FAQPage` JSON-LD) e `BreadcrumbList` JSON-LD — sem schema `Event` (não há
+  `startDate`/local reais nessas páginas).
+- Copy revisada para citar **só recursos que já existem de verdade**: RSVP, contagem regressiva,
+  cronograma, dress code, galeria de fotos, e — graças à Sprint 15 — lista de convidados com
+  lembrete automático por e-mail e cobrança fácil via WhatsApp. Nada de check-in por QR code ou jogo
+  de palpites (esses já apareciam em `landing.sales.*` como aspiracionais e não foram propagados
+  para as páginas novas).
 
-Aumento do LTV/ARPU: Leads que finalizam a edição chegam com o "desejo de compra" no nível máximo ao Checkout da Lastlink, aumentando a taxa de conversão do Order Bump de R$ 39 (Secretária Virtual) em até 40%.
+### Piece B — Preview instantâneo no InvitationPhoneMockup (Ativo, como descrito)
+Exatamente o "Preview no Mockup" da Fase 1 Lean deste documento: **zero requisições de escrita**, só
+`React.useState` no cliente. Para reaproveitar a renderização real do `InvitationPhoneMockup`
+(Sprint 13) em vez de duplicá-la, ele foi dividido em:
+- `InvitationPhoneMockupView.tsx` (novo) — o núcleo apresentacional puro, sem hooks, importável
+  tanto de um Server Component quanto de um Client Component.
+- `InvitationPhoneMockup.tsx` — vira um wrapper fino que resolve os labels de i18n no servidor e
+  delega para a view. Zero mudança na sua única outra chamadora (`HomeLanding.tsx`).
+- `InstantPreview.tsx` (novo, `"use client"`) — nome + data + tema (os 4 temas reais, seletor
+  reaproveitando `TemplateCard`) atualizam o mockup ao vivo. Só a tela de contagem regressiva é
+  renderizada (a única realmente derivada do que a pessoa digitou — as outras mostrariam texto de
+  exemplo desconectado do que foi preenchido). Embutido em cada página de categoria
+  (`defaultEventType` já travado na categoria).
 
-Métricas Limpas: O banco de dados PostgreSQL do backend só conterá dados de usuários com intenção real de compra.
+### Pixels — reaproveitados da Sprint 14, sem infraestrutura nova
+Segue o padrão já existente (`UpsellBanner.tsx`): chamadas `window.fbq?.(...)`/`gtag?.(...)`/
+`ttq?.track?.(...)` protegidas por `?.` — sem pixel configurado, é um no-op silencioso. Disparado:
+`ViewContent`-equivalente na chegada da página de categoria, `Lead`-equivalente quando nome+data
+estão preenchidos no preview, `CompleteRegistration`-equivalente (status pendente) no clique do CTA.
+
+### O que este brief pede e ainda **não** foi construído
+- **`POST /v1/auth/register-draft`** (endpoint atômico que cria usuário + convite numa transação só)
+  — deliberadamente adiado. Construir esse endpoint antes de medir se o preview em si já aumenta a
+  ativação seria repetir o mesmo erro do brief original (investir em infraestrutura sem dados que a
+  justifiquem). Hoje o CTA do preview leva para `/register`, o fluxo de cadastro já existente.
+- **Preview embutido em `/templates`** (a "vitrine de temas") — só foi embutido nas páginas de
+  categoria por enquanto; adicionar em `/templates` é uma extensão barata quando fizer sentido.
+- **Campanhas de retargeting reais** (Meta/Google/TikTok Ads) — configuração de contas de anúncio e
+  criação de campanhas é trabalho de marketing/mídia paga, fora do escopo de engenharia.
+- **Google OAuth** — confirmado adiado também por este documento ("Sprint 17B"), mesmo padrão do
+  Lastlink/WhatsApp: precisa de credenciais reais do Google Cloud Console antes de integrar de
+  verdade.
+
+### Verificação
+`npx tsc --noEmit` / `npx eslint` / `npm run build` limpos (build lista as 7 páginas novas: hub +
+5 categorias). `dotnet test`: 145/145 testes unitários passando (zero arquivos de backend tocados
+por esta sprint); os 84 testes de integração não rodaram nesta sessão por falta de conexão com o
+Postgres do WSL2 (ambiente, não regressão). Testado ao vivo: as 5 categorias respondem 200, slugs
+desconhecidos e `cha-revelacao` (adiado) respondem 404, JSON-LD (`BreadcrumbList`+`FAQPage`)
+presente no HTML renderizado no servidor, sitemap com as 6 URLs novas, sem overflow horizontal em
+390/768/1440, digitar no preview atualiza o mockup com **zero** chamadas de rede novas, e as 3
+línguas (incluindo acentuação correta em espanhol) renderizam sem chave faltando.

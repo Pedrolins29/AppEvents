@@ -6,6 +6,7 @@ import { Countdown } from "@/components/Countdown";
 import { InvitationHero, THEME_STYLES } from "@/components/InvitationHero";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RsvpForm } from "@/components/RsvpForm";
+import { mapsLinks } from "@/lib/mapsLinks";
 import { getEventTypeLabels, type EventType } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
 
@@ -59,14 +60,6 @@ function formatEventDate(iso: string, locale: string) {
     month: "long",
     day: "numeric",
   });
-}
-
-function mapsLinks(address: string) {
-  const query = encodeURIComponent(address);
-  return {
-    googleMaps: `https://www.google.com/maps/search/?api=1&query=${query}`,
-    waze: `https://waze.com/ul?q=${query}&navigate=yes`,
-  };
 }
 
 // Without this, Next could statically pre-render this route at build time, freezing the
