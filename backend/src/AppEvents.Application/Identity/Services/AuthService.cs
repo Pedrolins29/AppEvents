@@ -220,7 +220,7 @@ public class AuthService : IAuthService
         return ToProfile(user);
     }
 
-    public async Task<ConfirmEmailResponse> ConfirmEmailAsync(string rawToken, CancellationToken cancellationToken = default)
+    public async Task<(ConfirmEmailResponse Response, AuthResult? Session)> ConfirmEmailAsync(string rawToken, string? ipAddress, CancellationToken cancellationToken = default)
     {
         var tokenHash = RefreshTokenGenerator.Hash(rawToken);
         var user = await _userRepository.GetByEmailConfirmationTokenHashAsync(tokenHash, cancellationToken)
@@ -228,7 +228,10 @@ public class AuthService : IAuthService
 
         if (user.EmailConfirmed)
         {
-            return new ConfirmEmailResponse(AlreadyConfirmed: true);
+            // Replay of an already-used link (e.g. an email scanner prefetch, or the user
+            // clicking it twice) never issues a session — only a fresh confirmation proves the
+            // clicker currently controls the inbox at this moment.
+            return (new ConfirmEmailResponse(AlreadyConfirmed: true), null);
         }
 
         if (user.EmailConfirmationTokenExpiresAtUtc is null || user.EmailConfirmationTokenExpiresAtUtc < _dateTimeProvider.UtcNow)
@@ -241,7 +244,16 @@ public class AuthService : IAuthService
 
         _logger.LogInformation("Audit: email confirmed for user {UserId}", user.Id);
 
-        return new ConfirmEmailResponse(AlreadyConfirmed: false);
+        var session = await IssueTokensAsync(user, ipAddress, cancellationToken);
+        var response = new ConfirmEmailResponse(
+            AlreadyConfirmed: false,
+            AccessToken: session.AccessToken,
+            ExpiresInSeconds: session.ExpiresInSeconds,
+            User: session.User);
+
+        _logger.LogInformation("Audit: session issued on email confirmation for user {UserId}", user.Id);
+
+        return (response, session);
     }
 
     public async Task ResendConfirmationAsync(string email, CancellationToken cancellationToken = default)

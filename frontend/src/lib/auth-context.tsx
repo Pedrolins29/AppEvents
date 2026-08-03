@@ -20,6 +20,10 @@ interface AuthContextValue {
   login: (request: LoginRequest) => Promise<LoginResult>;
   register: (request: RegisterRequest) => Promise<void>;
   logout: () => Promise<void>;
+  /** Applies a session issued outside the normal login form — today, only a fresh (non-replay)
+   * email confirmation. Reuses the same InstantPreview-draft claim as login() so a visitor who
+   * registered mid-preview still lands in their new event's editor. */
+  applyConfirmedSession: (accessToken: string, user: UserProfile) => Promise<LoginResult>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -71,35 +75,51 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [refresh]);
 
-  const login = useCallback(async (request: LoginRequest): Promise<LoginResult> => {
-    const result = await authApi.login(request);
-    accessTokenRef.current = result.accessToken;
-    setUser(result.user);
-    localStorage.setItem(SESSION_HINT_KEY, "1");
+  const applySessionAndClaimDraft = useCallback(
+    async (accessToken: string, sessionUser: UserProfile): Promise<LoginResult> => {
+      accessTokenRef.current = accessToken;
+      setUser(sessionUser);
+      localStorage.setItem(SESSION_HINT_KEY, "1");
 
-    const draft = consumeInstantPreviewDraft();
-    if (!draft || !draft.name.trim() || !draft.eventDate) {
-      return { claimedEventId: null };
-    }
-    try {
-      const event = await eventsApi.create({
-        name: draft.name.trim(),
-        slug: buildDraftSlug(draft.name),
-        eventType: draft.eventType,
-        eventDate: draft.eventDate,
-        description: null,
-        address: draft.address.trim() || null,
-        dressCode: null,
-        timelineItems: [],
-        templateId: null,
-      });
-      return { claimedEventId: event.id };
-    } catch {
-      // Best-effort: a failed auto-claim (slug collision, transient error, etc.) should never
-      // block a real login — the visitor just lands on the normal events list instead.
-      return { claimedEventId: null };
-    }
-  }, []);
+      const draft = consumeInstantPreviewDraft();
+      if (!draft || !draft.name.trim() || !draft.eventDate) {
+        return { claimedEventId: null };
+      }
+      try {
+        const event = await eventsApi.create({
+          name: draft.name.trim(),
+          slug: buildDraftSlug(draft.name),
+          eventType: draft.eventType,
+          eventDate: draft.eventDate,
+          description: null,
+          address: draft.address.trim() || null,
+          dressCode: null,
+          timelineItems: [],
+          templateId: null,
+        });
+        return { claimedEventId: event.id };
+      } catch {
+        // Best-effort: a failed auto-claim (slug collision, transient error, etc.) should never
+        // block a real session — the visitor just lands on the normal events list instead.
+        return { claimedEventId: null };
+      }
+    },
+    [],
+  );
+
+  const login = useCallback(
+    async (request: LoginRequest): Promise<LoginResult> => {
+      const result = await authApi.login(request);
+      return applySessionAndClaimDraft(result.accessToken, result.user);
+    },
+    [applySessionAndClaimDraft],
+  );
+
+  const applyConfirmedSession = useCallback(
+    async (accessToken: string, sessionUser: UserProfile): Promise<LoginResult> =>
+      applySessionAndClaimDraft(accessToken, sessionUser),
+    [applySessionAndClaimDraft],
+  );
 
   const register = useCallback(async (request: RegisterRequest) => {
     await authApi.register(request);
@@ -116,7 +136,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, register, logout, applyConfirmedSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

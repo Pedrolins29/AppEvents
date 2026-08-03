@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { ApiError } from "@/lib/apiClient";
+import { CopyInviteLink } from "@/components/CopyInviteLink";
 import { InvitationBody } from "@/components/InvitationBody";
 import { DEFAULT_THEME_STYLE, THEME_STYLES, type ThemeStyle } from "@/components/InvitationHero";
 import { Skeleton } from "@/components/Skeleton";
@@ -118,6 +119,11 @@ export default function EventPreviewPage() {
       >
         {event.isPublished ? t("badgePreview") : t("badgeDraft")}
       </Link>
+      {event.isPublished && (
+        <div className="fixed right-4 top-4 z-10 rounded-2xl bg-white/90 p-2 shadow-md backdrop-blur-sm">
+          <CopyInviteLink slug={event.slug} eventName={event.name} />
+        </div>
+      )}
       <InvitationBody event={viewModel} theme={theme} demoRsvp />
     </>
   );

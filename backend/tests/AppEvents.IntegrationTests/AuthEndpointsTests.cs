@@ -267,7 +267,26 @@ public class AuthEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
     }
 
     [Fact]
-    public async Task ConfirmEmail_CalledTwiceWithSameToken_IsIdempotent()
+    public async Task ConfirmEmail_WithFreshToken_IssuesSessionDirectly()
+    {
+        var client = _factory.CreateClient();
+        var email = UniqueEmail();
+        await client.PostAsJsonAsync("/api/auth/register", new RegisterRequest(email, "Str0ng!Passw0rd", "Test User"));
+        var sentEmail = _factory.EmailSender.Sent.Single(e => e.To == email);
+        var token = ExtractConfirmationToken(sentEmail.HtmlBody);
+
+        var confirmResponse = await client.PostAsJsonAsync("/api/auth/confirm-email", new ConfirmEmailRequest(token));
+
+        confirmResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var confirmBody = await confirmResponse.Content.ReadFromJsonAsync<ConfirmEmailResponse>();
+        confirmBody!.AccessToken.Should().NotBeNullOrEmpty();
+        confirmBody.ExpiresInSeconds.Should().NotBeNull();
+        confirmBody.User.Should().NotBeNull();
+        confirmResponse.Headers.Should().Contain(h => h.Key == "Set-Cookie");
+    }
+
+    [Fact]
+    public async Task ConfirmEmail_CalledTwiceWithSameToken_IsIdempotentAndDoesNotIssueSessionOnReplay()
     {
         var client = _factory.CreateClient();
         var email = UniqueEmail();
@@ -280,8 +299,12 @@ public class AuthEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
 
         firstResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         secondResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        (await firstResponse.Content.ReadFromJsonAsync<ConfirmEmailResponse>())!.AlreadyConfirmed.Should().BeFalse();
-        (await secondResponse.Content.ReadFromJsonAsync<ConfirmEmailResponse>())!.AlreadyConfirmed.Should().BeTrue();
+        var firstBody = await firstResponse.Content.ReadFromJsonAsync<ConfirmEmailResponse>();
+        var secondBody = await secondResponse.Content.ReadFromJsonAsync<ConfirmEmailResponse>();
+        firstBody!.AlreadyConfirmed.Should().BeFalse();
+        secondBody!.AlreadyConfirmed.Should().BeTrue();
+        secondBody.AccessToken.Should().BeNull();
+        secondResponse.Headers.Should().NotContain(h => h.Key == "Set-Cookie");
     }
 
     [Fact]

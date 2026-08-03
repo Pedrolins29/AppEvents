@@ -14,7 +14,7 @@ public interface IAuthService
 
     Task<UserProfileResponse> GetProfileAsync(Guid userId, CancellationToken cancellationToken = default);
 
-    Task<ConfirmEmailResponse> ConfirmEmailAsync(string rawToken, CancellationToken cancellationToken = default);
+    Task<(ConfirmEmailResponse Response, AuthResult? Session)> ConfirmEmailAsync(string rawToken, string? ipAddress, CancellationToken cancellationToken = default);
 
     Task ResendConfirmationAsync(string email, CancellationToken cancellationToken = default);
 }

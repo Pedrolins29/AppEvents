@@ -120,7 +120,7 @@ export default function EventsPage() {
             {events.map((event) => (
               <li
                 key={event.id}
-                className="flex items-center justify-between border border-[#E2DFD3] bg-white px-4 py-3"
+                className="flex flex-wrap items-center justify-between gap-y-2 border border-[#E2DFD3] bg-white px-4 py-3"
               >
                 <div>
                   <p className="flex items-center gap-2 font-medium text-[#14211D]">
@@ -152,7 +152,7 @@ export default function EventsPage() {
                     )}
                   </p>
                 </div>
-                <div className="flex gap-3 text-sm">
+                <div className="flex flex-wrap gap-3 text-sm">
                   {event.isPublished && (
                     <CopyInviteLink slug={event.slug} eventName={event.name} variant="compact" />
                   )}

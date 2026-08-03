@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { useAuth, ApiError } from "@/lib/auth-context";
+import { ResendConfirmationForm } from "@/components/ResendConfirmationForm";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -75,6 +76,7 @@ export default function RegisterPage() {
               {t("checkEmailTitle")}
             </h1>
             <p className="text-[#5B6B67]">{t("checkEmailBody", { email: submittedEmail })}</p>
+            <ResendConfirmationForm initialEmail={submittedEmail} />
           </div>
         </main>
         <SiteFooter />

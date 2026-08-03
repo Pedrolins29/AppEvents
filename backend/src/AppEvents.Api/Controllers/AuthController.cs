@@ -57,7 +57,12 @@ public class AuthController : ControllerBase
     [HttpPost("confirm-email")]
     public async Task<ActionResult<ConfirmEmailResponse>> ConfirmEmail(ConfirmEmailRequest request, CancellationToken cancellationToken)
     {
-        var response = await _authService.ConfirmEmailAsync(request.Token, cancellationToken);
+        var (response, session) = await _authService.ConfirmEmailAsync(request.Token, GetClientIp(), cancellationToken);
+        if (session is not null)
+        {
+            SetRefreshTokenCookie(session.RefreshToken, session.RefreshTokenExpiresAtUtc);
+        }
+
         return Ok(response);
     }
 

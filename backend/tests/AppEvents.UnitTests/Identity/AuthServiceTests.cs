@@ -312,7 +312,7 @@ public class AuthServiceTests
     }
 
     [Fact]
-    public async Task ConfirmEmailAsync_WithValidToken_ConfirmsAndSaves()
+    public async Task ConfirmEmailAsync_WithValidToken_ConfirmsAndIssuesSession()
     {
         var sut = CreateSut();
         var user = CreateUser("Str0ng!Passw0rd", out _);
@@ -322,12 +322,19 @@ public class AuthServiceTests
 
         _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
             .Returns(user);
+        _jwtTokenService.GenerateAccessToken(user).Returns(new AccessToken("access-token", 900));
 
-        var response = await sut.ConfirmEmailAsync("raw-token");
+        var (response, session) = await sut.ConfirmEmailAsync("raw-token", "127.0.0.1");
 
         response.AlreadyConfirmed.Should().BeFalse();
+        response.AccessToken.Should().Be("access-token");
+        response.ExpiresInSeconds.Should().Be(900);
         user.EmailConfirmed.Should().BeTrue();
+        session.Should().NotBeNull();
+        session!.AccessToken.Should().Be("access-token");
         await _userRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _refreshTokenRepository.Received(1).AddAsync(
+            Arg.Is<RefreshToken>(rt => rt!.UserId == user.Id), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -337,7 +344,7 @@ public class AuthServiceTests
         _userRepository.GetByEmailConfirmationTokenHashAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
             .Returns((User?)null);
 
-        var act = () => sut.ConfirmEmailAsync("garbage-token");
+        var act = () => sut.ConfirmEmailAsync("garbage-token", "127.0.0.1");
 
         await act.Should().ThrowAsync<NotFoundException>();
     }
@@ -354,13 +361,13 @@ public class AuthServiceTests
         _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
             .Returns(user);
 
-        var act = () => sut.ConfirmEmailAsync("raw-token");
+        var act = () => sut.ConfirmEmailAsync("raw-token", "127.0.0.1");
 
         await act.Should().ThrowAsync<NotFoundException>();
     }
 
     [Fact]
-    public async Task ConfirmEmailAsync_AlreadyConfirmed_ReturnsAlreadyConfirmedTrueWithoutMutating()
+    public async Task ConfirmEmailAsync_AlreadyConfirmed_ReturnsAlreadyConfirmedTrueWithoutIssuingSession()
     {
         var sut = CreateSut();
         var user = CreateUser("Str0ng!Passw0rd", out _);
@@ -370,10 +377,13 @@ public class AuthServiceTests
         _userRepository.GetByEmailConfirmationTokenHashAsync(RefreshTokenGenerator.Hash("raw-token"), Arg.Any<CancellationToken>())
             .Returns(user);
 
-        var response = await sut.ConfirmEmailAsync("raw-token");
+        var (response, session) = await sut.ConfirmEmailAsync("raw-token", "127.0.0.1");
 
         response.AlreadyConfirmed.Should().BeTrue();
+        response.AccessToken.Should().BeNull();
+        session.Should().BeNull();
         await _userRepository.DidNotReceive().SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _refreshTokenRepository.DidNotReceive().AddAsync(Arg.Any<RefreshToken>(), Arg.Any<CancellationToken>());
     }
 
     [Fact]
