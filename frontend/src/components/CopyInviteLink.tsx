@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useState } from "react";
+import { QrCode } from "@/components/QrCode";
 import { buildInviteUrl } from "@/lib/inviteUrl";
 import { buildWhatsappShareLink } from "@/lib/whatsappLink";
 
@@ -19,6 +20,7 @@ interface CopyInviteLinkProps {
 export function CopyInviteLink({ slug, eventName, variant = "full" }: CopyInviteLinkProps) {
   const t = useTranslations("events.shareLink");
   const [copied, setCopied] = useState(false);
+  const [showQr, setShowQr] = useState(false);
 
   function fireSharedEvent(method: "copy_link" | "whatsapp") {
     window.fbq?.("trackCustom", "InvitationShared");
@@ -54,23 +56,37 @@ export function CopyInviteLink({ slug, eventName, variant = "full" }: CopyInvite
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="rounded-full border border-[#0F766E] px-4 py-2 text-sm font-medium text-[#0F766E] transition-colors duration-150 hover:bg-[#0F766E] hover:text-white"
-      >
-        {copied ? t("linkCopied") : t("copyLink")}
-      </button>
-      <a
-        href={whatsappHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => fireSharedEvent("whatsapp")}
-        className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
-      >
-        {t("whatsappShare")}
-      </a>
+    <div>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="rounded-full border border-[#0F766E] px-4 py-2 text-sm font-medium text-[#0F766E] transition-colors duration-150 hover:bg-[#0F766E] hover:text-white"
+        >
+          {copied ? t("linkCopied") : t("copyLink")}
+        </button>
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => fireSharedEvent("whatsapp")}
+          className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
+        >
+          {t("whatsappShare")}
+        </a>
+        <button
+          type="button"
+          onClick={() => setShowQr((v) => !v)}
+          className="rounded-full border border-[#E2DFD3] px-4 py-2 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#F5F2EA]"
+        >
+          {showQr ? t("hideQrCode") : t("showQrCode")}
+        </button>
+      </div>
+      {showQr && (
+        <div className="mt-3">
+          <QrCode value={buildInviteUrl(slug)} />
+        </div>
+      )}
     </div>
   );
 }

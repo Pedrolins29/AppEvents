@@ -174,7 +174,9 @@
       "copyLink": "Copiar link",
       "linkCopied": "Link copiado!",
       "whatsappShare": "Compartilhar no WhatsApp",
-      "whatsappMessage": "Olha o convite do meu evento \"{name}\": {link}"
+      "whatsappMessage": "Olha o convite do meu evento \"{name}\": {link}",
+      "showQrCode": "Mostrar QR Code",
+      "hideQrCode": "Ocultar QR Code"
     },
     "timelineEditor": {
       "label": "Linha do tempo (opcional)",
@@ -597,7 +599,17 @@
     "noPhoneForWhatsapp": "Este convidado não tem telefone.",
     "remove": "Remover",
     "removeConfirm": "Remover este convidado da lista?",
-    "whatsappMessage": "Olá, {name}! Passando para lembrar do nosso evento \"{event}\". Confirme sua presença aqui: {link}"
+    "whatsappMessage": "Olá, {name}! Passando para lembrar do nosso evento \"{event}\". Confirme sua presença aqui: {link}",
+    "markConfirmed": "Confirmar",
+    "markDeclined": "Recusar",
+    "markPending": "Voltar para pendente",
+    "noDigitalContact": "Sem contato digital",
+    "statusUpdateError": "Não foi possível atualizar o status do convidado."
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Próxima",
+    "goToPage": "Ir para a página {page}"
   },
   "criarConvite": {
     "hub": {
@@ -615,12 +627,12 @@
     "categories": {
       "Wedding": {
         "metaTitle": "Convite de Casamento Online e Interativo | AppEvents",
-        "metaDescription": "Crie um convite de casamento digital com envelope interativo, contagem regressiva, RSVP e lembretes automáticos. Grátis para começar.",
+        "metaDescription": "Crie um convite de casamento digital com envelope interativo, contagem regressiva, RSVP e lembretes prontos em um toque. Grátis para começar.",
         "heroEyebrow": "Casamento",
         "heroHeading": "O convite de casamento que seus convidados vão abrir de verdade",
         "heroSubtitle": "Um envelope digital interativo, cronograma da cerimônia e recepção, e confirmação de presença organizada — tudo em um único link.",
         "painPoint": "Lista de convidados bagunçada em grupos de WhatsApp e ninguém sabe ao certo quem confirmou.",
-        "solution": "RSVP organizado automaticamente, com lembretes por e-mail e cobrança fácil via WhatsApp para quem ainda não respondeu.",
+        "solution": "A lista de confirmados se atualiza sozinha a cada resposta, e você manda um lembrete pronto por e-mail ou WhatsApp com um toque para quem ainda não respondeu.",
         "showcaseHeading": "Casamentos criados no AppEvents",
         "faq": [
           {
@@ -711,12 +723,12 @@
       },
       "BabyShower": {
         "metaTitle": "Convite de Chá de Bebê Digital | AppEvents",
-        "metaDescription": "Crie um convite de chá de bebê online com lista de convidados organizada e lembretes automáticos de confirmação. Grátis para começar.",
+        "metaDescription": "Crie um convite de chá de bebê online com lista de convidados organizada e lembretes de confirmação prontos em um toque. Grátis para começar.",
         "heroEyebrow": "Chá de Bebê",
         "heroHeading": "Convite de chá de bebê sem bagunça no grupo de WhatsApp",
-        "heroSubtitle": "Lista de convidados organizada, lembretes automáticos por e-mail e cobrança fácil via WhatsApp para quem ainda não respondeu.",
+        "heroSubtitle": "Lista de convidados organizada, com lembretes prontos por e-mail e WhatsApp para enviar com um toque a quem ainda não respondeu.",
         "painPoint": "Grupo de WhatsApp lotado de mensagens e ninguém sabe ao certo quem vai comparecer.",
-        "solution": "Uma lista de convidados de verdade, com status de cada um e lembretes automáticos — sem precisar cobrar ninguém no particular.",
+        "solution": "Uma lista de convidados de verdade, com status de cada um e um lembrete pronto para enviar com um toque — sem precisar cobrar ninguém no particular.",
         "showcaseHeading": "Chás de bebê criados no AppEvents",
         "faq": [
           {

@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { Pagination } from "@/components/Pagination";
 import { guestsApi } from "@/lib/guestsApi";
 import { buildWhatsappLink } from "@/lib/whatsappLink";
 import { getRsvpStatusLabels, type RsvpStatus } from "@/types/rsvp";
@@ -19,6 +20,8 @@ const STATUS_COLOR: Record<RsvpStatus, string> = {
   Declined: "#8A8578",
 };
 
+const PAGE_SIZE = 10;
+
 export function GuestListManager({ eventId, slug, eventName }: GuestListManagerProps) {
   const t = useTranslations("guests");
   const statusLabels = getRsvpStatusLabels(useTranslations("rsvpStatus"));
@@ -33,6 +36,8 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [remindingId, setRemindingId] = useState<string | null>(null);
   const [remindedId, setRemindedId] = useState<string | null>(null);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     guestsApi
@@ -43,6 +48,12 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
       })
       .catch(() => setSummary({ total: 0, pending: 0, confirmed: 0, declined: 0 }));
   }, [eventId]);
+
+  const totalPages = Math.max(1, Math.ceil(guests.length / PAGE_SIZE));
+  // Derived, not stored: if a removal shrinks the list below the stored page, this clamps the
+  // rendered page back into range without needing a setState-in-effect round trip.
+  const currentPage = Math.min(page, totalPages);
+  const pagedGuests = guests.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   function personalLink(token: string): string {
     const origin = typeof window !== "undefined" ? window.location.origin : "";
@@ -104,6 +115,26 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
       setError(t("reminderError"));
     } finally {
       setRemindingId(null);
+    }
+  }
+
+  async function handleUpdateStatus(guest: GuestRecord, status: RsvpStatus) {
+    setError(null);
+    setUpdatingId(guest.id);
+    try {
+      const updated = await guestsApi.update(eventId, guest.id, {
+        guestName: guest.guestName,
+        guestEmail: guest.guestEmail,
+        guestPhone: guest.guestPhone,
+        status,
+      });
+      const next = guests.map((g) => (g.id === guest.id ? updated : g));
+      setGuests(next);
+      refreshSummary(next);
+    } catch {
+      setError(t("statusUpdateError"));
+    } finally {
+      setUpdatingId(null);
     }
   }
 
@@ -186,12 +217,14 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
         <p className="mt-4 text-sm text-[#5B6B67]">{t("empty")}</p>
       ) : (
         <ul className="mt-4 flex flex-col divide-y divide-[#E2DFD3]">
-          {guests.map((guest) => {
+          {pagedGuests.map((guest) => {
             const waHref = whatsappHref(guest);
+            const hasNoDigitalContact = !guest.guestEmail && !guest.guestPhone;
+            const isUpdating = updatingId === guest.id;
             return (
               <li key={guest.id} className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[#14211D]">{guest.guestName}</span>
                     <span
                       className="rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-white"
@@ -199,6 +232,11 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
                     >
                       {statusLabels[guest.status]}
                     </span>
+                    {hasNoDigitalContact && (
+                      <span className="rounded-full bg-[#F2EFE7] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-[#5B6B67]">
+                        {t("noDigitalContact")}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-[#5B6B67]">
                     {guest.guestEmail}
@@ -245,6 +283,36 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
                     </button>
                   )}
 
+                  {guest.status === "Pending" ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => handleUpdateStatus(guest, "Confirmed")}
+                        disabled={isUpdating}
+                        className="rounded-full border border-[#0F766E] px-3 py-1 text-[#0F766E] transition-colors duration-150 hover:bg-[#0F766E] hover:text-white disabled:opacity-50"
+                      >
+                        {t("markConfirmed")}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleUpdateStatus(guest, "Declined")}
+                        disabled={isUpdating}
+                        className="rounded-full border border-[#E2DFD3] px-3 py-1 text-[#14211D] transition-colors duration-150 hover:bg-[#F5F2EA] disabled:opacity-50"
+                      >
+                        {t("markDeclined")}
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleUpdateStatus(guest, "Pending")}
+                      disabled={isUpdating}
+                      className="text-[#5B6B67] underline transition-colors duration-150 hover:text-[#14211D] disabled:opacity-50"
+                    >
+                      {t("markPending")}
+                    </button>
+                  )}
+
                   <button
                     type="button"
                     onClick={() => handleRemove(guest.id)}
@@ -258,6 +326,8 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
           })}
         </ul>
       )}
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }

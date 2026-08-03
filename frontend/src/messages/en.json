@@ -174,7 +174,9 @@
       "copyLink": "Copy link",
       "linkCopied": "Link copied!",
       "whatsappShare": "Share on WhatsApp",
-      "whatsappMessage": "Check out the invitation for my event \"{name}\": {link}"
+      "whatsappMessage": "Check out the invitation for my event \"{name}\": {link}",
+      "showQrCode": "Show QR code",
+      "hideQrCode": "Hide QR code"
     },
     "timelineEditor": {
       "label": "Timeline (optional)",
@@ -597,7 +599,17 @@
     "noPhoneForWhatsapp": "This guest has no phone number.",
     "remove": "Remove",
     "removeConfirm": "Remove this guest from the list?",
-    "whatsappMessage": "Hi {name}! Just a note about our event \"{event}\". Please confirm your attendance here: {link}"
+    "whatsappMessage": "Hi {name}! Just a note about our event \"{event}\". Please confirm your attendance here: {link}",
+    "markConfirmed": "Confirm",
+    "markDeclined": "Decline",
+    "markPending": "Move back to pending",
+    "noDigitalContact": "No digital contact",
+    "statusUpdateError": "Could not update the guest's status."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "goToPage": "Go to page {page}"
   },
   "criarConvite": {
     "hub": {
@@ -615,12 +627,12 @@
     "categories": {
       "Wedding": {
         "metaTitle": "Online Wedding Invitation, Interactive | AppEvents",
-        "metaDescription": "Create a digital wedding invitation with an interactive envelope, countdown, RSVP and automatic reminders. Free to start.",
+        "metaDescription": "Create a digital wedding invitation with an interactive envelope, countdown, RSVP and one-tap ready-made reminders. Free to start.",
         "heroEyebrow": "Wedding",
         "heroHeading": "The wedding invitation your guests will actually open",
         "heroSubtitle": "An interactive digital envelope, a full ceremony-and-reception timeline, and organized RSVPs — all in one link.",
         "painPoint": "A guest list scattered across WhatsApp groups, with no clear picture of who is confirmed.",
-        "solution": "RSVPs organized automatically, with email reminders and an easy WhatsApp nudge for anyone who has not responded yet.",
+        "solution": "Your RSVP list updates itself with every response, and you send a ready-made email or WhatsApp reminder with one tap to anyone who hasn't replied yet.",
         "showcaseHeading": "Weddings created on AppEvents",
         "faq": [
           {
@@ -711,12 +723,12 @@
       },
       "BabyShower": {
         "metaTitle": "Digital Baby Shower Invitation | AppEvents",
-        "metaDescription": "Create an online baby shower invitation with an organized guest list and automatic RSVP reminders. Free to start.",
+        "metaDescription": "Create an online baby shower invitation with an organized guest list and one-tap RSVP reminders. Free to start.",
         "heroEyebrow": "Baby Shower",
         "heroHeading": "A baby shower invitation without WhatsApp group chaos",
-        "heroSubtitle": "An organized guest list, automatic email reminders, and an easy WhatsApp nudge for anyone who has not responded yet.",
+        "heroSubtitle": "An organized guest list, with ready-made email and WhatsApp reminders you send with one tap to anyone who hasn't replied yet.",
         "painPoint": "A WhatsApp group full of messages, with no clear picture of who is actually coming.",
-        "solution": "A real guest list, with each person's status tracked, and automatic reminders — no need to chase anyone individually.",
+        "solution": "A real guest list, with each person's status tracked, and a ready-made reminder you send with one tap — no need to chase anyone individually.",
         "showcaseHeading": "Baby showers created on AppEvents",
         "faq": [
           {

@@ -174,7 +174,9 @@
       "copyLink": "Copiar enlace",
       "linkCopied": "¡Enlace copiado!",
       "whatsappShare": "Compartir en WhatsApp",
-      "whatsappMessage": "Mira la invitación de mi evento \"{name}\": {link}"
+      "whatsappMessage": "Mira la invitación de mi evento \"{name}\": {link}",
+      "showQrCode": "Mostrar código QR",
+      "hideQrCode": "Ocultar código QR"
     },
     "timelineEditor": {
       "label": "Línea de tiempo (opcional)",
@@ -597,7 +599,17 @@
     "noPhoneForWhatsapp": "Este invitado no tiene teléfono.",
     "remove": "Eliminar",
     "removeConfirm": "¿Eliminar a este invitado de la lista?",
-    "whatsappMessage": "¡Hola {name}! Un recordatorio sobre nuestro evento \"{event}\". Confirma tu asistencia aquí: {link}"
+    "whatsappMessage": "¡Hola {name}! Un recordatorio sobre nuestro evento \"{event}\". Confirma tu asistencia aquí: {link}",
+    "markConfirmed": "Confirmar",
+    "markDeclined": "Rechazar",
+    "markPending": "Volver a pendiente",
+    "noDigitalContact": "Sin contacto digital",
+    "statusUpdateError": "No se pudo actualizar el estado del invitado."
+  },
+  "pagination": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "goToPage": "Ir a la página {page}"
   },
   "criarConvite": {
     "hub": {
@@ -615,12 +627,12 @@
     "categories": {
       "Wedding": {
         "metaTitle": "Invitación de Boda Online e Interactiva | AppEvents",
-        "metaDescription": "Crea una invitación de boda digital con sobre interactivo, cuenta regresiva, RSVP y recordatorios automáticos. Gratis para empezar.",
+        "metaDescription": "Crea una invitación de boda digital con sobre interactivo, cuenta regresiva, RSVP y recordatorios listos para enviar con un toque. Gratis para empezar.",
         "heroEyebrow": "Boda",
         "heroHeading": "La invitación de boda que tus invitados van a abrir de verdad",
         "heroSubtitle": "Un sobre digital interactivo, cronograma de ceremonia y recepción, y confirmaciones organizadas — todo en un solo enlace.",
         "painPoint": "Lista de invitados dispersa en grupos de WhatsApp, sin saber realmente quién confirmó.",
-        "solution": "RSVP organizado automáticamente, con recordatorios por correo y un aviso fácil por WhatsApp para quien aún no respondió.",
+        "solution": "Tu lista de confirmados se actualiza sola con cada respuesta, y envías un recordatorio listo por correo o WhatsApp con un toque a quien aún no respondió.",
         "showcaseHeading": "Bodas creadas en AppEvents",
         "faq": [
           {
@@ -711,12 +723,12 @@
       },
       "BabyShower": {
         "metaTitle": "Invitación de Baby Shower Digital | AppEvents",
-        "metaDescription": "Crea una invitación de baby shower online con lista de invitados organizada y recordatorios automáticos de confirmación. Gratis para empezar.",
+        "metaDescription": "Crea una invitación de baby shower online con lista de invitados organizada y recordatorios de confirmación listos para enviar con un toque. Gratis para empezar.",
         "heroEyebrow": "Baby Shower",
         "heroHeading": "Invitación de baby shower sin caos en el grupo de WhatsApp",
-        "heroSubtitle": "Lista de invitados organizada, recordatorios automáticos por correo y un aviso fácil por WhatsApp para quien aún no respondió.",
+        "heroSubtitle": "Lista de invitados organizada, con recordatorios listos por correo y WhatsApp que envías con un toque a quien aún no respondió.",
         "painPoint": "Un grupo de WhatsApp lleno de mensajes, sin saber realmente quién va a asistir.",
-        "solution": "Una lista de invitados real, con el estado de cada uno y recordatorios automáticos — sin tener que perseguir a nadie en privado.",
+        "solution": "Una lista de invitados real, con el estado de cada uno y un recordatorio listo para enviar con un toque — sin tener que perseguir a nadie en privado.",
         "showcaseHeading": "Baby showers creados en AppEvents",
         "faq": [
           {
