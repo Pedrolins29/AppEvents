@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import type { ThemeStyle } from "@/components/InvitationHero";
 import { publicEventsApi } from "@/lib/publicEventsApi";
@@ -21,6 +21,7 @@ interface RsvpFormProps {
 
 export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFormProps) {
   const t = useTranslations("invitation.rsvp");
+  const locale = useLocale();
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [guestPhone, setGuestPhone] = useState("");
@@ -63,6 +64,7 @@ export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFor
           status,
           honeypotField: honeypotField || null,
           inviteToken: inviteToken || null,
+          locale,
         });
       }
       setSubmitted(true);

@@ -18,6 +18,9 @@ export interface CreateRsvpRequest {
   // Present when the guest opened their personal link (/e/{slug}?g={token}); the submission then
   // updates that pre-existing pending guest instead of creating a new one.
   inviteToken?: string | null;
+  // The page's current UI language (en/pt/es) at submission time — picks the guest confirmation
+  // email's language, same pattern as RegisterRequest.locale.
+  locale?: string;
 }
 
 // Public prefill for a guest opening their own personal link.

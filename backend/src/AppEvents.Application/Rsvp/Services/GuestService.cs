@@ -1,13 +1,13 @@
-using System.Text;
 using AppEvents.Application.Common.Exceptions;
 using AppEvents.Application.Common.Interfaces;
-using AppEvents.Application.Events.Dtos;
 using AppEvents.Application.Events.Interfaces;
 using AppEvents.Application.Events.Services;
 using AppEvents.Application.Identity.Interfaces;
 using AppEvents.Application.Rsvp.Dtos;
+using AppEvents.Application.Rsvp.Emails;
 using AppEvents.Application.Rsvp.Interfaces;
 using AppEvents.Domain.Events;
+using AppEvents.Domain.Identity;
 using AppEvents.Domain.Rsvp;
 using Microsoft.Extensions.Logging;
 
@@ -101,17 +101,22 @@ public class GuestService : IGuestService
         // sent independently so one failure can't suppress the other.
         var organizer = await _userRepository.GetByIdAsync(@event.UserId, cancellationToken);
 
+        // Two different recipients, two different locale sources: the guest gets the language they
+        // were viewing the public page in (captured client-side, same pattern as RegisterRequest.
+        // Locale); the organizer gets their own account preference.
+        var guestLocale = SupportedLocales.IsSupported(request.Locale) ? request.Locale! : SupportedLocales.Default;
+
         if (guest.Status == RsvpStatus.Confirmed && !string.IsNullOrWhiteSpace(guest.GuestEmail))
         {
             await TrySendAsync(
-                () => SendGuestConfirmationEmailAsync(@event, guest, cancellationToken),
+                () => SendGuestConfirmationEmailAsync(@event, guest, guestLocale, cancellationToken),
                 "guest confirmation", guest.Id);
         }
 
         if (organizer is not null)
         {
             await TrySendAsync(
-                () => SendOrganizerNotificationEmailAsync(organizer.Email, @event, guest, cancellationToken),
+                () => SendOrganizerNotificationEmailAsync(organizer.Email, @event, guest, organizer.PreferredLocale, cancellationToken),
                 "organizer notification", guest.Id);
         }
 
@@ -217,8 +222,14 @@ public class GuestService : IGuestService
             });
         }
 
+        // The guest hasn't responded yet, so there's no locale signal from them - the organizer who
+        // triggered this reminder is the only available source.
+        var organizer = await _userRepository.GetByIdAsync(userId, cancellationToken);
+        var locale = organizer?.PreferredLocale ?? SupportedLocales.Default;
+
         var link = _inviteLinkBuilder.Build(@event.Slug, guest.InviteToken);
-        await _emailSender.SendAsync(guest.GuestEmail, $"Please confirm: {@event.Name}", BuildReminderEmailBody(@event, guest, link), cancellationToken);
+        var (subject, body) = RsvpEmailTemplates.BuildReminder(locale, @event, guest, link);
+        await _emailSender.SendAsync(guest.GuestEmail, subject, body, cancellationToken);
 
         var now = _dateTimeProvider.UtcNow;
         guest.ReminderCount++;
@@ -256,80 +267,17 @@ public class GuestService : IGuestService
         }
     }
 
-    private Task SendGuestConfirmationEmailAsync(Event @event, Guest guest, CancellationToken cancellationToken)
+    private Task SendGuestConfirmationEmailAsync(Event @event, Guest guest, string locale, CancellationToken cancellationToken)
     {
-        var subject = $"You're confirmed: {@event.Name}";
-        var body = BuildGuestEmailBody(@event, guest);
+        var (subject, body) = RsvpEmailTemplates.BuildGuestConfirmation(locale, @event, guest);
         return _emailSender.SendAsync(guest.GuestEmail!, subject, body, cancellationToken);
     }
 
-    private Task SendOrganizerNotificationEmailAsync(string organizerEmail, Event @event, Guest guest, CancellationToken cancellationToken)
+    private Task SendOrganizerNotificationEmailAsync(string organizerEmail, Event @event, Guest guest, string locale, CancellationToken cancellationToken)
     {
-        var subject = $"New RSVP for {@event.Name}: {guest.GuestName} ({guest.Status})";
-        var body = BuildOrganizerEmailBody(@event, guest);
+        var (subject, body) = RsvpEmailTemplates.BuildOrganizerNotification(locale, @event, guest);
         return _emailSender.SendAsync(organizerEmail, subject, body, cancellationToken);
     }
-
-    private static string BuildGuestEmailBody(Event @event, Guest guest)
-    {
-        var html = new StringBuilder();
-        html.Append($"<p>Hi {System.Net.WebUtility.HtmlEncode(guest.GuestName)},</p>");
-        html.Append($"<p>You're confirmed for <strong>{System.Net.WebUtility.HtmlEncode(@event.Name)}</strong> ({EventTypeLabel(@event.EventType)}).</p>");
-        html.Append($"<p><strong>Date:</strong> {@event.EventDate:dddd, MMMM d, yyyy}</p>");
-
-        if (!string.IsNullOrWhiteSpace(@event.Description))
-        {
-            html.Append($"<p>{System.Net.WebUtility.HtmlEncode(@event.Description)}</p>");
-        }
-
-        if (!string.IsNullOrWhiteSpace(@event.Address))
-        {
-            var encodedAddress = Uri.EscapeDataString(@event.Address);
-            html.Append($"<p><strong>Location:</strong> {System.Net.WebUtility.HtmlEncode(@event.Address)}<br/>");
-            html.Append($"<a href=\"https://www.google.com/maps/search/?api=1&query={encodedAddress}\">Open in Google Maps</a> &middot; ");
-            html.Append($"<a href=\"https://waze.com/ul?q={encodedAddress}&navigate=yes\">Open in Waze</a></p>");
-        }
-
-        html.Append("<p>We can't wait to see you there.</p>");
-        return html.ToString();
-    }
-
-    private static string BuildOrganizerEmailBody(Event @event, Guest guest)
-    {
-        var html = new StringBuilder();
-        html.Append($"<p>New RSVP for <strong>{System.Net.WebUtility.HtmlEncode(@event.Name)}</strong>:</p>");
-        html.Append("<ul>");
-        html.Append($"<li><strong>Name:</strong> {System.Net.WebUtility.HtmlEncode(guest.GuestName)}</li>");
-        html.Append($"<li><strong>Status:</strong> {guest.Status}</li>");
-        if (!string.IsNullOrWhiteSpace(guest.GuestEmail))
-        {
-            html.Append($"<li><strong>Email:</strong> {System.Net.WebUtility.HtmlEncode(guest.GuestEmail)}</li>");
-        }
-        if (!string.IsNullOrWhiteSpace(guest.GuestPhone))
-        {
-            html.Append($"<li><strong>Phone:</strong> {System.Net.WebUtility.HtmlEncode(guest.GuestPhone)}</li>");
-        }
-        html.Append("</ul>");
-        return html.ToString();
-    }
-
-    private static string BuildReminderEmailBody(EventResponse @event, Guest guest, string personalLink)
-    {
-        var html = new StringBuilder();
-        html.Append($"<p>Hi {System.Net.WebUtility.HtmlEncode(guest.GuestName)},</p>");
-        html.Append($"<p>We'd love to know if you can join us for <strong>{System.Net.WebUtility.HtmlEncode(@event.Name)}</strong> on {@event.EventDate:dddd, MMMM d, yyyy}.</p>");
-        html.Append($"<p>It only takes a moment — <a href=\"{System.Net.WebUtility.HtmlEncode(personalLink)}\">confirm your presence here</a>.</p>");
-        html.Append("<p>Hope to see you there!</p>");
-        return html.ToString();
-    }
-
-    private static string EventTypeLabel(EventType eventType) => eventType switch
-    {
-        EventType.FifteenYearsParty => "15th Birthday",
-        EventType.BabyShower => "Baby Shower",
-        EventType.GenderReveal => "Gender Reveal",
-        _ => eventType.ToString(),
-    };
 
     private static GuestDto ToDto(Guest guest) => new(
         guest.Id,

@@ -55,6 +55,13 @@ public class GuestServiceTests
     private static CreateRsvpRequest ValidSubmit(RsvpStatus status = RsvpStatus.Confirmed, string? token = null) =>
         new("Jane Doe", "jane@example.com", null, status, null, token);
 
+    private static User OrganizerUser(string locale) => new()
+    {
+        Id = Guid.NewGuid(),
+        Email = "organizer@example.com",
+        PreferredLocale = locale,
+    };
+
     [Fact]
     public async Task SubmitAsync_WhenEventNotFound_ThrowsNotFoundException()
     {
@@ -101,6 +108,59 @@ public class GuestServiceTests
         // Updated in place - not added as a new row.
         await _guestRepository.DidNotReceive().AddAsync(Arg.Any<Guest>(), Arg.Any<CancellationToken>());
         await _guestRepository.Received(1).SaveChangesAsync(Arg.Any<CancellationToken>());
+    }
+
+    [Theory]
+    [InlineData("pt", "Mal podemos esperar para ver você lá.")]
+    [InlineData("es", "No podemos esperar a verte allí.")]
+    [InlineData("en", "We can't wait to see you there.")]
+    public async Task SubmitAsync_GuestConfirmationEmail_UsesRequestLocale(string locale, string expectedClosing)
+    {
+        var sut = CreateSut();
+        var @event = PublishedEvent();
+        _eventRepository.GetPublishedBySlugAsync(@event.Slug, Arg.Any<CancellationToken>()).Returns(@event);
+        _userRepository.GetByIdAsync(@event.UserId, Arg.Any<CancellationToken>()).Returns(OrganizerUser("en"));
+
+        var request = new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null, null, locale);
+        await sut.SubmitAsync(@event.Slug, request);
+
+        await _emailSender.Received(1).SendAsync(
+            "jane@example.com", Arg.Any<string>(), Arg.Is<string>(b => b.Contains(expectedClosing)), Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task SubmitAsync_GuestConfirmationEmail_FallsBackToDefaultWhenLocaleMissingOrUnsupported()
+    {
+        var sut = CreateSut();
+        var @event = PublishedEvent();
+        _eventRepository.GetPublishedBySlugAsync(@event.Slug, Arg.Any<CancellationToken>()).Returns(@event);
+        _userRepository.GetByIdAsync(@event.UserId, Arg.Any<CancellationToken>()).Returns(OrganizerUser("en"));
+
+        var request = new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null, null, "fr");
+        await sut.SubmitAsync(@event.Slug, request);
+
+        await _emailSender.Received(1).SendAsync(
+            "jane@example.com", Arg.Any<string>(), Arg.Is<string>(b => b.Contains("We can't wait to see you there.")), Arg.Any<CancellationToken>());
+    }
+
+    [Theory]
+    [InlineData("pt", "Nova resposta de RSVP para")]
+    [InlineData("es", "Nueva respuesta de RSVP para")]
+    [InlineData("en", "New RSVP for")]
+    public async Task SubmitAsync_OrganizerNotificationEmail_UsesOrganizerPreferredLocale(string organizerLocale, string expectedIntro)
+    {
+        var sut = CreateSut();
+        var @event = PublishedEvent();
+        _eventRepository.GetPublishedBySlugAsync(@event.Slug, Arg.Any<CancellationToken>()).Returns(@event);
+        _userRepository.GetByIdAsync(@event.UserId, Arg.Any<CancellationToken>()).Returns(OrganizerUser(organizerLocale));
+
+        // The guest's own locale is deliberately different from the organizer's, to prove each
+        // email uses its own recipient's locale rather than accidentally sharing one value.
+        var request = new CreateRsvpRequest("Jane Doe", "jane@example.com", null, RsvpStatus.Confirmed, null, null, "en");
+        await sut.SubmitAsync(@event.Slug, request);
+
+        await _emailSender.Received(1).SendAsync(
+            "organizer@example.com", Arg.Any<string>(), Arg.Is<string>(b => b.Contains(expectedIntro)), Arg.Any<CancellationToken>());
     }
 
     [Fact]
@@ -187,6 +247,26 @@ public class GuestServiceTests
         await _emailSender.Received(1).SendAsync("pat@example.com", Arg.Any<string>(), Arg.Is<string>(b => b.Contains("existing-event") && b.Contains("tok")), Arg.Any<CancellationToken>());
         result.ReminderCount.Should().Be(1);
         result.LastReminderSentAtUtc.Should().Be(_now);
+    }
+
+    [Theory]
+    [InlineData("pt", "Esperamos ver você lá!")]
+    [InlineData("es", "¡Esperamos verte allí!")]
+    [InlineData("en", "Hope to see you there!")]
+    public async Task SendReminderEmailAsync_UsesOrganizerPreferredLocale(string organizerLocale, string expectedClosing)
+    {
+        var sut = CreateSut();
+        var eventId = Guid.NewGuid();
+        var guestId = Guid.NewGuid();
+        _eventService.GetByIdAsync(_ownerId, eventId, Arg.Any<CancellationToken>()).Returns(OwnedEventResponse(eventId, _ownerId, _now));
+        _userRepository.GetByIdAsync(_ownerId, Arg.Any<CancellationToken>()).Returns(OrganizerUser(organizerLocale));
+        var guest = new Guest { Id = guestId, EventId = eventId, GuestName = "Pat", GuestEmail = "pat@example.com", Status = RsvpStatus.Pending, InviteToken = "tok" };
+        _guestRepository.GetByIdAsync(guestId, Arg.Any<CancellationToken>()).Returns(guest);
+
+        await sut.SendReminderEmailAsync(_ownerId, eventId, guestId);
+
+        await _emailSender.Received(1).SendAsync(
+            "pat@example.com", Arg.Any<string>(), Arg.Is<string>(b => b.Contains(expectedClosing)), Arg.Any<CancellationToken>());
     }
 
     [Fact]

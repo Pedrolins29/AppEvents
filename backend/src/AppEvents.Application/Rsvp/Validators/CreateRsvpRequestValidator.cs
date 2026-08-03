@@ -1,5 +1,6 @@
 using AppEvents.Application.Events.Validators;
 using AppEvents.Application.Rsvp.Dtos;
+using AppEvents.Domain.Identity;
 using AppEvents.Domain.Rsvp;
 using FluentValidation;
 
@@ -39,5 +40,10 @@ public class CreateRsvpRequestValidator : AbstractValidator<CreateRsvpRequest>
         RuleFor(x => x.HoneypotField)
             .Empty()
             .WithMessage("Submission rejected.");
+
+        RuleFor(x => x.Locale)
+            .Must(SupportedLocales.IsSupported)
+            .When(x => x.Locale is not null)
+            .WithMessage("Locale must be one of: en, pt, es.");
     }
 }
