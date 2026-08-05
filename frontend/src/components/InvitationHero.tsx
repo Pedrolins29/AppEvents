@@ -12,6 +12,7 @@ export interface ThemeStyle {
   heading: string;
   body: string;
   accent: string;
+  gold?: string; // Optional wax seal color (defaults to accent if not provided)
   fontClassName: string;
   fontStyle: "italic" | "normal";
 }
@@ -23,6 +24,7 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
     heading: "#F3EDE0",
     body: "rgba(243,237,224,0.65)",
     accent: "#C9A24B",
+    gold: "#D4AF37",
     fontClassName: playfair.className,
     fontStyle: "italic",
   },
@@ -32,6 +34,7 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
     heading: "#16130F",
     body: "rgba(22,19,15,0.6)",
     accent: "#9C8A76",
+    gold: "#C5A572",
     fontClassName: "",
     fontStyle: "normal",
   },
@@ -41,6 +44,7 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
     heading: "#4A2E28",
     body: "rgba(74,46,40,0.65)",
     accent: "#C97B63",
+    gold: "#D4AF37",
     fontClassName: cormorant.className,
     fontStyle: "italic",
   },
@@ -50,6 +54,7 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
     heading: "#FFFFFF",
     body: "rgba(255,255,255,0.6)",
     accent: "#FF6B4A",
+    gold: "#FFD700",
     fontClassName: spaceGrotesk.className,
     fontStyle: "normal",
   },

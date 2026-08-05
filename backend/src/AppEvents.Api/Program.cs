@@ -41,10 +41,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Vercel deploys (and any future preview/production frontend origin) need to be addable via
-// config without a code change — WithOrigins takes params string[], so a comma-separated list
-// covers that. Falls back to the older singular key, then a hardcoded local dev default, so no
-// existing environment's config needs to change just because this became plural.
+// Multiple frontend origins (preview/production deployments) can be configured via
+// Cors:AllowedOrigins as a comma-separated list. Falls back to the older singular key,
+// then a hardcoded local dev default, so no existing environment's config needs to change.
 static string[] ResolveAllowedOrigins(IConfiguration configuration)
 {
     var plural = configuration["Cors:AllowedOrigins"];

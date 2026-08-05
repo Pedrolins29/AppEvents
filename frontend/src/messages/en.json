@@ -343,7 +343,13 @@
     },
     "dressCode": "Dress code",
     "metadataFallback": "You're invited — {type} on {date}.",
-    "notFoundTitle": "Invitation not found"
+    "notFoundTitle": "Invitation not found",
+    "openInMaps": "Open in maps",
+    "message": "Message",
+    "contactViaWhatsApp": "Message on WhatsApp",
+    "viewDressCode": "View dress code",
+    "confirmAttendance": "Confirm attendance",
+    "interactWithUs": "Interact with the invitation"
   },
   "landing": {
     "hero": {
@@ -647,7 +653,48 @@
             "question": "Can I see who has confirmed?",
             "answer": "Yes. You track the guest list in real time and can send email or WhatsApp reminders to anyone who has not responded."
           }
-        ]
+        ],
+        "plans": {
+          "formHeading": "Create your account to save",
+          "close": "Close",
+          "submitting": "Sending...",
+          "fullNameLabel": "Full name",
+          "emailLabel": "Email",
+          "passwordLabel": "Password",
+          "submitError": "We couldn't create your account. Please try again.",
+          "emailInUseError": "This email already has an account. Log in to continue.",
+          "essencial": {
+            "title": "Essential Invitation",
+            "price": "$49.90",
+            "priceNote": "One-time payment",
+            "features": [
+              "A complete interactive invitation, right on the guest's phone",
+              "RSVP confirmations with a self-updating guest list",
+              "Location map and live countdown",
+              "Ceremony and reception timeline",
+              "A photo gallery of the couple"
+            ],
+            "cta": "Choose Essential"
+          },
+          "premium": {
+            "badge": "Recommended",
+            "title": "Premium Invitation",
+            "price": "$89.90",
+            "priceNote": "Just +$40.00 · one-time payment",
+            "features": [
+              "Everything in the Essential Invitation",
+              "Early access to upcoming features as they ship (fee-free gift list, automatic WhatsApp reminders)",
+              "Priority email support"
+            ],
+            "founderNote": "You help fund AppEvents' development and get early access to every new feature.",
+            "cta": "Save my Premium invitation →"
+          },
+          "freeLink": "I'd rather continue for free for now",
+          "securityNote": "🔒 Your data is safe. Your draft has already been saved automatically.",
+          "trustGuarantee": "🛡️ 7-day unconditional guarantee",
+          "trustInstant": "⚡ Access unlocked immediately",
+          "trustSsl": "🔒 Secure checkout (SSL)"
+        }
       },
       "Birthday": {
         "metaTitle": "Digital Birthday Invitation | AppEvents",

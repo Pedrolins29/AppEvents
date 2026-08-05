@@ -343,7 +343,13 @@
     },
     "dressCode": "Traje",
     "metadataFallback": "Você está convidado — {type} em {date}.",
-    "notFoundTitle": "Convite não encontrado"
+    "notFoundTitle": "Convite não encontrado",
+    "openInMaps": "Abrir no mapa",
+    "message": "Mensagem",
+    "contactViaWhatsApp": "Falar pelo WhatsApp",
+    "viewDressCode": "Ver traje",
+    "confirmAttendance": "Confirmar presença",
+    "interactWithUs": "Interaja com o convite"
   },
   "landing": {
     "hero": {
@@ -647,7 +653,48 @@
             "question": "Consigo saber quem já confirmou presença?",
             "answer": "Sim. Você acompanha a lista de convidados em tempo real e pode mandar lembretes por e-mail ou WhatsApp para quem ainda não respondeu."
           }
-        ]
+        ],
+        "plans": {
+          "formHeading": "Crie sua conta para salvar",
+          "close": "Fechar",
+          "submitting": "Enviando...",
+          "fullNameLabel": "Nome completo",
+          "emailLabel": "E-mail",
+          "passwordLabel": "Senha",
+          "submitError": "Não foi possível criar sua conta. Tente novamente.",
+          "emailInUseError": "Este e-mail já tem uma conta. Faça login para continuar.",
+          "essencial": {
+            "title": "Convite Essencial",
+            "price": "R$ 49,90",
+            "priceNote": "Pagamento único",
+            "features": [
+              "Convite interativo completo, direto no celular do convidado",
+              "Confirmação de presença (RSVP) com lista atualizada sozinha",
+              "Mapa do local e contagem regressiva ao vivo",
+              "Cronograma da cerimônia e recepção",
+              "Galeria de fotos do casal"
+            ],
+            "cta": "Escolher Essencial"
+          },
+          "premium": {
+            "badge": "Recomendado",
+            "title": "Convite Premium",
+            "price": "R$ 89,90",
+            "priceNote": "Apenas +R$ 40,00 · pagamento único",
+            "features": [
+              "Tudo do Convite Essencial",
+              "Acesso antecipado às próximas novidades assim que saem do forno (lista de presentes Pix, lembrete automático no WhatsApp)",
+              "Suporte prioritário por e-mail"
+            ],
+            "founderNote": "Você ajuda a bancar o desenvolvimento do AppEvents e garante acesso antecipado a cada novidade.",
+            "cta": "Salvar meu convite Premium →"
+          },
+          "freeLink": "Prefiro continuar grátis por enquanto",
+          "securityNote": "🔒 Seus dados estão seguros. Seu rascunho já foi salvo automaticamente.",
+          "trustGuarantee": "🛡️ 7 dias de garantia incondicional",
+          "trustInstant": "⚡ Acesso liberado imediatamente",
+          "trustSsl": "🔒 Checkout seguro (SSL)"
+        }
       },
       "Birthday": {
         "metaTitle": "Convite de Aniversário Digital | AppEvents",

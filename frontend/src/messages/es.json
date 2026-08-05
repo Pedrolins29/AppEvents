@@ -343,7 +343,13 @@
     },
     "dressCode": "Código de vestimenta",
     "metadataFallback": "Estás invitado — {type} el {date}.",
-    "notFoundTitle": "Invitación no encontrada"
+    "notFoundTitle": "Invitación no encontrada",
+    "openInMaps": "Abrir en el mapa",
+    "message": "Mensaje",
+    "contactViaWhatsApp": "Hablar por WhatsApp",
+    "viewDressCode": "Ver código de vestimenta",
+    "confirmAttendance": "Confirmar asistencia",
+    "interactWithUs": "Interactúa con la invitación"
   },
   "landing": {
     "hero": {
@@ -647,7 +653,48 @@
             "question": "¿Puedo saber quién ya confirmó?",
             "answer": "Sí. Puedes ver la lista de invitados en tiempo real y enviar recordatorios por correo o WhatsApp a quien no haya respondido."
           }
-        ]
+        ],
+        "plans": {
+          "formHeading": "Crea tu cuenta para guardar",
+          "close": "Cerrar",
+          "submitting": "Enviando...",
+          "fullNameLabel": "Nombre completo",
+          "emailLabel": "Correo",
+          "passwordLabel": "Contraseña",
+          "submitError": "No pudimos crear tu cuenta. Inténtalo de nuevo.",
+          "emailInUseError": "Este correo ya tiene una cuenta. Inicia sesión para continuar.",
+          "essencial": {
+            "title": "Invitación Esencial",
+            "price": "$49,90",
+            "priceNote": "Pago único",
+            "features": [
+              "Invitación interactiva completa, directo en el celular del invitado",
+              "Confirmaciones (RSVP) con lista que se actualiza sola",
+              "Mapa del lugar y cuenta regresiva en vivo",
+              "Cronograma de ceremonia y recepción",
+              "Galería de fotos de la pareja"
+            ],
+            "cta": "Elegir Esencial"
+          },
+          "premium": {
+            "badge": "Recomendado",
+            "title": "Invitación Premium",
+            "price": "$89,90",
+            "priceNote": "Solo +$40,00 · pago único",
+            "features": [
+              "Todo lo de la Invitación Esencial",
+              "Acceso anticipado a las próximas novedades en cuanto salgan (lista de regalos sin comisión, recordatorio automático por WhatsApp)",
+              "Soporte prioritario por correo"
+            ],
+            "founderNote": "Ayudas a financiar el desarrollo de AppEvents y obtienes acceso anticipado a cada novedad.",
+            "cta": "Guardar mi invitación Premium →"
+          },
+          "freeLink": "Prefiero continuar gratis por ahora",
+          "securityNote": "🔒 Tus datos están seguros. Tu borrador ya se guardó automáticamente.",
+          "trustGuarantee": "🛡️ 7 días de garantía incondicional",
+          "trustInstant": "⚡ Acceso liberado de inmediato",
+          "trustSsl": "🔒 Pago seguro (SSL)"
+        }
       },
       "Birthday": {
         "metaTitle": "Invitación de Cumpleaños Digital | AppEvents",

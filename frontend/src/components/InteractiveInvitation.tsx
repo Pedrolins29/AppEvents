@@ -4,11 +4,19 @@ import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { DateReveal } from "@/components/DateReveal";
 import { THEME_STYLES } from "@/components/InvitationHero";
+import { InvitationPeelBook } from "@/components/InvitationPeelBook";
+import {
+  InteractiveActionGrid,
+  createLocationAction,
+  createWhatsAppAction,
+  createDressCodeAction,
+  createRsvpAction,
+} from "@/components/InteractiveActionGrid";
 import { formatEventDate } from "@/lib/formatEventDate";
 
-// The hero's interactive demo invitation — a real, user-scrollable sample of what AppEvents
-// produces (matrimonio.pro-style). Client component: content comes from the `landing.demo`
-// message namespace so pt/en/es all read naturally; the countdown ticks live.
+// The hero's interactive demo invitation — page-based navigation (drag the corner to peel,
+// PeelBack-style) instead of continuous scroll. Each "page" reveals a section of the invitation.
+// Client component: content from `landing.demo` namespace, countdown ticks live.
 const THEME = THEME_STYLES.floral;
 const DATE_ISO = "2026-09-14";
 const COUPLE = "Isabella & Marco";
@@ -39,6 +47,226 @@ function useCountdown(iso: string) {
   return p;
 }
 
+// Page wrapper: fills whatever slot InvitationPeelBook gives it, scrolls internally if content
+// runs long (a fixed "page" can't grow the way a normal flowing section could).
+function Page({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="relative flex h-full w-full flex-col overflow-y-auto rounded-[1.75rem]"
+      style={{ backgroundColor: THEME.pageBg, color: THEME.body }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function CoverPage({ coverImage, dateLabel }: { coverImage: string; dateLabel: string }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden rounded-[1.75rem]">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={coverImage}
+        alt=""
+        className="h-full w-full object-cover"
+        style={{ filter: "grayscale(30%) brightness(0.85)" }}
+      />
+      <div
+        className="absolute bottom-8 left-0 right-0 text-center text-sm tracking-widest"
+        style={{ color: "rgba(255,255,255,0.9)" }}
+      >
+        {dateLabel}
+      </div>
+    </div>
+  );
+}
+
+function NameDatePage({
+  dateLabel,
+  cdLabels,
+  cdValues,
+  eventTypeLabel,
+  t,
+}: {
+  dateLabel: string;
+  cdLabels: string[];
+  cdValues: number[];
+  eventTypeLabel: string;
+  t: (key: string) => string;
+}) {
+  return (
+    <Page>
+      <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-6">
+        <span className="text-[8px] font-medium uppercase tracking-[0.35em]" style={{ color: THEME.accent }}>
+          {eventTypeLabel}
+        </span>
+
+        <h3
+          className={THEME.fontClassName}
+          style={{ color: THEME.heading, fontStyle: THEME.fontStyle, fontSize: "1.5rem", lineHeight: 1.1 }}
+        >
+          {COUPLE}
+        </h3>
+
+        <p className="text-center text-[10px]" style={{ color: THEME.body }}>
+          {t("invitedLine")}
+        </p>
+
+        <p className="text-[9px]" style={{ color: THEME.accent }}>
+          {dateLabel}
+        </p>
+
+        <DateReveal label={t("revealDate")} coverBg={THEME.sectionBg} accent={THEME.accent}>
+          <div className="flex items-center justify-center gap-2" aria-label={dateLabel}>
+            {cdValues.map((value: number, i: number) => (
+              <div
+                key={i}
+                className="flex min-w-[32px] flex-col items-center rounded-md py-1"
+                style={{ backgroundColor: THEME.sectionBg }}
+              >
+                <span className="text-[11px] font-semibold tabular-nums" style={{ color: THEME.heading }}>
+                  {String(value).padStart(2, "0")}
+                </span>
+                <span className="mt-0.5 text-[7px] uppercase tracking-[0.15em]" style={{ color: THEME.body }}>
+                  {cdLabels[i]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </DateReveal>
+      </div>
+    </Page>
+  );
+}
+
+function TimelinePage({ timeline, t }: { timeline: { time: string; label: string }[]; t: (key: string) => string }) {
+  return (
+    <Page>
+      <div className="flex flex-col gap-3 px-5 py-6">
+        <h4
+          className={`${THEME.fontClassName} text-center text-[1rem]`}
+          style={{ color: THEME.heading, fontStyle: THEME.fontStyle }}
+        >
+          {t("timelineHeading")}
+        </h4>
+
+        <ol className="relative ml-3 flex flex-col gap-3 border-l" style={{ borderColor: `${THEME.accent}55` }}>
+          {timeline.map((item: { time: string; label: string }) => (
+            <li key={item.time} className="relative pl-4">
+              <span
+                className="absolute -left-[5px] top-1 h-2 w-2 rotate-45"
+                style={{ backgroundColor: THEME.accent }}
+                aria-hidden
+              />
+              <span className="block text-[9px] font-semibold tabular-nums" style={{ color: THEME.heading }}>
+                {item.time}
+              </span>
+              <span className="block text-[8px]" style={{ color: THEME.body }}>
+                {item.label}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </Page>
+  );
+}
+
+function LocationsPage({
+  locations,
+  t,
+}: {
+  locations: { label: string; name: string; address: string }[];
+  t: (key: string) => string;
+}) {
+  return (
+    <Page>
+      <div className="flex flex-col gap-2.5 px-5 py-6">
+        <h4
+          className={`${THEME.fontClassName} text-center text-[1rem]`}
+          style={{ color: THEME.heading, fontStyle: THEME.fontStyle }}
+        >
+          {t("locationsHeading")}
+        </h4>
+
+        {locations.map((loc: { label: string; name: string; address: string }) => (
+          <div
+            key={loc.label}
+            className="flex flex-col items-center gap-1 rounded-lg px-3 py-2.5 text-center"
+            style={{ backgroundColor: THEME.sectionBg }}
+          >
+            <span className="text-[7px] font-medium uppercase tracking-[0.25em]" style={{ color: THEME.accent }}>
+              {loc.label}
+            </span>
+            <span className="text-[10px] font-medium" style={{ color: THEME.heading }}>
+              {loc.name}
+            </span>
+            <span className="text-[8px]" style={{ color: THEME.body }}>
+              {loc.address}
+            </span>
+            <a
+              href={mapsUrl(`${loc.name}, ${loc.address}`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 rounded-full px-2.5 py-0.5 text-[7px] font-medium uppercase tracking-[0.15em]"
+              style={{ backgroundColor: THEME.accent, color: THEME.pageBg }}
+            >
+              {t("howToGetThere")}
+            </a>
+          </div>
+        ))}
+      </div>
+    </Page>
+  );
+}
+
+function GalleryPage({ photos, t }: { photos: string[]; t: (key: string) => string }) {
+  return (
+    <Page>
+      <div className="flex flex-1 flex-col items-center justify-center gap-2 px-4 py-6">
+        <h4
+          className={`${THEME.fontClassName} text-center text-[1rem]`}
+          style={{ color: THEME.heading, fontStyle: THEME.fontStyle }}
+        >
+          {t("photosHeading")}
+        </h4>
+        <span className="text-[7px] uppercase tracking-[0.25em]" style={{ color: THEME.accent }}>
+          {t("swipe")} →
+        </span>
+        <div className="photo-strip flex w-full snap-x snap-mandatory gap-2 overflow-x-auto">
+          {photos.map((src: string) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={src}
+              src={src}
+              alt=""
+              loading="lazy"
+              className="h-20 w-28 shrink-0 snap-center rounded-lg object-cover"
+            />
+          ))}
+        </div>
+      </div>
+    </Page>
+  );
+}
+
+// Quick-actions page — only real, shipped capabilities (location, WhatsApp nudge, dress code,
+// RSVP). Gift registry and calendar export don't exist in the product yet, so they're excluded
+// rather than shown as clickable actions that go nowhere.
+function InteractiveActionsPage({ inv }: { inv: (key: string) => string }) {
+  const actions = [
+    createLocationAction(inv),
+    createWhatsAppAction(inv),
+    createDressCodeAction(inv),
+    createRsvpAction(inv),
+  ];
+
+  return (
+    <Page>
+      <InteractiveActionGrid actions={actions} accentColor={THEME.accent} t={inv} />
+    </Page>
+  );
+}
+
 export function InteractiveInvitation() {
   const locale = useLocale();
   const t = useTranslations("landing.demo");
@@ -56,14 +284,21 @@ export function InteractiveInvitation() {
   const cdLabels = [c("days"), c("hours"), c("min"), c("sec")];
   const cdValues = cd ? [cd.d, cd.h, cd.m, cd.s] : [0, 0, 0, 0];
 
-  const heading = (text: string) => (
-    <h4
-      className={`${THEME.fontClassName} text-center text-[1.05rem]`}
-      style={{ color: THEME.heading, fontStyle: THEME.fontStyle }}
-    >
-      {text}
-    </h4>
-  );
+  const pages = [
+    <CoverPage key="cover" dateLabel={dateLabel} coverImage={COVER} />,
+    <NameDatePage
+      key="namedate"
+      dateLabel={dateLabel}
+      cdLabels={cdLabels}
+      cdValues={cdValues}
+      eventTypeLabel={eventTypes("Wedding")}
+      t={t}
+    />,
+    <TimelinePage key="timeline" timeline={timeline} t={t} />,
+    <LocationsPage key="locations" locations={locations} t={t} />,
+    <GalleryPage key="gallery" photos={PHOTOS} t={t} />,
+    <InteractiveActionsPage key="actions" inv={inv} />,
+  ];
 
   return (
     <div
@@ -75,181 +310,8 @@ export function InteractiveInvitation() {
         style={{ backgroundColor: "#1A1611" }}
         aria-hidden
       />
-      <div
-        className="invitation-scroll relative h-full w-full overflow-y-auto rounded-[1.75rem]"
-        style={{ backgroundColor: THEME.pageBg, color: THEME.body }}
-      >
-        {/* Cover photo */}
-        <div className="relative h-40 w-full overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={COVER} alt="" loading="lazy" className="h-full w-full object-cover" />
-          <div
-            className="absolute inset-0"
-            style={{ background: `linear-gradient(to bottom, transparent 45%, ${THEME.pageBg})` }}
-          />
-        </div>
 
-        <div className="flex flex-col gap-6 px-5 pb-10 pt-2">
-          {/* Names */}
-          <div className="flex flex-col items-center gap-1 text-center">
-            <span className="text-[8px] font-medium uppercase tracking-[0.35em]" style={{ color: THEME.accent }}>
-              {eventTypes("Wedding")}
-            </span>
-            <h3
-              className={THEME.fontClassName}
-              style={{ color: THEME.heading, fontStyle: THEME.fontStyle, fontSize: "1.6rem", lineHeight: 1.1 }}
-            >
-              {COUPLE}
-            </h3>
-            <p className="text-[11px]" style={{ color: THEME.body }}>
-              {t("invitedLine")}
-            </p>
-            <p className="text-[10px]" style={{ color: THEME.accent }}>
-              {dateLabel}
-            </p>
-          </div>
-
-          {/* Countdown (live) — revealed with a playful tap, like the reference's "raspe para
-              revelar a data". */}
-          <DateReveal label={t("revealDate")} coverBg={THEME.sectionBg} accent={THEME.accent}>
-            <div className="flex items-center justify-center gap-2.5" aria-label={dateLabel}>
-              {cdValues.map((value, i) => (
-                <div
-                  key={i}
-                  className="flex min-w-[38px] flex-col items-center rounded-md py-1.5"
-                  style={{ backgroundColor: THEME.sectionBg }}
-                >
-                  <span className="text-sm font-semibold tabular-nums" style={{ color: THEME.heading }}>
-                    {String(value).padStart(2, "0")}
-                  </span>
-                  <span className="mt-0.5 text-[7px] uppercase tracking-[0.15em]" style={{ color: THEME.body }}>
-                    {cdLabels[i]}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </DateReveal>
-
-          {/* Letter */}
-          <section className="rounded-lg px-4 py-4" style={{ backgroundColor: THEME.sectionBg }}>
-            <p
-              className={`${THEME.fontClassName} mb-2 text-center text-[0.95rem]`}
-              style={{ color: THEME.heading, fontStyle: THEME.fontStyle }}
-            >
-              {t("letterHeading")}
-            </p>
-            <p className="text-center text-[10px] leading-relaxed" style={{ color: THEME.body }}>
-              {t("letter")}
-            </p>
-          </section>
-
-          {/* Locations */}
-          <div className="flex flex-col gap-3">
-            {heading(t("locationsHeading"))}
-            {locations.map((loc) => (
-              <div
-                key={loc.label}
-                className="flex flex-col items-center gap-1 rounded-lg px-4 py-3 text-center"
-                style={{ backgroundColor: THEME.sectionBg }}
-              >
-                <span className="text-[7px] font-medium uppercase tracking-[0.25em]" style={{ color: THEME.accent }}>
-                  {loc.label}
-                </span>
-                <span className="text-[11px] font-medium" style={{ color: THEME.heading }}>
-                  {loc.name}
-                </span>
-                <span className="text-[9px]" style={{ color: THEME.body }}>
-                  {loc.address}
-                </span>
-                <a
-                  href={mapsUrl(`${loc.name}, ${loc.address}`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-1 rounded-full px-3 py-1 text-[8px] font-medium uppercase tracking-[0.15em]"
-                  style={{ backgroundColor: THEME.accent, color: THEME.pageBg }}
-                >
-                  {t("howToGetThere")}
-                </a>
-              </div>
-            ))}
-          </div>
-
-          {/* Timeline */}
-          <div className="flex flex-col gap-3">
-            {heading(t("timelineHeading"))}
-            <ol className="relative ml-3 flex flex-col gap-3 border-l" style={{ borderColor: `${THEME.accent}55` }}>
-              {timeline.map((item) => (
-                <li key={item.time} className="relative pl-4">
-                  <span
-                    className="absolute -left-[5px] top-1 h-2 w-2 rotate-45"
-                    style={{ backgroundColor: THEME.accent }}
-                    aria-hidden
-                  />
-                  <span className="block text-[10px] font-semibold tabular-nums" style={{ color: THEME.heading }}>
-                    {item.time}
-                  </span>
-                  <span className="block text-[9px]" style={{ color: THEME.body }}>
-                    {item.label}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          {/* Photo strip */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-center gap-2">
-              {heading(t("photosHeading"))}
-            </div>
-            <span className="text-center text-[8px] uppercase tracking-[0.25em]" style={{ color: THEME.accent }}>
-              {t("swipe")} →
-            </span>
-            <div className="photo-strip -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1">
-              {PHOTOS.map((src) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={src}
-                  src={src}
-                  alt=""
-                  loading="lazy"
-                  className="h-24 w-32 shrink-0 snap-center rounded-md object-cover"
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Dress code */}
-          <div className="flex flex-col items-center gap-1 text-center">
-            <span className="text-[8px] font-medium uppercase tracking-[0.25em]" style={{ color: THEME.accent }}>
-              {inv("dressCode")}
-            </span>
-            <span className="text-[11px]" style={{ color: THEME.heading }}>
-              {t("dressCodeValue")}
-            </span>
-          </div>
-
-          {/* RSVP */}
-          <div className="flex flex-col items-center gap-2.5 text-center">
-            <span className="text-[9px] font-medium uppercase tracking-[0.3em]" style={{ color: THEME.accent }}>
-              {inv("rsvp.heading")}
-            </span>
-            <div className="flex gap-2">
-              <span
-                className="rounded-full px-3.5 py-1.5 text-[9px] font-medium"
-                style={{ backgroundColor: THEME.accent, color: THEME.pageBg }}
-              >
-                {inv("rsvp.attending")}
-              </span>
-              <span
-                className="rounded-full border px-3.5 py-1.5 text-[9px] font-medium"
-                style={{ borderColor: THEME.accent, color: THEME.heading }}
-              >
-                {inv("rsvp.notAttending")}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <InvitationPeelBook pages={pages} accentColor={THEME.gold ?? THEME.accent} pullLabel="PUXE AQUI" />
     </div>
   );
 }

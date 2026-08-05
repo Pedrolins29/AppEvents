@@ -35,3 +35,41 @@ export function getCheckoutUrl(eventType: EventType, userId: string, eventId: st
   const separator = base.includes("?") ? "&" : "?";
   return `${base}${separator}appeventsRef=${encodeURIComponent(`${userId}.${eventId}`)}`;
 }
+
+export type WeddingPlanTier = "Essencial" | "Premium";
+
+// Sprint 23: the soft-gate/plan modal fires right after registration, before the visitor's
+// InstantPreview draft has been claimed into a real Event (that only happens on first login — see
+// instantPreviewDraft.ts) — so there's no eventId yet to correlate with. Order.EventId is already
+// nullable for exactly this case; only the new user's id goes in the reference. Wedding-only for
+// now (see Sprints/sprint23.md) — other event types get their own env vars + entries here once
+// modeled, without touching the modal itself.
+function weddingPlanEnvUrlFor(tier: WeddingPlanTier): string | undefined {
+  switch (tier) {
+    case "Essencial":
+      return process.env.NEXT_PUBLIC_LASTLINK_CHECKOUT_WEDDING_ESSENCIAL;
+    case "Premium":
+      return process.env.NEXT_PUBLIC_LASTLINK_CHECKOUT_WEDDING_PREMIUM;
+  }
+}
+
+export function getWeddingPlanCheckoutUrl(tier: WeddingPlanTier, userId: string): string | null {
+  const base = weddingPlanEnvUrlFor(tier);
+  if (!base) {
+    return null;
+  }
+
+  const separator = base.includes("?") ? "&" : "?";
+  return `${base}${separator}appeventsRef=${encodeURIComponent(userId)}`;
+}
+
+export function isWeddingPlanConfigured(tier: WeddingPlanTier): boolean {
+  return Boolean(weddingPlanEnvUrlFor(tier));
+}
+
+// Whether the Wedding soft-gate/plan modal has anywhere real to send a visitor — same
+// invisible-until-configured convention as UpsellBanner. False (both env vars unset) means
+// InstantPreview's CTA keeps its current plain-register behavior instead of showing the modal.
+export function hasWeddingPlansConfigured(): boolean {
+  return isWeddingPlanConfigured("Essencial") || isWeddingPlanConfigured("Premium");
+}

@@ -3,7 +3,9 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 import { InvitationPhoneMockupView, type MockupLabels } from "@/components/InvitationPhoneMockupView";
+import { SoftGateModal } from "@/components/SoftGateModal";
 import { TemplateCard } from "@/components/TemplateCard";
+import { hasWeddingPlansConfigured } from "@/lib/checkoutUrls";
 import { formatEventDate } from "@/lib/formatEventDate";
 import { stageInstantPreviewDraft } from "@/lib/instantPreviewDraft";
 import { mapsLinks } from "@/lib/mapsLinks";
@@ -44,7 +46,13 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
   const [address, setAddress] = useState("");
   const [photos, setPhotos] = useState<StagedPhoto[]>([]);
   const [hasFiredLead, setHasFiredLead] = useState(false);
+  const [showPlansModal, setShowPlansModal] = useState(false);
   const photosRef = useRef<StagedPhoto[]>([]);
+
+  // Sprint 23: the soft-gate/plan modal only exists for Wedding drafts, and only once a real
+  // checkout link is configured for at least one tier (see checkoutUrls.ts) — every other event
+  // type, and Wedding itself before any Lastlink link is set up, keeps today's plain-register CTA.
+  const showWeddingPlansGate = eventType === "Wedding" && hasWeddingPlansConfigured();
 
   useEffect(() => {
     photosRef.current = photos;
@@ -96,6 +104,7 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
   }
 
   return (
+    <>
     <div className="mx-auto grid max-w-4xl gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
       <div className="flex flex-col gap-4">
         <div>
@@ -244,13 +253,26 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
           )}
         </div>
 
-        <a
-          href="/register"
-          onClick={handleCreateClick}
-          className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
-        >
-          {t("ctaCreate")}
-        </a>
+        {showWeddingPlansGate ? (
+          <button
+            type="button"
+            onClick={() => {
+              handleCreateClick();
+              setShowPlansModal(true);
+            }}
+            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+          >
+            {t("ctaCreate")}
+          </button>
+        ) : (
+          <a
+            href="/register"
+            onClick={handleCreateClick}
+            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+          >
+            {t("ctaCreate")}
+          </a>
+        )}
         <p className="text-xs text-[var(--muted-foreground)]">{t("disclaimer")}</p>
       </div>
 
@@ -265,5 +287,9 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
         labels={labels}
       />
     </div>
+    {showWeddingPlansGate && (
+      <SoftGateModal isOpen={showPlansModal} onClose={() => setShowPlansModal(false)} />
+    )}
+    </>
   );
 }

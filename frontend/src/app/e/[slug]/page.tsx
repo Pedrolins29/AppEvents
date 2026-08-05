@@ -10,7 +10,7 @@ import { publicEventsApi } from "@/lib/publicEventsApi";
 import { getEventTypeLabels } from "@/types/event";
 
 // ISR: the public invitation page is guest-facing and cacheable — a burst of guests opening the
-// same link on event day should hit Vercel's edge cache, not the .NET API, on every visit. The
+// same link on event day should hit the CDN edge cache, not the .NET API, on every visit. The
 // per-guest personal-link prefill (?g=token) can't be baked into this shared cache, so it's fetched
 // client-side instead (see RsvpForm.tsx).
 export const revalidate = 60;

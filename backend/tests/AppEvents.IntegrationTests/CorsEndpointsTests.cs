@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 namespace AppEvents.IntegrationTests;
 
 // Covers the Cors:AllowedOrigins (plural, comma-separated) config path added for multi-origin
-// support (e.g. local dev + a future Vercel domain), plus the fallback chain down to the older
+// support (e.g. local dev + production domains), plus the fallback chain down to the older
 // singular Cors:AllowedOrigin key and finally the hardcoded localhost default - see
 // ResolveAllowedOrigins in Program.cs. Exercised via a real preflight request against the actual
 // CORS middleware rather than reflecting into the local function directly.
@@ -33,13 +33,13 @@ public class CorsEndpointsTests : IClassFixture<AppEventsWebApplicationFactory>
         using var factory = _factory.WithWebHostBuilder(builder =>
             builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
             {
-                ["Cors:AllowedOrigins"] = "https://staging.example.com,https://appevents.vercel.app",
+                ["Cors:AllowedOrigins"] = "https://staging.example.com,https://app.example.com",
             })));
         var client = factory.CreateClient();
 
-        var response = await client.SendAsync(PreflightRequest("https://appevents.vercel.app"));
+        var response = await client.SendAsync(PreflightRequest("https://app.example.com"));
 
-        response.Headers.GetValues("Access-Control-Allow-Origin").Should().ContainSingle("https://appevents.vercel.app");
+        response.Headers.GetValues("Access-Control-Allow-Origin").Should().ContainSingle("https://app.example.com");
     }
 
     [Fact]
