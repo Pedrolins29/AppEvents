@@ -6,8 +6,6 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_dev_password}
-      # Only the first (default) database is created from POSTGRES_DB - appevents_test is
-      # created by the init script below, since the app needs both (dev + integration tests).
       POSTGRES_DB: appevents_dev
     ports:
       - "5432:5432"
@@ -25,8 +23,28 @@ services:
     container_name: appevents-mailpit
     restart: unless-stopped
     ports:
-      - "1025:1025" # SMTP - matches Email:Host/Port in appsettings.Development.json, no auth needed
-      - "8025:8025" # Web UI - open http://localhost:8025 to see emails sent by the app
+      - "1025:1025" # SMTP - matches Email:Host/Port in appsettings.Development.json
+      - "8025:8025" # Web UI - open http://localhost:8025 to see emails
+
+  omniroute:
+    image: diegosouzapw/omniroute:latest
+    container_name: appevents-omniroute
+    restart: unless-stopped
+    ports:
+      - "20128:20128" # OmniRoute API (delivery routing optimization)
+    volumes:
+      - omniroute_data:/app/data # Persistent data for routes, optimization cache
+    environment:
+      # Optional: Add env vars if OmniRoute image supports them
+      NODE_ENV: development
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:20128/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - postgres # OmniRoute can use PostgreSQL for persistence if needed
 
 volumes:
   appevents_pgdata:
+  omniroute_data:
