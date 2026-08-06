@@ -1,5 +1,4 @@
 import { Cormorant_Garamond, Playfair_Display, Space_Grotesk } from "next/font/google";
-import type { ReactNode } from "react";
 import type { ThemeKey } from "@/types/template";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600"], style: ["italic", "normal"] });
@@ -97,50 +96,11 @@ export function ThemeMotif({ theme, accentColor }: { theme: ThemeKey; accentColo
   return <span className="h-px w-10" style={{ backgroundColor: accentColor }} aria-hidden />;
 }
 
-interface InvitationHeroProps {
-  name: string;
-  eventTypeLabel: string;
-  formattedDate: string;
-  coverImageUrl: string | null;
-  theme: ThemeStyle;
-  children?: ReactNode;
-}
-
-export function InvitationHero({ name, eventTypeLabel, formattedDate, coverImageUrl, theme, children }: InvitationHeroProps) {
-  return (
-    <section className="relative flex min-h-[75vh] sm:min-h-[85vh] flex-col items-center justify-center overflow-hidden px-6 py-24 text-center">
-      {coverImageUrl ? (
-        <>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={coverImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0" style={{ backgroundColor: theme.pageBg, opacity: 0.55 }} />
-        </>
-      ) : (
-        <div className="absolute inset-0" style={{ backgroundColor: theme.pageBg }} />
-      )}
-      <div className="relative flex flex-col items-center gap-5">
-        <span
-          className="text-xs font-medium uppercase tracking-[0.4em]"
-          style={{ color: theme.accent }}
-        >
-          {eventTypeLabel}
-        </span>
-        <h1
-          className={theme.fontClassName}
-          style={{
-            color: theme.heading,
-            fontStyle: theme.fontStyle,
-            fontSize: "clamp(2.25rem, 6vw, 4rem)",
-            lineHeight: 1.1,
-          }}
-        >
-          {name}
-        </h1>
-        <p className="text-sm tracking-wide" style={{ color: theme.body }}>
-          {formattedDate}
-        </p>
-        {children && <div className="mt-6">{children}</div>}
-      </div>
-    </section>
-  );
-}
+// The <InvitationHero> component itself lives in InvitationHeroContent.tsx (a Client Component —
+// its GSAP entrance sequence needs refs/effects), imported directly from there by its two real
+// callers. It is NOT re-exported from this file: this file stays a plain server-safe module so
+// THEME_STYLES/DEFAULT_THEME_STYLE/ThemeMotif remain importable from contexts that can't cross a
+// "use client" boundary, e.g. app/e/[slug]/opengraph-image.tsx (a next/og ImageResponse route,
+// not a normal React render tree) and the ISR page at app/e/[slug]/page.tsx — and re-exporting
+// would also create a needless import cycle (InvitationHeroContent.tsx already imports ThemeMotif
+// from here).

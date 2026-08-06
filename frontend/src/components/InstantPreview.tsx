@@ -203,7 +203,7 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
                 type="button"
                 onClick={() => setTheme(key)}
                 aria-pressed={theme === key}
-                className="overflow-hidden rounded-sm transition-opacity duration-150"
+                className="overflow-hidden rounded-sm transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
                 style={{
                   outline: theme === key ? "2px solid var(--pinewood)" : "1px solid transparent",
                   outlineOffset: 2,
@@ -260,7 +260,7 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
               handleCreateClick();
               setShowPlansModal(true);
             }}
-            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
           >
             {t("ctaCreate")}
           </button>
@@ -268,7 +268,7 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
           <a
             href="/register"
             onClick={handleCreateClick}
-            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+            className="mt-2 inline-block rounded-full bg-[var(--gold)] px-6 py-3 text-center text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
           >
             {t("ctaCreate")}
           </a>

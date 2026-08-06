@@ -23,6 +23,12 @@
   --border: #e6dfd0;
   /* Hairline for the dark Ink bands — a translucent champagne. */
   --border-invert: rgba(232, 217, 188, 0.18);
+
+  /* Shared motion tokens — mirrored in src/lib/motion.ts for JS/GSAP use. */
+  --ease-premium: cubic-bezier(.22, .61, .36, 1);
+  --duration-fast: 250ms;
+  --duration-base: 400ms;
+  --duration-slow: 700ms;
 }
 
 @theme inline {

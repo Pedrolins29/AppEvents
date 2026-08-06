@@ -101,7 +101,7 @@ export function SiteHeader() {
           >
             <Link
               href="/criar-convite"
-              className="rounded-full bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition-all duration-150 hover:-translate-y-0.5 hover:shadow-md"
+              className="rounded-full bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
             >
               {t("getStarted")}
             </Link>
@@ -145,7 +145,7 @@ export function SiteHeader() {
           <Link
             href="/criar-convite"
             onClick={() => setIsMenuOpen(false)}
-            className="mt-2 rounded-full bg-[var(--gold)] px-4 py-2 text-center text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:shadow-md"
+            className="mt-2 rounded-full bg-[var(--gold)] px-4 py-2 text-center text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
           >
             {t("getStarted")}
           </Link>

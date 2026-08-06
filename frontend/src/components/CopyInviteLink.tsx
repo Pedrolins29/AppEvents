@@ -61,7 +61,7 @@ export function CopyInviteLink({ slug, eventName, variant = "full" }: CopyInvite
         <button
           type="button"
           onClick={handleCopy}
-          className="rounded-full border border-[#0F766E] px-4 py-2 text-sm font-medium text-[#0F766E] transition-colors duration-150 hover:bg-[#0F766E] hover:text-white"
+          className="rounded-full border border-[#0F766E] px-4 py-2 text-sm font-medium text-[#0F766E] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#0F766E] hover:text-white hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
         >
           {copied ? t("linkCopied") : t("copyLink")}
         </button>
@@ -70,14 +70,14 @@ export function CopyInviteLink({ slug, eventName, variant = "full" }: CopyInvite
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => fireSharedEvent("whatsapp")}
-          className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
+          className="rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#0C5C56] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
         >
           {t("whatsappShare")}
         </a>
         <button
           type="button"
           onClick={() => setShowQr((v) => !v)}
-          className="rounded-full border border-[#E2DFD3] px-4 py-2 text-sm font-medium text-[#14211D] transition-colors duration-150 hover:bg-[#F5F2EA]"
+          className="rounded-full border border-[#E2DFD3] px-4 py-2 text-sm font-medium text-[#14211D] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#F5F2EA] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
         >
           {showQr ? t("hideQrCode") : t("showQrCode")}
         </button>

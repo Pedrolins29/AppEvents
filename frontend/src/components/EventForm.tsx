@@ -242,7 +242,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
             <button
               type="button"
               onClick={() => update("templateId", null)}
-              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-colors duration-150 ${
+              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)] ${
                 values.templateId === null ? "border-[#0F766E]" : "border-transparent bg-[#F2EFE7]"
               }`}
             >
@@ -253,7 +253,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
                 type="button"
                 key={template.id}
                 onClick={() => update("templateId", template.id)}
-                className={`overflow-hidden border-2 transition-colors duration-150 ${
+                className={`overflow-hidden border-2 transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)] ${
                   values.templateId === template.id ? "border-[#0F766E]" : "border-transparent"
                 }`}
               >
@@ -267,7 +267,7 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56] disabled:opacity-50"
+        className="mt-2 rounded-full bg-[#0F766E] px-5 py-2 font-medium text-white transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#0C5C56] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] disabled:opacity-50"
       >
         {isSubmitting ? t("saving") : submitLabel}
       </button>

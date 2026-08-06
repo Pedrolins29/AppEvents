@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Countdown } from "@/components/Countdown";
-import { InvitationHero, THEME_STYLES } from "@/components/InvitationHero";
+import { THEME_STYLES } from "@/components/InvitationHero";
+import { InvitationHero } from "@/components/InvitationHeroContent";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { RsvpForm } from "@/components/RsvpForm";
 import { mapsLinks } from "@/lib/mapsLinks";
@@ -129,6 +130,7 @@ export default async function TemplatePreviewPage({ params }: PageProps) {
         formattedDate={formatEventDate(targetDate, locale)}
         coverImageUrl={sample.coverImageUrl}
         theme={theme}
+        themeKey={sampleKey}
       >
         <Countdown targetDate={targetDate} accentColor={theme.accent} textColor={theme.body} />
       </InvitationHero>

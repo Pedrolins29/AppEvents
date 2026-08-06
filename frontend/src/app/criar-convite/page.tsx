@@ -58,7 +58,7 @@ export default async function CreateInvitationHubPage() {
                 <Reveal key={type} delay={i * 0.06}>
                   <Link
                     href={`/criar-convite/${slug}`}
-                    className="group flex h-full flex-col items-center justify-center gap-2 rounded-sm border border-[var(--border)] bg-white/70 px-4 py-10 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
+                    className="group flex h-full flex-col items-center justify-center gap-2 rounded-sm border border-[var(--border)] bg-white/70 px-4 py-10 text-center transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
                   >
                     <span className="font-display text-xl text-[var(--ink)]">{eventTypeLabels[type]}</span>
                     <span className="inline-flex items-center gap-1 text-xs text-[var(--pinewood)]">
@@ -74,7 +74,7 @@ export default async function CreateInvitationHubPage() {
             <Reveal delay={CATEGORY_ORDER.length * 0.06}>
               <Link
                 href="/templates"
-                className="group flex h-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-[var(--gold)] bg-white/40 px-4 py-10 text-center transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
+                className="group flex h-full flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-[var(--gold)] bg-white/40 px-4 py-10 text-center transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
               >
                 <span className="font-display text-xl text-[var(--ink)]">{t("otherEventsTitle")}</span>
                 <span className="inline-flex items-center gap-1 text-xs text-[var(--pinewood)]">

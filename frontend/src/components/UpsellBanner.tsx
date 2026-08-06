@@ -40,7 +40,7 @@ export function UpsellBanner({ eventId, eventType }: UpsellBannerProps) {
       <a
         href={checkoutUrl}
         onClick={handleClick}
-        className="mt-3 inline-block rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-colors duration-150 hover:bg-[#0C5C56]"
+        className="mt-3 inline-block rounded-full bg-[#0F766E] px-4 py-2 text-sm font-medium text-white transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#0C5C56] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
       >
         {t("cta")}
       </a>

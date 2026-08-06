@@ -214,13 +214,13 @@ export async function HomeLanding() {
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
                   href="/criar-convite"
-                  className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+                  className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
                 >
                   {t("hero.ctaCreate")}
                 </Link>
                 <Link
                   href="/templates"
-                  className="rounded-full border border-[color-mix(in_srgb,var(--champagne)_38%,transparent)] px-7 py-3 text-sm font-medium text-[var(--porcelain)] transition-colors duration-150 hover:bg-white/5"
+                  className="rounded-full border border-[color-mix(in_srgb,var(--champagne)_38%,transparent)] px-7 py-3 text-sm font-medium text-[var(--porcelain)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-white/5 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
                 >
                   {t("hero.ctaBrowse")}
                 </Link>
@@ -262,7 +262,7 @@ export async function HomeLanding() {
               const Icon = FEATURE_ICONS[i];
               return (
                 <Reveal key={title} delay={i * 0.06}>
-                  <div className="h-full rounded-sm border border-[var(--border)] bg-white/70 p-6 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)]">
+                  <div className="h-full rounded-sm border border-[var(--border)] bg-white/70 p-6 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]">
                     <div className="mb-4 text-[var(--pinewood)]">
                       {i === 1 ? (
                         <div className="flex items-center gap-2" aria-hidden>
@@ -320,7 +320,7 @@ export async function HomeLanding() {
                 <Reveal key={theme} delay={i * 0.06}>
                   <Link
                     href={`/templates/${theme}`}
-                    className="group block h-full overflow-hidden rounded-sm border border-[var(--border)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
+                    className="group block h-full overflow-hidden rounded-sm border border-[var(--border)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
                   >
                     <TemplateCard theme={theme} name={themeNameT(theme)} />
                     <div className="border-t border-[var(--border)] bg-white px-3 py-2.5 text-center">
@@ -473,7 +473,7 @@ export async function HomeLanding() {
               </p>
               <Link
                 href="/criar-convite"
-                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
               >
                 {t("hero.ctaCreate")}
               </Link>

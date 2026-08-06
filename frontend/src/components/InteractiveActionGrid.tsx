@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { Variants } from "framer-motion";
 import React, { useState } from "react";
+import { DURATION, EASE_FRAMER } from "@/lib/motion";
 
 interface ActionIcon {
   id: string;
@@ -46,13 +47,12 @@ export function InteractiveActionGrid({
     show: {
       opacity: 1,
       scale: 1,
-      transition: { type: "spring", stiffness: 300, damping: 30 },
+      transition: { duration: DURATION.base, ease: EASE_FRAMER },
     },
   };
 
   const iconVariants: Variants = {
-    idle: { scale: 1, rotate: 0 },
-    hover: { scale: 1.1, rotate: 5 },
+    idle: { scale: 1 },
     tap: { scale: 0.95 },
   };
 
@@ -93,8 +93,10 @@ export function InteractiveActionGrid({
             variants={itemVariants}
             onClick={() => handleActionClick(action)}
             whileHover={{
+              scale: 1.03,
               backgroundColor: `${accentColor}25`,
               boxShadow: `0 8px 20px -6px rgba(156, 138, 118, 0.25)`,
+              transition: { duration: DURATION.fast, ease: EASE_FRAMER },
             }}
             whileTap={{ scale: 0.95 }}
             aria-label={action.label}
@@ -108,7 +110,6 @@ export function InteractiveActionGrid({
               }}
               variants={iconVariants}
               initial="idle"
-              whileHover="hover"
               whileTap="tap"
             >
               {action.icon}

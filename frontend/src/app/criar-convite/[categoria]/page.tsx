@@ -208,7 +208,7 @@ export default async function CreateInvitationCategoryPage({ params }: PageProps
               <FoilRule className="mx-auto mt-5" />
               <Link
                 href="/register"
-                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
               >
                 {instantPreviewT("ctaCreate")}
               </Link>

@@ -154,7 +154,7 @@ export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFor
         <button
           type="button"
           onClick={() => setStatus("Confirmed")}
-          className="rounded-full border px-5 py-2 text-sm font-medium"
+          className="rounded-full border px-5 py-2 text-sm font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:brightness-105 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
           style={
             status === "Confirmed"
               ? { background: theme.accent, borderColor: theme.accent, color: theme.pageBg }
@@ -166,7 +166,7 @@ export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFor
         <button
           type="button"
           onClick={() => setStatus("Declined")}
-          className="rounded-full border px-5 py-2 text-sm font-medium"
+          className="rounded-full border px-5 py-2 text-sm font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:brightness-105 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
           style={
             status === "Declined"
               ? { background: theme.accent, borderColor: theme.accent, color: theme.pageBg }
@@ -182,7 +182,7 @@ export function RsvpForm({ slug, theme, demoMode = false, inviteToken }: RsvpFor
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-full px-6 py-2 text-sm font-medium disabled:opacity-50"
+        className="rounded-full px-6 py-2 text-sm font-medium transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:brightness-105 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] disabled:opacity-50"
         style={{ background: theme.accent, color: theme.pageBg }}
       >
         {isSubmitting ? t("sending") : t("send")}

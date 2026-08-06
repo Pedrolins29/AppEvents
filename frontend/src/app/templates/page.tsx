@@ -60,7 +60,7 @@ export default function TemplatesPage() {
             {templates.map((template) => (
               <div
                 key={template.id}
-                className="group overflow-hidden border border-[#E2DFD3] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
+                className="group overflow-hidden border border-[#E2DFD3] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)]"
               >
                 <TemplateCard theme={template.theme} name={themeNameT(template.theme)} />
                 <div className="flex items-center justify-between border-t border-[#E2DFD3] bg-white px-4 py-3">

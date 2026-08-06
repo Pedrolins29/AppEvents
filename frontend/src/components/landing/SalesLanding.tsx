@@ -90,13 +90,13 @@ export async function SalesLanding() {
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
                   href="/register"
-                  className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+                  className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
                 >
                   {s("hero.ctaPrimary")}
                 </Link>
                 <a
                   href="#live-demo"
-                  className="rounded-full border border-[color-mix(in_srgb,var(--champagne)_38%,transparent)] px-7 py-3 text-sm font-medium text-[var(--porcelain)] transition-colors duration-150 hover:bg-white/5"
+                  className="rounded-full border border-[color-mix(in_srgb,var(--champagne)_38%,transparent)] px-7 py-3 text-sm font-medium text-[var(--porcelain)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-white/5 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
                 >
                   {s("hero.ctaSecondary")}
                 </a>
@@ -126,7 +126,7 @@ export async function SalesLanding() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               {personas.map(({ audience, pain, solution }, i) => (
                 <Reveal key={audience} delay={i * 0.07}>
-                  <div className="flex h-full flex-col rounded-sm border border-[var(--border)] bg-white/70 p-7 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)]">
+                  <div className="flex h-full flex-col rounded-sm border border-[var(--border)] bg-white/70 p-7 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]">
                     <p className="text-xs font-medium uppercase tracking-[0.25em] text-[var(--pinewood)]">
                       {audience}
                     </p>
@@ -349,7 +349,7 @@ export async function SalesLanding() {
               </p>
               <Link
                 href="/register"
-                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-colors duration-150 hover:bg-[#C6A05E]"
+                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
               >
                 {s("finalCta.cta")}
               </Link>
