@@ -77,6 +77,47 @@ export function TemplateCard({ theme, name }: TemplateCardProps) {
     );
   }
 
+  if (theme === "romantic") {
+    return (
+      <div className="relative aspect-[3/4] w-full overflow-hidden" style={{ backgroundColor: "#FBF6EC" }}>
+        <div className="pointer-events-none absolute inset-3 border" style={{ borderColor: "rgba(184,134,62,0.45)" }}>
+          <div className="absolute inset-2 border" style={{ borderColor: "rgba(184,134,62,0.2)" }} />
+        </div>
+        <div className="relative flex h-full flex-col items-center justify-center gap-4 px-8 text-center">
+          <span className="text-[10px] uppercase tracking-[0.35em]" style={{ color: "#B8863E" }}>{name}</span>
+          <div className="flex items-center gap-3">
+            <span className="h-px w-8" style={{ backgroundColor: "rgba(184,134,62,0.5)" }} />
+            <svg width="9" height="9" viewBox="0 0 10 10" aria-hidden>
+              <path d="M5 0L10 5L5 10L0 5Z" fill="#B8863E" />
+            </svg>
+            <span className="h-px w-8" style={{ backgroundColor: "rgba(184,134,62,0.5)" }} />
+          </div>
+          <h3 className={playfair.className} style={{ color: "#2A2118", fontSize: "1.9rem", lineHeight: 1.15, fontStyle: "italic" }}>
+            Golden Afternoon
+          </h3>
+          <p className="text-xs" style={{ color: "rgba(42,33,24,0.6)" }}>Warm cream, antique gold</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (theme === "garden") {
+    return (
+      <div className="relative aspect-[3/4] w-full overflow-hidden" style={{ backgroundColor: "#F4F6EE" }}>
+        <div style={{ color: "#7C9473" }}>
+          <Sprig className="pointer-events-none absolute -left-2 -top-2 h-16 w-16 rotate-[20deg]" />
+          <Sprig className="pointer-events-none absolute -bottom-2 -right-2 h-16 w-16 rotate-[200deg]" />
+        </div>
+        <div className="relative flex h-full flex-col items-center justify-center gap-6 px-10 text-center">
+          <span className="text-[10px] font-medium uppercase tracking-[0.4em]" style={{ color: "#7C9473" }}>{name}</span>
+          <span className="h-px w-10" style={{ backgroundColor: "#7C9473" }} />
+          <h3 className="text-3xl font-light tracking-tight" style={{ color: "#33402C" }}>Rooted in Love</h3>
+          <p className="text-xs font-light" style={{ color: "rgba(51,64,44,0.5)" }}>Botanical. Quiet. Grown with care.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative aspect-[3/4] w-full overflow-hidden" style={{ backgroundColor: "#14161F" }}>
       <div

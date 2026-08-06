@@ -82,11 +82,34 @@ html {
   50% { opacity: 0.7; }
 }
 
+/* Landing-page testimonial marquee: continuous horizontal scroll, pauses on hover. The track
+   renders its testimonial list twice (see TestimonialMarquee.tsx), so translating exactly -50%
+   moves by one full copy-width and wraps seamlessly. */
+@keyframes testimonial-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.testimonial-marquee-track {
+  animation: testimonial-marquee 40s linear infinite;
+}
+
+.testimonial-marquee-track:hover {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .phone-scroll {
     animation: none;
   }
   .seal-sheen {
+    animation: none;
+  }
+  .testimonial-marquee-track {
     animation: none;
   }
 }

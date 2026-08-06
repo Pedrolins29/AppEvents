@@ -7,6 +7,7 @@ import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TemplateCard } from "@/components/TemplateCard";
+import { TestimonialMarquee, type Testimonial } from "@/components/TestimonialMarquee";
 import { formatEventDate } from "@/lib/formatEventDate";
 import { EVENT_TYPES, getEventTypeLabels, type EventType } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
@@ -58,7 +59,7 @@ function MapIcon() {
 
 const FEATURE_ICONS = [ThemesIcon, CountdownIcon, GalleryIcon, MapIcon] as const;
 
-const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern"];
+const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern", "romantic", "garden"];
 
 // A thin antique-gold foil rule — the recurring editorial divider under section headings.
 function FoilRule({ className = "" }: { className?: string }) {
@@ -185,6 +186,8 @@ export async function HomeLanding() {
   const steps = t.raw("howItWorks.steps") as { title: string; body: string }[];
   const faqItems = t.raw("faq.items") as { question: string; answer: string }[];
   const proof = t.raw("hero.proof") as string[];
+  // PLACEHOLDER — mock/example testimonials, not real customer quotes. See TestimonialMarquee.tsx.
+  const testimonials = t.raw("socialProof.testimonials") as Testimonial[];
   // Deliberately not derived from EVENT_TYPES — these are display-only groupings for the hero
   // (e.g. baby shower + gender reveal merged into one pill, plus a "Corporate Events" pill that
   // has no backing EventType yet — see Sprints/sprint19.md).
@@ -255,6 +258,13 @@ export async function HomeLanding() {
           </div>
         </section>
 
+        {/* Social proof — muted (placeholder testimonials, see TestimonialMarquee.tsx) */}
+        <TestimonialMarquee
+          eyebrow={t("socialProof.eyebrow")}
+          heading={t("socialProof.heading")}
+          testimonials={testimonials}
+        />
+
         {/* Features — porcelain */}
         <section className="px-6 py-16 sm:py-24">
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
@@ -315,7 +325,7 @@ export async function HomeLanding() {
               </h2>
               <FoilRule className="mx-auto mt-5" />
             </Reveal>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
               {TEMPLATE_THEMES.map((theme, i) => (
                 <Reveal key={theme} delay={i * 0.06}>
                   <Link

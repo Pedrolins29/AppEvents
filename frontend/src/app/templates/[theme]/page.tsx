@@ -31,6 +31,8 @@ const SAMPLE_NAMES: Record<ThemeKey, string> = {
   minimalist: "Maya's Graduation",
   floral: "Welcome, Baby Rose",
   modern: "Alex's 30th Birthday",
+  romantic: "Sofia & Rafael",
+  garden: "Baby Aria's Reveal",
 };
 
 const SAMPLE_EVENT_TYPES: Record<ThemeKey, EventType> = {
@@ -38,6 +40,8 @@ const SAMPLE_EVENT_TYPES: Record<ThemeKey, EventType> = {
   minimalist: "Graduation",
   floral: "BabyShower",
   modern: "Birthday",
+  romantic: "Wedding",
+  garden: "GenderReveal",
 };
 
 const SAMPLE_ADDRESSES: Record<ThemeKey, string> = {
@@ -45,6 +49,8 @@ const SAMPLE_ADDRESSES: Record<ThemeKey, string> = {
   minimalist: "University Hall, Austin",
   floral: "The Garden Room, Portland",
   modern: "Skyline Loft, Chicago",
+  romantic: "Quinta das Oliveiras, Sintra",
+  garden: "Botanical Garden, Curitiba",
 };
 
 const SAMPLE_COVER_IMAGES: Record<ThemeKey, string | null> = {
@@ -52,6 +58,8 @@ const SAMPLE_COVER_IMAGES: Record<ThemeKey, string | null> = {
   minimalist: "/showcase/graduation.jpg",
   floral: "/showcase/babyshower-farm.jpg",
   modern: null,
+  romantic: null,
+  garden: null,
 };
 
 function formatEventDate(iso: string, locale: string) {

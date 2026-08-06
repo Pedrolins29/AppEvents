@@ -47,7 +47,9 @@
     "elegant": "Elegante",
     "minimalist": "Minimalista",
     "floral": "Floral",
-    "modern": "Moderno"
+    "modern": "Moderno",
+    "romantic": "Romántico",
+    "garden": "Jardín"
   },
   "countdown": {
     "days": "Días",
@@ -205,14 +207,14 @@
     "gallery": {
       "eyebrow": "Plantillas",
       "heading": "Elige tu estilo",
-      "subtitle": "Cuatro temas exclusivos — elige uno y hazlo tuyo.",
+      "subtitle": "Seis temas exclusivos — elige uno y hazlo tuyo.",
       "loadError": "No se pudieron cargar las plantillas.",
       "preview": "Vista previa",
       "useThisTemplate": "Usar esta plantilla"
     },
     "metadata": {
       "title": "Ver Plantillas",
-      "description": "Cuatro temas de invitación exclusivos — Elegante, Minimalista, Floral y Moderno. Elige uno y hazlo tuyo."
+      "description": "Seis temas de invitación exclusivos — Elegante, Minimalista, Floral, Moderno, Romántico y Jardín. Elige uno y hazlo tuyo."
     },
     "themePreview": {
       "badge": "Vista previa · volver a plantillas",
@@ -298,6 +300,50 @@
               "label": "Baile"
             }
           ]
+        },
+        "romantic": {
+          "description": "Dos almas, un solo camino. Únete a nosotros para una tarde dorada, llena de cariño y buenos recuerdos.",
+          "dressCode": "Formal casual, tonos terrosos",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "17:30",
+              "label": "Cóctel"
+            },
+            {
+              "time": "19:00",
+              "label": "Cena"
+            },
+            {
+              "time": "21:00",
+              "label": "Baile"
+            }
+          ]
+        },
+        "garden": {
+          "description": "Un jardín, una sorpresa, un nuevo capítulo. Ven a descubrir con nosotros si es niño o niña, entre flores y buenas risas.",
+          "dressCode": "¿Verde o rosa? ¡Elige un bando!",
+          "timeline": [
+            {
+              "time": "15:00",
+              "label": "Llegada"
+            },
+            {
+              "time": "15:30",
+              "label": "Juegos de jardín"
+            },
+            {
+              "time": "16:30",
+              "label": "El gran momento"
+            },
+            {
+              "time": "17:00",
+              "label": "Pastel y brindis"
+            }
+          ]
         }
       }
     }
@@ -378,8 +424,8 @@
     },
     "features": [
       {
-        "title": "Cuatro plantillas exclusivas",
-        "body": "Elegante, Minimalista, Floral o Moderno — cada una con su propia tipografía, color y estilo. Elige la que más se parezca a tu evento."
+        "title": "Seis plantillas exclusivas",
+        "body": "Elegante, Minimalista, Floral, Moderno, Romántico o Jardín — cada una con su propia tipografía, color y estilo. Elige la que más se parezca a tu evento."
       },
       {
         "title": "Una cuenta regresiva en vivo",
@@ -409,7 +455,7 @@
       "steps": [
         {
           "title": "Elige un tema",
-          "body": "Elegante, Minimalista, Floral o Moderno — elige el que más se parezca a tu evento."
+          "body": "Elegante, Minimalista, Floral, Moderno, Romántico o Jardín — elige el que más se parezca a tu evento."
         },
         {
           "title": "Agrega los detalles",
@@ -455,6 +501,42 @@
     "finalCta": {
       "title": "Tu invitación, en línea en minutos.",
       "subtitle": "Elige un tema, agrega los detalles y comparte el enlace cuando estés listo."
+    },
+    "socialProof": {
+      "eyebrow": "Testimonios",
+      "heading": "Aprobado por quienes ya lo crearon",
+      "testimonials": [
+        {
+          "name": "Marina & Thiago",
+          "location": "São Paulo, Brasil",
+          "quote": "Creamos la invitación en una tarde y todos comentaron lo bonita que quedó. Las confirmaciones llegaron solas, sin grupo de WhatsApp desordenado.",
+          "rating": 5
+        },
+        {
+          "name": "Camila Duarte",
+          "location": "Curitiba, Brasil",
+          "quote": "La graduación de mi hija quedó con su estilo. Fácil de editar y se vio perfecto en el celular de todos.",
+          "rating": 5
+        },
+        {
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, Brasil",
+          "quote": "Agregué el mapa y el código de vestimenta en dos minutos. Los invitados solo tuvieron que tocar un botón para confirmar.",
+          "rating": 5
+        },
+        {
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, Brasil",
+          "quote": "La cuenta regresiva emocionó a todos mucho antes del gran día. Lo recomendamos a toda pareja que se va a casar.",
+          "rating": 5
+        },
+        {
+          "name": "Fernanda Alves",
+          "location": "Recife, Brasil",
+          "quote": "La invitación de nuestro baby shower quedó preciosa en el tema floral. Fue rápido publicarla y el enlace fue fácil de compartir.",
+          "rating": 5
+        }
+      ]
     },
     "demo": {
       "tapToOpen": "Toca para abrir",

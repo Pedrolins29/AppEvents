@@ -47,7 +47,9 @@
     "elegant": "Elegant",
     "minimalist": "Minimalist",
     "floral": "Floral",
-    "modern": "Modern"
+    "modern": "Modern",
+    "romantic": "Romantic",
+    "garden": "Garden"
   },
   "countdown": {
     "days": "Days",
@@ -205,14 +207,14 @@
     "gallery": {
       "eyebrow": "Templates",
       "heading": "Choose your style",
-      "subtitle": "Four hand-designed themes — pick one and make it yours.",
+      "subtitle": "Six hand-designed themes — pick one and make it yours.",
       "loadError": "Could not load templates.",
       "preview": "Preview",
       "useThisTemplate": "Use this template"
     },
     "metadata": {
       "title": "Browse Templates",
-      "description": "Four hand-designed invitation themes — Elegant, Minimalist, Floral, and Modern. Pick one and make it yours."
+      "description": "Six hand-designed invitation themes — Elegant, Minimalist, Floral, Modern, Romantic, and Garden. Pick one and make it yours."
     },
     "themePreview": {
       "badge": "Preview · back to templates",
@@ -298,6 +300,50 @@
               "label": "Dancing"
             }
           ]
+        },
+        "romantic": {
+          "description": "Two souls, one path. Join us for a golden afternoon, full of warmth and good memories.",
+          "dressCode": "Smart casual, earthy tones",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Ceremony"
+            },
+            {
+              "time": "17:30",
+              "label": "Cocktail hour"
+            },
+            {
+              "time": "19:00",
+              "label": "Dinner"
+            },
+            {
+              "time": "21:00",
+              "label": "Dancing"
+            }
+          ]
+        },
+        "garden": {
+          "description": "A garden, a surprise, a new chapter. Come find out with us — boy or girl? — among flowers and good laughs.",
+          "dressCode": "Green or pink — pick a side!",
+          "timeline": [
+            {
+              "time": "15:00",
+              "label": "Arrival"
+            },
+            {
+              "time": "15:30",
+              "label": "Garden games"
+            },
+            {
+              "time": "16:30",
+              "label": "The big moment"
+            },
+            {
+              "time": "17:00",
+              "label": "Cake & toasts"
+            }
+          ]
         }
       }
     }
@@ -378,8 +424,8 @@
     },
     "features": [
       {
-        "title": "Four designer themes",
-        "body": "Elegant, Minimalist, Floral, or Modern — each with its own type, color, and mood. Pick the one that feels like your event."
+        "title": "Six designer themes",
+        "body": "Elegant, Minimalist, Floral, Modern, Romantic, or Garden — each with its own type, color, and mood. Pick the one that feels like your event."
       },
       {
         "title": "A countdown that ticks",
@@ -409,7 +455,7 @@
       "steps": [
         {
           "title": "Choose a theme",
-          "body": "Elegant, Minimalist, Floral, or Modern — pick the one that feels like your event."
+          "body": "Elegant, Minimalist, Floral, Modern, Romantic, or Garden — pick the one that feels like your event."
         },
         {
           "title": "Add your details",
@@ -455,6 +501,42 @@
     "finalCta": {
       "title": "Your invitation, live in minutes.",
       "subtitle": "Pick a theme, add your details, and share the link when you're ready."
+    },
+    "socialProof": {
+      "eyebrow": "Testimonials",
+      "heading": "Loved by the people who made one",
+      "testimonials": [
+        {
+          "name": "Marina & Thiago",
+          "location": "São Paulo, Brazil",
+          "quote": "We built the invitation in one afternoon and everyone commented on how beautiful it was. RSVPs just came in on their own — no more messy group chats.",
+          "rating": 5
+        },
+        {
+          "name": "Camila Duarte",
+          "location": "Curitiba, Brazil",
+          "quote": "My daughter's graduation invite felt exactly like her. Easy to edit, and it looked perfect on everyone's phone.",
+          "rating": 5
+        },
+        {
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, Brazil",
+          "quote": "I added the map and dress code in two minutes. Guests only had to tap one button to RSVP.",
+          "rating": 5
+        },
+        {
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, Brazil",
+          "quote": "The countdown got everyone excited long before the big day arrived. We recommend it to every couple getting married.",
+          "rating": 5
+        },
+        {
+          "name": "Fernanda Alves",
+          "location": "Recife, Brazil",
+          "quote": "Our baby shower invite looked so sweet in the floral theme. It was quick to publish and the link was easy to share.",
+          "rating": 5
+        }
+      ]
     },
     "demo": {
       "tapToOpen": "Tap to open",

@@ -2,7 +2,7 @@
 
 import { useReducedMotion } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
-import { PeelBack } from "@/components/PeelBack";
+import { PeelBackEnhanced as PeelBack } from "@/components/PeelBackEnhanced";
 
 interface InvitationPeelBookProps {
   pages: ReactNode[];

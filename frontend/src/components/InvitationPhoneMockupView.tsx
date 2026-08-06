@@ -49,6 +49,17 @@ function MapGlyph({ color }: { color: string }) {
   );
 }
 
+function CalendarGlyph({ color }: { color: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden fill="none">
+      <rect x="2" y="3" width="12" height="11" rx="1.5" stroke={color} strokeWidth="1.3" />
+      <path d="M2 6.5H14" stroke={color} strokeWidth="1.3" />
+      <path d="M5 1.5V4" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M11 1.5V4" stroke={color} strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ScreenBlock({
   theme,
   screen,
@@ -190,17 +201,39 @@ export function InvitationPhoneMockupView({
 }: InvitationPhoneMockupViewProps) {
   const theme = THEME_STYLES[themeKey];
   const dims = size === "sm" ? { h: 320, w: 160 } : { h: 420, w: 210 };
+  // Floating contextual badges are a decorative flourish reserved for the larger, standalone
+  // mockup (InstantPreview, and any future non-grid usage) — in the dense "sm" showcase grid
+  // (8 phones side by side) they'd collide with neighboring cards, so they're skipped there.
+  const showBadges = size === "default";
 
   return (
     <div
       className="relative mx-auto rounded-[2.25rem] border-[6px] shadow-[0_25px_60px_-15px_rgba(15,23,20,0.45)]"
-      style={{ borderColor: "#1A1611", backgroundColor: "#1A1611", height: dims.h, width: dims.w, padding: 8 }}
+      style={{ borderColor: "var(--ink)", backgroundColor: "var(--ink)", height: dims.h, width: dims.w, padding: 8 }}
     >
       <div
         className="absolute left-1/2 top-3 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full"
-        style={{ backgroundColor: "#1A1611" }}
+        style={{ backgroundColor: "var(--ink)" }}
         aria-hidden
       />
+      {showBadges && (
+        <div
+          className="pointer-events-none absolute -right-6 top-10 z-20 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-[0_8px_20px_-8px_rgba(22,19,14,0.35)]"
+          aria-hidden
+        >
+          <CalendarGlyph color={theme.accent} />
+          <span className="whitespace-nowrap text-[9px] font-medium text-[#2A2118]">{eventTypeLabel}</span>
+        </div>
+      )}
+      {showBadges && address && (
+        <div
+          className="pointer-events-none absolute -left-6 bottom-16 z-20 flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 shadow-[0_8px_20px_-8px_rgba(22,19,14,0.35)]"
+          aria-hidden
+        >
+          <MapGlyph color={theme.accent} />
+          <span className="max-w-[100px] truncate text-[9px] font-medium text-[#2A2118]">{address}</span>
+        </div>
+      )}
       <div
         className="relative h-full w-full overflow-hidden rounded-[1.75rem]"
         style={{ backgroundColor: theme.pageBg }}

@@ -47,7 +47,9 @@
     "elegant": "Elegante",
     "minimalist": "Minimalista",
     "floral": "Floral",
-    "modern": "Moderno"
+    "modern": "Moderno",
+    "romantic": "Romântico",
+    "garden": "Jardim"
   },
   "countdown": {
     "days": "Dias",
@@ -205,14 +207,14 @@
     "gallery": {
       "eyebrow": "Modelos",
       "heading": "Escolha seu estilo",
-      "subtitle": "Quatro temas exclusivos — escolha um e deixe com a sua cara.",
+      "subtitle": "Seis temas exclusivos — escolha um e deixe com a sua cara.",
       "loadError": "Não foi possível carregar os modelos.",
       "preview": "Ver exemplo",
       "useThisTemplate": "Usar este modelo"
     },
     "metadata": {
       "title": "Ver Modelos",
-      "description": "Quatro temas de convite exclusivos — Elegante, Minimalista, Floral e Moderno. Escolha um e deixe com a sua cara."
+      "description": "Seis temas de convite exclusivos — Elegante, Minimalista, Floral, Moderno, Romântico e Jardim. Escolha um e deixe com a sua cara."
     },
     "themePreview": {
       "badge": "Visualização · voltar aos modelos",
@@ -298,6 +300,50 @@
               "label": "Baile"
             }
           ]
+        },
+        "romantic": {
+          "description": "Duas almas, um só caminho. Venha celebrar conosco uma tarde dourada, cheia de carinho e boas memórias.",
+          "dressCode": "Esporte fino, tons terrosos",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Cerimônia"
+            },
+            {
+              "time": "17:30",
+              "label": "Coquetel"
+            },
+            {
+              "time": "19:00",
+              "label": "Jantar"
+            },
+            {
+              "time": "21:00",
+              "label": "Festa"
+            }
+          ]
+        },
+        "garden": {
+          "description": "Um jardim, uma surpresa, um novo capítulo. Venham descobrir com a gente se é menino ou menina, entre flores e boas risadas.",
+          "dressCode": "Verde ou rosa — escolha um lado!",
+          "timeline": [
+            {
+              "time": "15:00",
+              "label": "Chegada"
+            },
+            {
+              "time": "15:30",
+              "label": "Jogos no jardim"
+            },
+            {
+              "time": "16:30",
+              "label": "O grande momento"
+            },
+            {
+              "time": "17:00",
+              "label": "Bolo e brindes"
+            }
+          ]
         }
       }
     }
@@ -378,8 +424,8 @@
     },
     "features": [
       {
-        "title": "Quatro temas exclusivos",
-        "body": "Elegante, Minimalista, Floral ou Moderno — cada um com sua própria tipografia, cor e estilo. Escolha o que mais combina com seu evento."
+        "title": "Seis temas exclusivos",
+        "body": "Elegante, Minimalista, Floral, Moderno, Romântico ou Jardim — cada um com sua própria tipografia, cor e estilo. Escolha o que mais combina com seu evento."
       },
       {
         "title": "Uma contagem regressiva ao vivo",
@@ -409,7 +455,7 @@
       "steps": [
         {
           "title": "Escolha um tema",
-          "body": "Elegante, Minimalista, Floral ou Moderno — escolha o que mais combina com seu evento."
+          "body": "Elegante, Minimalista, Floral, Moderno, Romântico ou Jardim — escolha o que mais combina com seu evento."
         },
         {
           "title": "Adicione os detalhes",
@@ -455,6 +501,42 @@
     "finalCta": {
       "title": "Seu convite, no ar em minutos.",
       "subtitle": "Escolha um tema, adicione os detalhes e compartilhe o link quando estiver pronto."
+    },
+    "socialProof": {
+      "eyebrow": "Depoimentos",
+      "heading": "Quem já criou, aprovou",
+      "testimonials": [
+        {
+          "name": "Marina & Thiago",
+          "location": "São Paulo, SP",
+          "quote": "Criamos o convite em uma tarde e todo mundo comentou como ficou lindo. As confirmações chegaram sozinhas, sem grupo de WhatsApp bagunçado.",
+          "rating": 5
+        },
+        {
+          "name": "Camila Duarte",
+          "location": "Curitiba, PR",
+          "quote": "A formatura da minha filha ficou com a cara dela. Simples de editar e funcionou perfeito no celular de todo mundo.",
+          "rating": 5
+        },
+        {
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, MG",
+          "quote": "Adicionei o mapa e o traje em dois minutos. Os convidados só precisaram tocar em um botão pra confirmar presença.",
+          "rating": 5
+        },
+        {
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, RS",
+          "quote": "A contagem regressiva deixou todo mundo animado antes mesmo do grande dia chegar. Recomendamos pra todo mundo que vai casar.",
+          "rating": 5
+        },
+        {
+          "name": "Fernanda Alves",
+          "location": "Recife, PE",
+          "quote": "O chá de bebê ficou uma fofura no tema floral. Foi rápido publicar e o link ficou fácil de compartilhar.",
+          "rating": 5
+        }
+      ]
     },
     "demo": {
       "tapToOpen": "Toque para abrir",

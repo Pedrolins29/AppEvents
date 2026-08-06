@@ -22,7 +22,7 @@ interface StagedPhoto {
   previewUrl: string;
 }
 
-const THEME_KEYS: ThemeKey[] = ["elegant", "minimalist", "floral", "modern"];
+const THEME_KEYS: ThemeKey[] = ["elegant", "minimalist", "floral", "modern", "romantic", "garden"];
 const MAX_PHOTOS = 3;
 
 // Sprint 17, Piece B: a deliberately small "type your name, see it live" widget — NOT a
@@ -196,7 +196,7 @@ export function InstantPreview({ defaultEventType }: InstantPreviewProps) {
 
         <div>
           <p className="mb-1 text-sm text-[var(--muted-foreground)]">{t("themeLabel")}</p>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {THEME_KEYS.map((key) => (
               <button
                 key={key}

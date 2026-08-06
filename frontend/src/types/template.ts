@@ -1,4 +1,4 @@
-export type ThemeKey = "elegant" | "minimalist" | "floral" | "modern";
+export type ThemeKey = "elegant" | "minimalist" | "floral" | "modern" | "romantic" | "garden";
 
 export interface TemplateRecord {
   id: string;

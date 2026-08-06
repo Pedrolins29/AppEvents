@@ -57,6 +57,28 @@ export const THEME_STYLES: Record<ThemeKey, ThemeStyle> = {
     fontClassName: spaceGrotesk.className,
     fontStyle: "normal",
   },
+  // Warm cream + muted gold + near-black — the palette a matrimonio.pro-style reference leans on.
+  romantic: {
+    pageBg: "#FBF6EC",
+    sectionBg: "#FFFDF7",
+    heading: "#2A2118",
+    body: "rgba(42,33,24,0.62)",
+    accent: "#B8863E",
+    gold: "#C9A24B",
+    fontClassName: playfair.className,
+    fontStyle: "italic",
+  },
+  // Sage green + cream, botanical — distinct from `floral`'s pink/coral direction.
+  garden: {
+    pageBg: "#F4F6EE",
+    sectionBg: "#FFFFFF",
+    heading: "#33402C",
+    body: "rgba(51,64,44,0.62)",
+    accent: "#7C9473",
+    gold: "#C5A572",
+    fontClassName: "",
+    fontStyle: "normal",
+  },
 };
 
 export const DEFAULT_THEME_STYLE: ThemeStyle = THEME_STYLES.minimalist;
@@ -76,7 +98,7 @@ function Sprig({ className, color }: { className?: string; color: string }) {
 }
 
 export function ThemeMotif({ theme, accentColor }: { theme: ThemeKey; accentColor: string }) {
-  if (theme === "elegant") {
+  if (theme === "elegant" || theme === "romantic") {
     return (
       <div className="flex items-center gap-3" aria-hidden>
         <span className="h-px w-8" style={{ backgroundColor: accentColor }} />
@@ -87,7 +109,7 @@ export function ThemeMotif({ theme, accentColor }: { theme: ThemeKey; accentColo
       </div>
     );
   }
-  if (theme === "floral") {
+  if (theme === "floral" || theme === "garden") {
     return <Sprig className="h-10 w-10" color={accentColor} />;
   }
   if (theme === "modern") {
