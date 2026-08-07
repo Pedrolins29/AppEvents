@@ -16,17 +16,9 @@
         "@modelcontextprotocol/server-sequential-thinking"
       ]
     },
-    "Apify": {
-      "type": "http",
-      "url": "https://mcp.apify.com"
-    },
     "Cloudflare": {
       "type": "http",
       "url": "https://docs.mcp.cloudflare.com/mcp"
-    },
-    "GitHub": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
     },
     "Next.js Devtools": {
       "type": "stdio",
@@ -35,33 +27,6 @@
         "-y",
         "next-devtools-mcp"
       ]
-    },
-    "Resend": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "resend-mcp"
-      ],
-      "env": {
-        "RESEND_API_KEY": ""
-      }
-    },
-    "PlayMCP": {
-      "type": "http",
-      "url": "https://playmcp.kakao.com/mcp"
-    },
-    "Pixelesq   for Claude": {
-      "type": "http",
-      "url": "https://pixelesq-mcp.pixelesq.workers.dev/mcp"
-    },
-    "connection endpoints": {
-      "type": "http",
-      "url": "https://yourorg.mcp.natoma.app/v2/profile/your-profile/github/mcp"
-    },
-    "Malwarebytes Scam Guard": {
-      "type": "http",
-      "url": "https://scamguard.malwarebytes.com/claude/mcp"
     }
   }
 }
