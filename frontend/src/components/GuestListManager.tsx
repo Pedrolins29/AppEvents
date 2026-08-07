@@ -12,6 +12,7 @@ interface GuestListManagerProps {
   eventId: string;
   slug: string;
   eventName: string;
+  onSummaryChange?: (summary: AttendanceSummary) => void;
 }
 
 const STATUS_COLOR: Record<RsvpStatus, string> = {
@@ -22,7 +23,7 @@ const STATUS_COLOR: Record<RsvpStatus, string> = {
 
 const PAGE_SIZE = 10;
 
-export function GuestListManager({ eventId, slug, eventName }: GuestListManagerProps) {
+export function GuestListManager({ eventId, slug, eventName, onSummaryChange }: GuestListManagerProps) {
   const t = useTranslations("guests");
   const statusLabels = getRsvpStatusLabels(useTranslations("rsvpStatus"));
 
@@ -44,10 +45,19 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
       .list(eventId)
       .then((response) => {
         setSummary(response.summary);
+        if (onSummaryChange) {
+          onSummaryChange(response.summary);
+        }
         setGuests(response.guests);
       })
-      .catch(() => setSummary({ total: 0, pending: 0, confirmed: 0, declined: 0 }));
-  }, [eventId]);
+      .catch(() => {
+        const fallbackSummary = { total: 0, pending: 0, confirmed: 0, declined: 0 };
+        setSummary(fallbackSummary);
+        if (onSummaryChange) {
+          onSummaryChange(fallbackSummary);
+        }
+      });
+  }, [eventId, onSummaryChange]);
 
   const totalPages = Math.max(1, Math.ceil(guests.length / PAGE_SIZE));
   // Derived, not stored: if a removal shrinks the list below the stored page, this clamps the
@@ -61,12 +71,16 @@ export function GuestListManager({ eventId, slug, eventName }: GuestListManagerP
   }
 
   function refreshSummary(list: GuestRecord[]) {
-    setSummary({
+    const newSummary = {
       total: list.length,
       pending: list.filter((g) => g.status === "Pending").length,
       confirmed: list.filter((g) => g.status === "Confirmed").length,
       declined: list.filter((g) => g.status === "Declined").length,
-    });
+    };
+    setSummary(newSummary);
+    if (onSummaryChange) {
+      onSummaryChange(newSummary);
+    }
   }
 
   async function handleAdd(event: React.FormEvent) {

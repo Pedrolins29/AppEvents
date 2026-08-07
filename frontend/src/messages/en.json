@@ -170,7 +170,13 @@
       "uploadError": "Could not upload the image.",
       "galleryUploadError": "Could not upload one or more images.",
       "saveChanges": "Save changes",
-      "justPublished": "Your invitation is live! Link copied — share it now."
+      "justPublished": "Your invitation is live! Link copied — share it now.",
+      "tabs": {
+        "details": "Details",
+        "detailsAria": "Details tab — edit event information, photos, and gallery",
+        "guests": "Guests",
+        "guestsAria": "Guests tab — add and manage your guest list"
+      }
     },
     "shareLink": {
       "copyLink": "Copy link",

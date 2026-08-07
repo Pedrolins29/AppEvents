@@ -170,7 +170,13 @@
       "uploadError": "No se pudo subir la imagen.",
       "galleryUploadError": "No se pudo subir una o más imágenes.",
       "saveChanges": "Guardar cambios",
-      "justPublished": "¡Tu invitación está publicada! Enlace copiado — compártelo ahora."
+      "justPublished": "¡Tu invitación está publicada! Enlace copiado — compártelo ahora.",
+      "tabs": {
+        "details": "Detalles",
+        "detailsAria": "Pestaña de detalles — editar información del evento, fotos y galería",
+        "guests": "Invitados",
+        "guestsAria": "Pestaña de invitados — agregar y gestionar tu lista de invitados"
+      }
     },
     "shareLink": {
       "copyLink": "Copiar enlace",

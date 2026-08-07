@@ -170,7 +170,13 @@
       "uploadError": "Não foi possível enviar a imagem.",
       "galleryUploadError": "Não foi possível enviar uma ou mais imagens.",
       "saveChanges": "Salvar alterações",
-      "justPublished": "Convite publicado! Link copiado — compartilhe agora."
+      "justPublished": "Convite publicado! Link copiado — compartilhe agora.",
+      "tabs": {
+        "details": "Detalhes",
+        "detailsAria": "Aba de detalhes do evento — editar informações, fotos e galeria",
+        "guests": "Convidados",
+        "guestsAria": "Aba de convidados — adicionar e gerenciar lista de convidados"
+      }
     },
     "shareLink": {
       "copyLink": "Copiar link",

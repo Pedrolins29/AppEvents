@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Countdown } from "@/components/Countdown";
 import { ThemeMotif, type ThemeStyle } from "@/components/InvitationHero";
@@ -313,7 +313,11 @@ export function InvitationBody({ event, theme, demoRsvp = false, inviteToken }: 
       <div className="fixed right-4 top-4 z-10">
         <LanguageSwitcher />
       </div>
-      {sections}
+      {sections.map((section, i) => (
+        <Fragment key={i}>
+          {section}
+        </Fragment>
+      ))}
     </div>
   );
 }
