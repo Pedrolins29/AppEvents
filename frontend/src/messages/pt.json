@@ -489,6 +489,118 @@
     "interactWithUs": "Interaja com o convite"
   },
   "landing": {
+    "steps": {
+      "eyebrow": "TÃO SIMPLES QUE PARECE",
+      "heading": "mágica",
+      "description": "Antes, um convite assim levava dias de design sob medida. Hoje, a mesma qualidade está a três passos.",
+      "step1Title": "Escolha o design",
+      "step1Body": "Escrevam os nomes de vocês e o estilo que imaginam: mostramos convites completos, um por vez e já com os dados de vocês.",
+      "step2Title": "Personalize ao vivo",
+      "step2Body": "Toque em qualquer parte do convite e edite: fotos, textos, cores, música, as seções que quiserem mostrar e em que ordem.",
+      "step3Title": "Publique e compartilhe",
+      "step3Body": "Recebem um link com os nomes de vocês para enviar no WhatsApp. Pagam só quando veem pronto e decidem compartilhar."
+    },
+    "services": {
+      "eyebrow": "MUITO MAIS QUE UM CONVITE",
+      "heading": "o site de casamento de vocês",
+      "subtitle": "Não é um cartão bonito: é o site do casamento de vocês. Responde as perguntas de sempre, organiza as confirmações e junta as lembranças.",
+      "features": [
+        {
+          "title": "Chegue de correr atrás de convidado",
+          "description": "Confirmam no convite e chega para vocês por e-mail ou WhatsApp: quem vem, acompanhantes, crianças, restrições. Tudo se organiza sozinho no painel, com lista para baixar em Excel."
+        },
+        {
+          "title": "Presentes, sem saia justa",
+          "description": "Mesa de presentes com 0% de comissão: os convidados escolhem um presente, as passagens..., e transferem direto pra conta de vocês e chega o aviso com mensagem. Mais Pix/conta com botão copiar, link da lista e QR."
+        },
+        {
+          "title": "As fotos de todo mundo, num lugar só",
+          "description": "Os convidados sabem fotos e vídeos na galeria da festa — com um QR para imprimir nas mesas — e no seguinte a lista fica toda arquivada, as fotos não se perdem."
+        },
+        {
+          "title": "Cada convidado, recebido pelo nome",
+          "description": "Escrevam \"Marcelo e família\" e essa pessoa abre um convite que a cumprimenta pelo nome, com envelope lacrado, a música de vocês e uma abertura de cinema."
+        },
+        {
+          "title": "Contagem regressiva ao vivo",
+          "description": "Mapas da cerimônia e da festa com Google Maps integrado. Endereço, horários, como chegar — tudo centralizado."
+        },
+        {
+          "title": "Organize convidados por grupo",
+          "description": "Mesas com foto, nomes, restrições alimentares e até alergias — organize locas sozinho no painel. Mapa de mesas para imprimir."
+        }
+      ]
+    },
+    "adminPreview": {
+      "eyebrow": "SEU PAINEL",
+      "heading": "Tudo organizado em um lugar",
+      "description": "Acompanhe confirmações em tempo real, gerencie convidados, visualize fotos e controle cada detalhe do seu convite em um painel simples e intuitivo.",
+      "features": [
+        {
+          "title": "Confirmações em tempo real",
+          "description": "Veja quem confirmou, recusou ou ainda está pendente — tudo atualizado automaticamente."
+        },
+        {
+          "title": "Gerenciador de convidados",
+          "description": "Liste todos os convidados, adicione acompanhantes, marque restrições alimentares e organize por grupo de mesas."
+        },
+        {
+          "title": "Galeria centralizada",
+          "description": "Colete fotos de todos os convidados em um só lugar — sem perder nenhuma memória do grande dia."
+        },
+        {
+          "title": "Edições ao vivo",
+          "description": "Mude qualquer coisa no convite a qualquer momento — as alterações entram no ar instantaneamente."
+        }
+      ]
+    },
+    "templates": {
+      "eyebrow": "MODELOS",
+      "heading": "Escolha seu estilo",
+      "subtitle": "Dez temas exclusivos — cada um com sua própria tipografia, paleta de cores e identidade visual. Encontre o que combina com você.",
+      "viewAll": "Ver todos os modelos →"
+    },
+    "comparison": {
+      "title": "Por que começar do zero?",
+      "subtitle": "Compare a forma antiga com a magia do AppEvents",
+      "before": [
+        "Convite em papel caro",
+        "Lista de convidados em grupo de WhatsApp",
+        "Confirmações soltas em várias conversas",
+        "Fotos espalhadas por diferentes álbuns"
+      ],
+      "after": [
+        "Convite digital elegante em 5 minutos",
+        "Lista de convidados organizada no painel",
+        "Confirmações automáticas e centralizadas",
+        "Todas as fotos no mesmo lugar"
+      ]
+    },
+    "testimonials": {
+      "title": "Histórias de quem já criou",
+      "subtitle": "Veja como AppEvents mudou a experiência de noivos, pais de debutantes e formandos",
+      "items": [
+        {
+          "quote": "Criamos o convite em uma tarde e todo mundo comentou como ficou lindo. As confirmações chegaram sozinhas, sem grupo de WhatsApp bagunçado.",
+          "name": "Marina & Thiago",
+          "location": "São Paulo, SP"
+        },
+        {
+          "quote": "A formatura da minha filha ficou com a cara dela. Simples de editar e funcionou perfeito no celular de todo mundo.",
+          "name": "Camila Duarte",
+          "location": "Curitiba, PR"
+        },
+        {
+          "quote": "A contagem regressiva deixou todo mundo animado antes mesmo do grande dia chegar. Recomendamos pra todo mundo que vai casar.",
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, RS"
+        }
+      ]
+    },
+    "veja": {
+      "title": "Veja funcionando",
+      "subtitle": "Casamentos, formaturas, festas, chás de bebê — explore convites reais criados no AppEvents em todos os nossos temas."
+    },
     "hero": {
       "eyebrow": "✦ Convites Digitais Elegantes",
       "title": "Um convite que vale a pena abrir.",

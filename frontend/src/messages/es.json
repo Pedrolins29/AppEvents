@@ -489,6 +489,118 @@
     "interactWithUs": "Interactúa con la invitación"
   },
   "landing": {
+    "steps": {
+      "eyebrow": "TAN SIMPLE QUE PARECE",
+      "heading": "magia",
+      "description": "Antes, una invitación así tomaba semanas de diseño personalizado. Hoy, la misma calidad en solo tres pasos.",
+      "step1Title": "Elige el diseño",
+      "step1Body": "Cuéntanos tus nombres y tu estilo — te mostramos invitaciones completas, una por una, ya con tus datos.",
+      "step2Title": "Personaliza en vivo",
+      "step2Body": "Toca cualquier parte de la invitación para editar: fotos, textos, colores, música, qué secciones mostrar y en qué orden.",
+      "step3Title": "Publica y comparte",
+      "step3Body": "Tus invitados reciben un enlace con tus nombres para enviar por WhatsApp. Solo pagas cuando la ves lista y decides compartir."
+    },
+    "services": {
+      "eyebrow": "MUCHO MÁS QUE UNA INVITACIÓN",
+      "heading": "el sitio de tu boda",
+      "subtitle": "No es solo una tarjeta bonita — es el sitio de tu boda. Responde las preguntas de siempre, organiza confirmaciones y guarda todos los recuerdos en un lugar.",
+      "features": [
+        {
+          "title": "Deja de perseguir RSVPs",
+          "description": "Los invitados confirman en la invitación y te llega por correo o WhatsApp — quién viene, acompañantes, niños, restricciones. Todo se organiza solo en tu panel con descarga en Excel."
+        },
+        {
+          "title": "Regalos sin incomodidad",
+          "description": "Registro de regalos con 0% de comisión — los invitados eligen un regalo, vuelos, experiencias, y transfieren directo a tu cuenta con notificación. Botones de Pix/banco, enlace de lista y QR."
+        },
+        {
+          "title": "Todas tus fotos en un lugar",
+          "description": "Los invitados suben fotos y videos a tu galería — con código QR para imprimir en las mesas — y luego el álbum completo se archiva para que ningún recuerdo se pierda."
+        },
+        {
+          "title": "Cada invitado saludado por su nombre",
+          "description": "Escribe \"Marcelo y familia\" y esa persona abre una invitación que les saluda por su nombre, con sobre lacrado, tu música y una apertura de cine."
+        },
+        {
+          "title": "Cuenta regresiva en vivo",
+          "description": "Mapas de la ceremonia y la recepción con Google Maps integrado. Dirección, horarios, cómo llegar — todo centralizado."
+        },
+        {
+          "title": "Organiza invitados por mesa",
+          "description": "Mesas con foto, nombres, restricciones dietéticas y alergias — organiza el seating en tu panel. Mapa de mesas imprimible."
+        }
+      ]
+    },
+    "adminPreview": {
+      "eyebrow": "TU PANEL DE CONTROL",
+      "heading": "Todo organizado en un lugar",
+      "description": "Sigue confirmaciones en tiempo real, gestiona tu lista de invitados, visualiza fotos y controla cada detalle de tu invitación desde un panel simple e intuitivo.",
+      "features": [
+        {
+          "title": "Confirmaciones en tiempo real",
+          "description": "Ve quién confirmó, rechazó o está pendiente — todo actualizado automáticamente conforme responden los invitados."
+        },
+        {
+          "title": "Gestor de lista de invitados",
+          "description": "Lista todos los invitados, agrega acompañantes, marca restricciones dietéticas y organiza por mesa con un clic."
+        },
+        {
+          "title": "Galería de fotos centralizada",
+          "description": "Recopila fotos de todos los invitados en un lugar — ningún recuerdo del gran día se pierde en el camino."
+        },
+        {
+          "title": "Ediciones en vivo",
+          "description": "Cambia cualquier cosa en tu invitación en cualquier momento — las actualizaciones van en vivo instantáneamente en el mismo enlace."
+        }
+      ]
+    },
+    "templates": {
+      "eyebrow": "PLANTILLAS",
+      "heading": "Elige tu estilo",
+      "subtitle": "Diez temas exclusivos — cada uno con su propia tipografía, paleta de colores e identidad visual. Encuentra el que te combine.",
+      "viewAll": "Ver todas las plantillas →"
+    },
+    "comparison": {
+      "title": "¿Por qué empezar de cero?",
+      "subtitle": "Compara la forma antigua con la magia de AppEvents",
+      "before": [
+        "Invitación de papel cara",
+        "Lista de invitados dispersa en grupos de WhatsApp",
+        "Confirmaciones enterradas en múltiples chats",
+        "Fotos esparcidas en diferentes álbumes"
+      ],
+      "after": [
+        "Invitación digital elegante en 5 minutos",
+        "Lista de invitados organizada en tu panel",
+        "Confirmaciones automáticas y centralizadas",
+        "Todas las fotos en el mismo lugar hermoso"
+      ]
+    },
+    "testimonials": {
+      "title": "Historias de creadores",
+      "subtitle": "Ve cómo AppEvents cambió la experiencia de parejas, padres y graduandos",
+      "items": [
+        {
+          "quote": "Creamos la invitación en una tarde y a todos les encantó cómo quedó. Las confirmaciones llegaron solas, sin ese grupo de WhatsApp loco.",
+          "name": "Marina & Thiago",
+          "location": "São Paulo, SP"
+        },
+        {
+          "quote": "La invitación de graduación de mi hija fue con su personalidad. Tan fácil de editar y funcionó perfectamente en el teléfono de todos.",
+          "name": "Camila Duarte",
+          "location": "Curitiba, PR"
+        },
+        {
+          "quote": "La cuenta regresiva entusiasmó a todos antes de que llegara el gran día. Se la recomendamos a todos los que se van a casar.",
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, RS"
+        }
+      ]
+    },
+    "veja": {
+      "title": "Mira en acción",
+      "subtitle": "Bodas, graduaciones, fiestas, baby showers — explora invitaciones reales creadas en AppEvents en todos nuestros temas."
+    },
     "hero": {
       "eyebrow": "✦ Invitaciones Digitales Elegantes",
       "title": "Una invitación que vale la pena abrir.",

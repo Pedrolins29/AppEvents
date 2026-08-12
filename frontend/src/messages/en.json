@@ -489,6 +489,118 @@
     "interactWithUs": "Interact with the invitation"
   },
   "landing": {
+    "steps": {
+      "eyebrow": "SO SIMPLE IT SEEMS",
+      "heading": "like magic",
+      "description": "Once, an invitation like this took weeks of custom design. Today, the same quality takes just three steps.",
+      "step1Title": "Choose the design",
+      "step1Body": "Tell us your names and your style — we show you complete invitations, one by one, already with your details.",
+      "step2Title": "Personalize live",
+      "step2Body": "Tap anywhere on the invitation to edit: photos, text, colors, music, which sections to show and in what order.",
+      "step3Title": "Publish and share",
+      "step3Body": "Your guests get a link with your names to send on WhatsApp. You only pay when you see it finished and decide to share."
+    },
+    "services": {
+      "eyebrow": "MORE THAN AN INVITATION",
+      "heading": "your wedding website",
+      "subtitle": "It's not just a pretty card — it's your wedding website. It answers the usual questions, organizes confirmations, and keeps all the memories in one place.",
+      "features": [
+        {
+          "title": "Stop chasing RSVPs",
+          "description": "Guests confirm right on the invitation and it reaches you by email or WhatsApp — who's coming, plus ones, kids, dietary restrictions. Everything organizes itself in your dashboard with an Excel download."
+        },
+        {
+          "title": "Gifts, without the awkwardness",
+          "description": "Gift registry with 0% commission — guests pick a gift, flights, experiences, and transfer straight to your account with a message notification. Pix/bank transfer buttons, registry link, and QR code."
+        },
+        {
+          "title": "All your photos in one place",
+          "description": "Guests know to upload photos and videos to your gallery — with a QR code to print on tables — and afterward the full album stays archived so no memory is lost."
+        },
+        {
+          "title": "Every guest greeted by name",
+          "description": "Write \"Marcelo and family\" and that person opens an invitation that greets them by name, with a sealed envelope, your music, and a cinema-style reveal."
+        },
+        {
+          "title": "Live countdown timer",
+          "description": "Maps of the ceremony and reception with Google Maps integration. Address, times, directions — everything in one place."
+        },
+        {
+          "title": "Organize guests by table",
+          "description": "Tables with photos, names, dietary restrictions, and allergies — manage seating in your dashboard. Printable table map."
+        }
+      ]
+    },
+    "adminPreview": {
+      "eyebrow": "YOUR CONTROL PANEL",
+      "heading": "Everything organized in one place",
+      "description": "Track confirmations in real time, manage your guest list, view photos, and control every detail of your invitation from a simple, intuitive dashboard.",
+      "features": [
+        {
+          "title": "Real-time confirmations",
+          "description": "See who confirmed, declined, or is still pending — all updated automatically as guests respond."
+        },
+        {
+          "title": "Guest list manager",
+          "description": "List all guests, add plus-ones, mark dietary restrictions, and organize by table group with one click."
+        },
+        {
+          "title": "Centralized photo gallery",
+          "description": "Collect photos from all guests in one place — no memory of the big day gets lost in the shuffle."
+        },
+        {
+          "title": "Live edits",
+          "description": "Change anything on your invitation anytime — updates go live instantly at the same link."
+        }
+      ]
+    },
+    "templates": {
+      "eyebrow": "THEMES",
+      "heading": "Choose your style",
+      "subtitle": "Ten exclusive themes — each with its own typeface, color palette, and visual identity. Find the one that matches you.",
+      "viewAll": "See all themes →"
+    },
+    "comparison": {
+      "title": "Why start from scratch?",
+      "subtitle": "Compare the old way with the magic of AppEvents",
+      "before": [
+        "Expensive paper invitation",
+        "Guest list scattered in WhatsApp groups",
+        "Confirmations buried in multiple chats",
+        "Photos spread across different albums"
+      ],
+      "after": [
+        "Elegant digital invitation in 5 minutes",
+        "Organized guest list in your dashboard",
+        "Automatic, centralized confirmations",
+        "All photos in the same beautiful place"
+      ]
+    },
+    "testimonials": {
+      "title": "Stories from creators",
+      "subtitle": "See how AppEvents changed the experience for couples, parents, and graduates",
+      "items": [
+        {
+          "quote": "We created the invitation in an afternoon and everyone loved how it turned out. Confirmations came in automatically, without that crazy WhatsApp group.",
+          "name": "Marina & Thiago",
+          "location": "São Paulo, SP"
+        },
+        {
+          "quote": "My daughter's graduation invitation had her personality all over it. So easy to edit and it worked perfectly on everyone's phone.",
+          "name": "Camila Duarte",
+          "location": "Curitiba, PR"
+        },
+        {
+          "quote": "The countdown got everyone excited before the big day even arrived. We recommend it to anyone getting married.",
+          "name": "Beatriz & Lucas",
+          "location": "Porto Alegre, RS"
+        }
+      ]
+    },
+    "veja": {
+      "title": "See it in action",
+      "subtitle": "Weddings, graduations, parties, baby showers — explore real invitations created in AppEvents across all our themes."
+    },
     "hero": {
       "eyebrow": "✦ Elegant Digital Invitations",
       "title": "An invitation worth opening.",
