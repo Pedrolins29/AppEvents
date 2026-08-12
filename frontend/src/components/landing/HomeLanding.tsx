@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
+import { AnimatedHeroPhone } from "@/components/AnimatedHeroPhone";
 import { EnvelopeReveal } from "@/components/EnvelopeReveal";
 import { InteractiveInvitation } from "@/components/InteractiveInvitation";
+import { TemplateCarousel } from "@/components/TemplateCarousel";
 import { InvitationPhoneMockup, type MockupScreen } from "@/components/InvitationPhoneMockup";
 import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -59,7 +61,7 @@ function MapIcon() {
 
 const FEATURE_ICONS = [ThemesIcon, CountdownIcon, GalleryIcon, MapIcon] as const;
 
-const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern", "romantic", "garden"];
+const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern", "romantic", "garden", "newspaper", "candlelight", "neon", "seal"];
 
 // A thin antique-gold foil rule — the recurring editorial divider under section headings.
 function FoilRule({ className = "" }: { className?: string }) {
@@ -172,6 +174,68 @@ export const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
     ],
     photoUrl: "/showcase/babyshower-minimalist.jpg",
   },
+  {
+    theme: "romantic",
+    eventType: "Wedding",
+    name: "Sofia & Rafael",
+    dateIso: "2026-07-18",
+    screens: ["countdown", "map"],
+    address: "Quinta das Oliveiras, Sintra",
+    photoUrl: "/showcase/prewed 2.jpg",
+  },
+  {
+    theme: "garden",
+    eventType: "Wedding",
+    name: "Baby Aria's Reveal",
+    dateIso: "2026-02-20",
+    screens: ["countdown", "dressCode"],
+    dressCode: "Botanical, pastels",
+    photoUrl: "/showcase/prewed3.jpg",
+  },
+  {
+    theme: "newspaper",
+    eventType: "Birthday",
+    name: "The Daily Times",
+    dateIso: "2026-09-25",
+    screens: ["timeline", "photo"],
+    timelineItems: [
+      { time: "18:00", label: "Arrival" },
+      { time: "19:00", label: "Dinner" },
+      { time: "21:00", label: "Dancing" },
+    ],
+    photoUrl: "/showcase/prewed4.jpg",
+  },
+  {
+    theme: "candlelight",
+    eventType: "Wedding",
+    name: "Lucia & Gabriel",
+    dateIso: "2026-10-14",
+    screens: ["countdown", "map"],
+    address: "Château de la Rose, Paris",
+    photoUrl: "/showcase/prewed5.jpg",
+  },
+  {
+    theme: "neon",
+    eventType: "Birthday",
+    name: "Electric Nights",
+    dateIso: "2026-12-31",
+    screens: ["countdown", "photo"],
+    photoUrl: "/showcase/prewed6.jpg",
+  },
+  {
+    theme: "seal",
+    eventType: "Wedding",
+    name: "Catherine & Edmund",
+    dateIso: "2026-06-12",
+    screens: ["timeline", "map"],
+    address: "Manor House, Edinburgh",
+    timelineItems: [
+      { time: "15:00", label: "Ceremony" },
+      { time: "16:30", label: "Reception" },
+      { time: "19:00", label: "Dinner" },
+    ],
+    photoUrl: "/showcase/wedding-embrace.jpg",
+  },
 ];
 
 export async function HomeLanding() {
@@ -251,9 +315,15 @@ export async function HomeLanding() {
             </div>
 
             <div className="flex min-w-0 justify-center">
-              <EnvelopeReveal label={t("demo.envelopeLabel")} openLabel={t("demo.tapToOpen")}>
-                <InteractiveInvitation />
-              </EnvelopeReveal>
+              <AnimatedHeroPhone>
+                <EnvelopeReveal
+                  label={t("demo.envelopeLabel")}
+                  openLabel={t("demo.tapToOpen")}
+                  photoUrl="/showcase/wedding-embrace.jpg"
+                >
+                  <InteractiveInvitation />
+                </EnvelopeReveal>
+              </AnimatedHeroPhone>
             </div>
           </div>
         </section>
@@ -325,14 +395,14 @@ export async function HomeLanding() {
               </h2>
               <FoilRule className="mx-auto mt-5" />
             </Reveal>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
               {TEMPLATE_THEMES.map((theme, i) => (
                 <Reveal key={theme} delay={i * 0.06}>
                   <Link
                     href={`/templates/${theme}`}
                     className="group block h-full overflow-hidden rounded-sm border border-[var(--border)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
                   >
-                    <TemplateCard theme={theme} name={themeNameT(theme)} />
+                    <TemplateCard theme={theme} name={themeNameT(theme)} showPeelback={["elegant", "floral", "candlelight"].includes(theme)} />
                     <div className="border-t border-[var(--border)] bg-white px-3 py-2.5 text-center">
                       <span className="font-display text-base text-[var(--ink)]">{themeNameT(theme)}</span>
                     </div>
@@ -366,6 +436,15 @@ export async function HomeLanding() {
                 {t("showcase.subtitle")}
               </p>
             </Reveal>
+
+            {/* Interactive carousel showcase */}
+            <Reveal className="mb-16">
+              <div className="flex justify-center rounded-2xl border border-[var(--border)] bg-gradient-to-b from-white/10 to-transparent p-8 sm:p-12 backdrop-blur-sm">
+                <TemplateCarousel autoRotate rotationIntervalMs={4000} />
+              </div>
+            </Reveal>
+
+            {/* Static grid gallery */}
             <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
               {SHOWCASE_ENTRIES.map((entry, i) => {
                 const eventTypeLabel = eventTypeLabels[entry.eventType];

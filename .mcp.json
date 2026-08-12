@@ -27,6 +27,10 @@
         "-y",
         "next-devtools-mcp"
       ]
+    },
+    "21st.dev": {
+      "type": "http",
+      "url": "https://21st.dev/api/mcp"
     }
   }
 }

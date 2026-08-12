@@ -49,7 +49,11 @@
     "floral": "Floral",
     "modern": "Moderno",
     "romantic": "Romântico",
-    "garden": "Jardim"
+    "garden": "Jardim",
+    "newspaper": "Manchete",
+    "candlelight": "Velas",
+    "neon": "Neon",
+    "seal": "Lacre & Selo"
   },
   "countdown": {
     "days": "Dias",
@@ -179,6 +183,7 @@
       }
     },
     "shareLink": {
+      "shareTitle": "Compartilhar convite",
       "copyLink": "Copiar link",
       "linkCopied": "Link copiado!",
       "whatsappShare": "Compartilhar no WhatsApp",
@@ -213,14 +218,14 @@
     "gallery": {
       "eyebrow": "Modelos",
       "heading": "Escolha seu estilo",
-      "subtitle": "Seis temas exclusivos — escolha um e deixe com a sua cara.",
+      "subtitle": "Dez temas exclusivos — escolha um e deixe com a sua cara.",
       "loadError": "Não foi possível carregar os modelos.",
       "preview": "Ver exemplo",
       "useThisTemplate": "Usar este modelo"
     },
     "metadata": {
       "title": "Ver Modelos",
-      "description": "Seis temas de convite exclusivos — Elegante, Minimalista, Floral, Moderno, Romântico e Jardim. Escolha um e deixe com a sua cara."
+      "description": "Dez temas de convite exclusivos — Elegante, Minimalista, Floral, Moderno, Romântico, Jardim, Manchete, Velas, Neon e Lacre & Selo. Escolha um e deixe com a sua cara."
     },
     "themePreview": {
       "badge": "Visualização · voltar aos modelos",
@@ -350,6 +355,86 @@
               "label": "Bolo e brindes"
             }
           ]
+        },
+        "newspaper": {
+          "description": "Notícia quente saindo do forno: Laura e Vicente vão se casar! Venha celebrar essa manchete com a gente.",
+          "dressCode": "Traje social, tons clássicos",
+          "timeline": [
+            {
+              "time": "17:00",
+              "label": "Cerimônia"
+            },
+            {
+              "time": "18:00",
+              "label": "Sessão de fotos"
+            },
+            {
+              "time": "19:00",
+              "label": "Jantar"
+            },
+            {
+              "time": "21:00",
+              "label": "Festa"
+            }
+          ]
+        },
+        "candlelight": {
+          "description": "À luz de velas, começamos um novo capítulo. Junte-se a nós numa noite intimista, cheia de amor.",
+          "dressCode": "Traje a rigor, tons escuros",
+          "timeline": [
+            {
+              "time": "19:00",
+              "label": "Cerimônia"
+            },
+            {
+              "time": "20:00",
+              "label": "Jantar à luz de velas"
+            },
+            {
+              "time": "22:00",
+              "label": "Baile"
+            }
+          ]
+        },
+        "neon": {
+          "description": "O letreiro vai acender! Vem com a gente pra uma noite neon, cheia de luz, música e muita festa.",
+          "dressCode": "Traje de festa, aposte em cores vibrantes",
+          "timeline": [
+            {
+              "time": "20:00",
+              "label": "Abertura"
+            },
+            {
+              "time": "21:00",
+              "label": "Jantar"
+            },
+            {
+              "time": "23:00",
+              "label": "Pista aberta"
+            }
+          ]
+        },
+        "seal": {
+          "description": "Vamos nos casar! Um convite lacrado com carinho, guardando a promessa do nosso \"para sempre\".",
+          "dressCode": "Esporte fino, tons neutros",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Cerimônia"
+            },
+            {
+              "time": "17:00",
+              "label": "Recepção"
+            },
+            {
+              "time": "18:30",
+              "label": "Jantar"
+            },
+            {
+              "time": "20:30",
+              "label": "Festa"
+            }
+          ]
         }
       }
     }
@@ -430,8 +515,8 @@
     },
     "features": [
       {
-        "title": "Seis temas exclusivos",
-        "body": "Elegante, Minimalista, Floral, Moderno, Romântico ou Jardim — cada um com sua própria tipografia, cor e estilo. Escolha o que mais combina com seu evento."
+        "title": "Dez temas exclusivos",
+        "body": "Elegante, Minimalista, Floral, Moderno, Romântico, Jardim, Manchete, Velas, Neon ou Lacre & Selo — cada um com sua própria tipografia, cor e estilo. Escolha o que mais combina com seu evento."
       },
       {
         "title": "Uma contagem regressiva ao vivo",
@@ -461,7 +546,7 @@
       "steps": [
         {
           "title": "Escolha um tema",
-          "body": "Elegante, Minimalista, Floral, Moderno, Romântico ou Jardim — escolha o que mais combina com seu evento."
+          "body": "Elegante, Minimalista, Floral, Moderno, Romântico, Jardim, Manchete, Velas, Neon ou Lacre & Selo — escolha o que mais combina com seu evento."
         },
         {
           "title": "Adicione os detalhes",

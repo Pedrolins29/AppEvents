@@ -49,7 +49,11 @@
     "floral": "Floral",
     "modern": "Modern",
     "romantic": "Romantic",
-    "garden": "Garden"
+    "garden": "Garden",
+    "newspaper": "Headline",
+    "candlelight": "Candlelight",
+    "neon": "Neon",
+    "seal": "Wax Seal"
   },
   "countdown": {
     "days": "Days",
@@ -179,6 +183,7 @@
       }
     },
     "shareLink": {
+      "shareTitle": "Share invitation",
       "copyLink": "Copy link",
       "linkCopied": "Link copied!",
       "whatsappShare": "Share on WhatsApp",
@@ -213,14 +218,14 @@
     "gallery": {
       "eyebrow": "Templates",
       "heading": "Choose your style",
-      "subtitle": "Six hand-designed themes — pick one and make it yours.",
+      "subtitle": "Ten hand-designed themes — pick one and make it yours.",
       "loadError": "Could not load templates.",
       "preview": "Preview",
       "useThisTemplate": "Use this template"
     },
     "metadata": {
       "title": "Browse Templates",
-      "description": "Six hand-designed invitation themes — Elegant, Minimalist, Floral, Modern, Romantic, and Garden. Pick one and make it yours."
+      "description": "Ten hand-designed invitation themes — Elegant, Minimalist, Floral, Modern, Romantic, Garden, Headline, Candlelight, Neon, and Wax Seal. Pick one and make it yours."
     },
     "themePreview": {
       "badge": "Preview · back to templates",
@@ -350,6 +355,86 @@
               "label": "Cake & toasts"
             }
           ]
+        },
+        "newspaper": {
+          "description": "Hot off the press: Laura and Vicente are getting married! Come celebrate the headline with us.",
+          "dressCode": "Formal, classic tones",
+          "timeline": [
+            {
+              "time": "17:00",
+              "label": "Ceremony"
+            },
+            {
+              "time": "18:00",
+              "label": "Photo session"
+            },
+            {
+              "time": "19:00",
+              "label": "Dinner"
+            },
+            {
+              "time": "21:00",
+              "label": "Party"
+            }
+          ]
+        },
+        "candlelight": {
+          "description": "By candlelight, we begin a new chapter. Join us for an intimate evening full of love.",
+          "dressCode": "Black tie, dark tones",
+          "timeline": [
+            {
+              "time": "19:00",
+              "label": "Ceremony"
+            },
+            {
+              "time": "20:00",
+              "label": "Candlelit dinner"
+            },
+            {
+              "time": "22:00",
+              "label": "Dancing"
+            }
+          ]
+        },
+        "neon": {
+          "description": "The sign's about to light up! Join us for a neon night full of light, music, and celebration.",
+          "dressCode": "Party attire, go bold with color",
+          "timeline": [
+            {
+              "time": "20:00",
+              "label": "Doors open"
+            },
+            {
+              "time": "21:00",
+              "label": "Dinner"
+            },
+            {
+              "time": "23:00",
+              "label": "Dance floor opens"
+            }
+          ]
+        },
+        "seal": {
+          "description": "We're getting married! A lovingly sealed invitation, holding the promise of our forever.",
+          "dressCode": "Smart casual, neutral tones",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Ceremony"
+            },
+            {
+              "time": "17:00",
+              "label": "Reception"
+            },
+            {
+              "time": "18:30",
+              "label": "Dinner"
+            },
+            {
+              "time": "20:30",
+              "label": "Party"
+            }
+          ]
         }
       }
     }
@@ -430,8 +515,8 @@
     },
     "features": [
       {
-        "title": "Six designer themes",
-        "body": "Elegant, Minimalist, Floral, Modern, Romantic, or Garden — each with its own type, color, and mood. Pick the one that feels like your event."
+        "title": "Ten designer themes",
+        "body": "Elegant, Minimalist, Floral, Modern, Romantic, Garden, Headline, Candlelight, Neon, or Wax Seal — each with its own type, color, and mood. Pick the one that feels like your event."
       },
       {
         "title": "A countdown that ticks",
@@ -461,7 +546,7 @@
       "steps": [
         {
           "title": "Choose a theme",
-          "body": "Elegant, Minimalist, Floral, Modern, Romantic, or Garden — pick the one that feels like your event."
+          "body": "Elegant, Minimalist, Floral, Modern, Romantic, Garden, Headline, Candlelight, Neon, or Wax Seal — pick the one that feels like your event."
         },
         {
           "title": "Add your details",

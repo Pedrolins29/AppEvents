@@ -200,7 +200,8 @@ export function InvitationPhoneMockupView({
   size = "default",
 }: InvitationPhoneMockupViewProps) {
   const theme = THEME_STYLES[themeKey];
-  const dims = size === "sm" ? { h: 320, w: 160 } : { h: 420, w: 210 };
+  // iPhone proportions: 19.5:9 (2.16:1) for modern iPhones. sm=compact grid, default=hero showcase.
+  const dims = size === "sm" ? { h: 360, w: 168 } : { h: 480, w: 222 };
   // Floating contextual badges are a decorative flourish reserved for the larger, standalone
   // mockup (InstantPreview, and any future non-grid usage) — in the dense "sm" showcase grid
   // (8 phones side by side) they'd collide with neighboring cards, so they're skipped there.

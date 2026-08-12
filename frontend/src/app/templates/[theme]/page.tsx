@@ -60,6 +60,10 @@ const SAMPLE_COVER_IMAGES: Record<ThemeKey, string | null> = {
   modern: null,
   romantic: null,
   garden: null,
+  newspaper: null,
+  candlelight: null,
+  neon: null,
+  seal: null,
 };
 
 function formatEventDate(iso: string, locale: string) {

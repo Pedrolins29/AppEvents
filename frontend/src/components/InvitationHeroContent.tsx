@@ -3,7 +3,7 @@
 import { useRef, type ReactNode } from "react";
 import { gsap, GSAP_EASE_PREMIUM, useGsapContext } from "@/lib/gsap";
 import { DURATION } from "@/lib/motion";
-import { ThemeMotif, type ThemeStyle } from "@/components/InvitationHero";
+import { HERO_DECORATIONS, HERO_OVERLAYS, PHOTO_FILTERS, ThemeMotif, type ThemeStyle } from "@/components/InvitationHero";
 import type { ThemeKey } from "@/types/template";
 
 export interface InvitationHeroProps {
@@ -108,8 +108,21 @@ export function InvitationHero({
       {coverImageUrl ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img ref={bgImageRef} src={coverImageUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-          <div className="absolute inset-0" style={{ backgroundColor: theme.pageBg, opacity: 0.55 }} />
+          <img
+            ref={bgImageRef}
+            src={coverImageUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: theme.photoFilterKey ? PHOTO_FILTERS[theme.photoFilterKey] : undefined }}
+          />
+          <div
+            className="absolute inset-0"
+            style={
+              theme.heroOverlayKey
+                ? { background: HERO_OVERLAYS[theme.heroOverlayKey] }
+                : { backgroundColor: theme.pageBg, opacity: 0.55 }
+            }
+          />
         </>
       ) : (
         <div className="absolute inset-0" style={{ backgroundColor: theme.pageBg }} />
@@ -117,8 +130,9 @@ export function InvitationHero({
       <div className="relative flex flex-col items-center gap-5">
         <div
           ref={decorationRef}
-          className="opacity-0 -translate-y-2 motion-reduce:opacity-100 motion-reduce:translate-y-0"
+          className="flex flex-col items-center gap-2 opacity-0 -translate-y-2 motion-reduce:opacity-100 motion-reduce:translate-y-0"
         >
+          {theme.heroDecoration && <div aria-hidden>{HERO_DECORATIONS[theme.heroDecoration](theme)}</div>}
           <ThemeMotif theme={themeKey} accentColor={theme.accent} />
         </div>
         <span

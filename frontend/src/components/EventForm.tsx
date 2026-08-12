@@ -7,6 +7,7 @@ import { slugify } from "@/lib/slugify";
 import { templatesApi } from "@/lib/templatesApi";
 import { TemplateCard } from "@/components/TemplateCard";
 import { TimelineItemsEditor } from "@/components/TimelineItemsEditor";
+import { TemplateSelectionCard } from "@/components/TemplateSelectionCard";
 import {
   getEventTypeLabels,
   EVENT_TYPES,
@@ -56,6 +57,7 @@ interface EventFormProps {
 
 export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormProps) {
   const t = useTranslations("events.form");
+  const themeNameT = useTranslations("templateThemeNames");
   const eventTypeLabels = getEventTypeLabels(useTranslations("eventTypes"));
   const [values, setValues] = useState<EventFormValues>(initialValues ?? EMPTY_VALUES);
   const [templates, setTemplates] = useState<TemplateRecord[]>([]);
@@ -235,30 +237,29 @@ export function EventForm({ initialValues, onSubmit, submitLabel }: EventFormPro
       />
       {templates.length > 0 && (
         <div>
-          <span className="mb-1 block text-sm font-medium text-[#14211D]">
+          <span className="mb-3 block text-sm font-medium text-[#14211D]">
             {t("template")}
           </span>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <button
               type="button"
               onClick={() => update("templateId", null)}
-              className={`flex aspect-[3/4] items-center justify-center border-2 text-xs text-[#5B6B67] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)] ${
-                values.templateId === null ? "border-[#0F766E]" : "border-transparent bg-[#F2EFE7]"
+              className={`rounded-xl border-2 px-4 py-3 text-left transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none ${
+                values.templateId === null
+                  ? "border-[#0F766E] bg-[#F5F2EA]"
+                  : "border-[#E2DFD3] bg-white hover:-translate-y-1 hover:shadow-md"
               }`}
             >
-              {t("none")}
+              <span className="text-sm font-medium text-[#14211D]">{t("none")}</span>
             </button>
             {templates.map((template) => (
-              <button
-                type="button"
+              <TemplateSelectionCard
                 key={template.id}
-                onClick={() => update("templateId", template.id)}
-                className={`overflow-hidden border-2 transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_18px_40px_-16px_rgba(15,23,20,0.35)] ${
-                  values.templateId === template.id ? "border-[#0F766E]" : "border-transparent"
-                }`}
-              >
-                <TemplateCard theme={template.theme} name={template.name} />
-              </button>
+                theme={template.theme}
+                name={themeNameT(template.theme)}
+                isSelected={values.templateId === template.id}
+                onSelect={() => update("templateId", template.id)}
+              />
             ))}
           </div>
         </div>

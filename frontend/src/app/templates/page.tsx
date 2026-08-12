@@ -49,14 +49,20 @@ export default function TemplatesPage() {
           {error && <p className="text-center text-sm text-red-600">{error}</p>}
 
           {isLoading ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
+              <Skeleton className="aspect-[3/4] w-full" />
               <Skeleton className="aspect-[3/4] w-full" />
               <Skeleton className="aspect-[3/4] w-full" />
               <Skeleton className="aspect-[3/4] w-full" />
               <Skeleton className="aspect-[3/4] w-full" />
             </div>
           ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
             {templates.map((template) => (
               <div
                 key={template.id}

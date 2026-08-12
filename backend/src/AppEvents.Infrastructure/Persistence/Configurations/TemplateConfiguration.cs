@@ -32,7 +32,13 @@ public class TemplateConfiguration : IEntityTypeConfiguration<Template>
             Seed(TemplateThemes.ElegantId, "Elegant", TemplateThemes.Elegant),
             Seed(TemplateThemes.MinimalistId, "Minimalist", TemplateThemes.Minimalist),
             Seed(TemplateThemes.FloralId, "Floral", TemplateThemes.Floral),
-            Seed(TemplateThemes.ModernId, "Modern", TemplateThemes.Modern));
+            Seed(TemplateThemes.ModernId, "Modern", TemplateThemes.Modern),
+            Seed(TemplateThemes.RomanticId, "Romantic", TemplateThemes.Romantic),
+            Seed(TemplateThemes.GardenId, "Garden", TemplateThemes.Garden),
+            Seed(TemplateThemes.NewspaperId, "Newspaper", TemplateThemes.Newspaper),
+            Seed(TemplateThemes.CandlelightId, "Candlelight", TemplateThemes.Candlelight),
+            Seed(TemplateThemes.NeonId, "Neon", TemplateThemes.Neon),
+            Seed(TemplateThemes.SealId, "Seal", TemplateThemes.Seal));
     }
 
     private static Template Seed(Guid id, string name, string theme) => new()

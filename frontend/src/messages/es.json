@@ -49,7 +49,11 @@
     "floral": "Floral",
     "modern": "Moderno",
     "romantic": "Romántico",
-    "garden": "Jardín"
+    "garden": "Jardín",
+    "newspaper": "Titular",
+    "candlelight": "Velas",
+    "neon": "Neón",
+    "seal": "Lacre y Sello"
   },
   "countdown": {
     "days": "Días",
@@ -179,6 +183,7 @@
       }
     },
     "shareLink": {
+      "shareTitle": "Compartir invitación",
       "copyLink": "Copiar enlace",
       "linkCopied": "¡Enlace copiado!",
       "whatsappShare": "Compartir en WhatsApp",
@@ -213,14 +218,14 @@
     "gallery": {
       "eyebrow": "Plantillas",
       "heading": "Elige tu estilo",
-      "subtitle": "Seis temas exclusivos — elige uno y hazlo tuyo.",
+      "subtitle": "Diez temas exclusivos — elige uno y házlo tuyo.",
       "loadError": "No se pudieron cargar las plantillas.",
       "preview": "Vista previa",
       "useThisTemplate": "Usar esta plantilla"
     },
     "metadata": {
       "title": "Ver Plantillas",
-      "description": "Seis temas de invitación exclusivos — Elegante, Minimalista, Floral, Moderno, Romántico y Jardín. Elige uno y hazlo tuyo."
+      "description": "Diez temas de invitación exclusivos — Elegante, Minimalista, Floral, Moderno, Romántico, Jardín, Titular, Velas, Neón y Lacre y Sello. Elige uno y házlo tuyo."
     },
     "themePreview": {
       "badge": "Vista previa · volver a plantillas",
@@ -350,6 +355,86 @@
               "label": "Pastel y brindis"
             }
           ]
+        },
+        "newspaper": {
+          "description": "Noticia de última hora: ¡Laura y Vicente se casan! Ven a celebrar este titular con nosotros.",
+          "dressCode": "Formal, tonos clásicos",
+          "timeline": [
+            {
+              "time": "17:00",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "18:00",
+              "label": "Sesión de fotos"
+            },
+            {
+              "time": "19:00",
+              "label": "Cena"
+            },
+            {
+              "time": "21:00",
+              "label": "Fiesta"
+            }
+          ]
+        },
+        "candlelight": {
+          "description": "A la luz de las velas, comenzamos un nuevo capítulo. Únete a nosotros en una noche íntima, llena de amor.",
+          "dressCode": "Etiqueta rigurosa, tonos oscuros",
+          "timeline": [
+            {
+              "time": "19:00",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "20:00",
+              "label": "Cena a la luz de las velas"
+            },
+            {
+              "time": "22:00",
+              "label": "Baile"
+            }
+          ]
+        },
+        "neon": {
+          "description": "¡El letrero se va a encender! Ven con nosotros a una noche neón, llena de luz, música y fiesta.",
+          "dressCode": "Traje de fiesta, apuesta por colores vibrantes",
+          "timeline": [
+            {
+              "time": "20:00",
+              "label": "Apertura"
+            },
+            {
+              "time": "21:00",
+              "label": "Cena"
+            },
+            {
+              "time": "23:00",
+              "label": "Pista abierta"
+            }
+          ]
+        },
+        "seal": {
+          "description": "¡Nos casamos! Una invitación lacrada con cariño, guardando la promesa de nuestro \"para siempre\".",
+          "dressCode": "Formal casual, tonos neutros",
+          "timeline": [
+            {
+              "time": "16:00",
+              "label": "Ceremonia"
+            },
+            {
+              "time": "17:00",
+              "label": "Recepción"
+            },
+            {
+              "time": "18:30",
+              "label": "Cena"
+            },
+            {
+              "time": "20:30",
+              "label": "Fiesta"
+            }
+          ]
         }
       }
     }
@@ -430,8 +515,8 @@
     },
     "features": [
       {
-        "title": "Seis plantillas exclusivas",
-        "body": "Elegante, Minimalista, Floral, Moderno, Romántico o Jardín — cada una con su propia tipografía, color y estilo. Elige la que más se parezca a tu evento."
+        "title": "Diez plantillas exclusivas",
+        "body": "Elegante, Minimalista, Floral, Moderno, Romántico, Jardín, Titular, Velas, Neón o Lacre y Sello — cada una con su propia tipografía, color y estilo. Elige la que más se parezca a tu evento."
       },
       {
         "title": "Una cuenta regresiva en vivo",
@@ -461,7 +546,7 @@
       "steps": [
         {
           "title": "Elige un tema",
-          "body": "Elegante, Minimalista, Floral, Moderno, Romántico o Jardín — elige el que más se parezca a tu evento."
+          "body": "Elegante, Minimalista, Floral, Moderno, Romántico, Jardín, Titular, Velas, Neón o Lacre y Sello — elige el que más se parezca a tu evento."
         },
         {
           "title": "Agrega los detalles",
