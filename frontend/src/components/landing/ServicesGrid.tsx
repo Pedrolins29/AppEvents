@@ -112,6 +112,15 @@ export function ServicesGrid() {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, i) => {
             const Icon = FEATURE_ICONS[i];
+            const statData = [
+              { width: 85, label: <>A maioria dos convidados confirma direto pelo link, sem <b>grupo de WhatsApp</b></> },
+              { width: 72, label: <><b>Zero comissão</b> na mesa de presentes — transferências direto pra conta de vocês</> },
+              { width: 90, label: <>Todas as fotos do evento guardadas num único lugar com <b>QR code</b> pra imprimir nas mesas</> },
+              { width: 78, label: <>Cada convidado abre um convite personalizado <b>com o próprio nome</b> na tela</> },
+              { width: 88, label: <>Contagem regressiva ao vivo com <b>mapas integrados</b> do Google Maps e Waze</> },
+              { width: 81, label: <>Organize mesas com fotos, nomes e <b>restrições alimentares</b> — mapa imprimível</> },
+            ];
+            const stat = statData[i];
             return (
               <Reveal key={feature.title} delay={i * 0.06}>
                 <div className="h-full rounded-sm border border-[var(--border)] bg-[var(--porcelain)] p-6 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]">
@@ -120,6 +129,12 @@ export function ServicesGrid() {
                   </div>
                   <h3 className="mb-1.5 font-display text-xl text-[var(--ink)]">{feature.title}</h3>
                   <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{feature.description}</p>
+                  <div className="mini-stat">
+                    <div className="mini-stat-bar">
+                      <span style={{ width: `${stat.width}%` }}></span>
+                    </div>
+                    <span className="mini-stat-label">{stat.label}</span>
+                  </div>
                 </div>
               </Reveal>
             );

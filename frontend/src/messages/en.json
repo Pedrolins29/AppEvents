@@ -502,8 +502,8 @@
     },
     "services": {
       "eyebrow": "MORE THAN AN INVITATION",
-      "heading": "your wedding website",
-      "subtitle": "It's not just a pretty card — it's your wedding website. It answers the usual questions, organizes confirmations, and keeps all the memories in one place.",
+      "heading": "your event website",
+      "subtitle": "It's not just a pretty card — it's your event website. It answers the usual questions, organizes confirmations, and keeps all the memories in one place.",
       "features": [
         {
           "title": "Stop chasing RSVPs",
@@ -515,11 +515,11 @@
         },
         {
           "title": "All your photos in one place",
-          "description": "Guests know to upload photos and videos to your gallery — with a QR code to print on tables — and afterward the full album stays archived so no memory is lost."
+          "description": "You upload the event photos to your gallery — with a QR code to print on tables — and afterward the full album stays archived so no memory is lost."
         },
         {
           "title": "Every guest greeted by name",
-          "description": "Write \"Marcelo and family\" and that person opens an invitation that greets them by name, with a sealed envelope, your music, and a cinema-style reveal."
+          "description": "Write \"Marcelo and family\" and that person opens an invitation that greets them by name, with a sealed envelope and a personalized reveal."
         },
         {
           "title": "Live countdown timer",
@@ -546,7 +546,7 @@
         },
         {
           "title": "Centralized photo gallery",
-          "description": "Collect photos from all guests in one place — no memory of the big day gets lost in the shuffle."
+          "description": "Store and organize your event photos in one place — memories from the big day always at hand."
         },
         {
           "title": "Live edits",
@@ -563,6 +563,8 @@
     "comparison": {
       "title": "Why start from scratch?",
       "subtitle": "Compare the old way with the magic of AppEvents",
+      "beforeTitle": "The invitation as usual",
+      "afterTitle": "With AppEvents",
       "before": [
         "Expensive paper invitation",
         "Guest list scattered in WhatsApp groups",
@@ -591,9 +593,44 @@
           "location": "Curitiba, PR"
         },
         {
+          "quote": "I added the map and dress code in two minutes. Guests only had to tap one button to RSVP.",
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, MG"
+        },
+        {
           "quote": "The countdown got everyone excited before the big day even arrived. We recommend it to anyone getting married.",
           "name": "Beatriz & Lucas",
           "location": "Porto Alegre, RS"
+        },
+        {
+          "quote": "Our baby shower invite looked so sweet in the floral theme. It was quick to publish and the link was easy to share.",
+          "name": "Fernanda Alves",
+          "location": "Recife, PE"
+        },
+        {
+          "quote": "My 40th birthday was flawless. The modern theme was perfect for me, and everyone RSVP'd with one click — no messy WhatsApp groups.",
+          "name": "Daniel Costa",
+          "location": "Rio de Janeiro, RJ"
+        },
+        {
+          "quote": "We organized a corporate event and the neon theme was perfect. Confirmations came automatically, and we managed everything without complications.",
+          "name": "Luiza Mendes",
+          "location": "Brasília, DF"
+        },
+        {
+          "quote": "My daughter graduated and wanted a special invitation. With the elegant theme, it turned out perfect — we shared it with the whole family in seconds.",
+          "name": "Patricia Silva",
+          "location": "Salvador, BA"
+        },
+        {
+          "quote": "A beach wedding with minimalist theme. Guests had everything — map, times, photos — without any confusion.",
+          "name": "Felipe & Andréa",
+          "location": "Florianópolis, SC"
+        },
+        {
+          "quote": "Our gender reveal in the garden theme was beautiful. We sent the invite to family and within minutes everyone had confirmed — it was magical!",
+          "name": "Mariana & Gustavo",
+          "location": "Goiás, GO"
         }
       ]
     },

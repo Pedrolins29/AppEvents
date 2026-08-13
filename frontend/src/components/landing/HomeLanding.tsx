@@ -1,67 +1,22 @@
 import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { AnimatedHeroPhone } from "@/components/AnimatedHeroPhone";
 import { EnvelopeReveal } from "@/components/EnvelopeReveal";
 import { InteractiveInvitation } from "@/components/InteractiveInvitation";
+import { MobileCtaBar } from "@/components/MobileCtaBar";
 import { TemplateCarousel } from "@/components/TemplateCarousel";
-import { InvitationPhoneMockup, type MockupScreen } from "@/components/InvitationPhoneMockup";
+import type { MockupScreen } from "@/components/InvitationPhoneMockup";
 import { Reveal } from "@/components/Reveal";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TemplateCard } from "@/components/TemplateCard";
-import { TestimonialMarquee, type Testimonial } from "@/components/TestimonialMarquee";
-import { formatEventDate } from "@/lib/formatEventDate";
+import { AdminPreview } from "@/components/landing/AdminPreview";
+import { ComparisonSection } from "@/components/landing/ComparisonSection";
+import { HorizontalTemplateCarousel } from "@/components/landing/HorizontalTemplateCarousel";
+import { ServicesGrid } from "@/components/landing/ServicesGrid";
+import { StepSection } from "@/components/landing/StepSection";
+import { TestimonialGrid } from "@/components/landing/TestimonialGrid";
 import { EVENT_TYPES, getEventTypeLabels, type EventType } from "@/types/event";
 import type { ThemeKey } from "@/types/template";
-
-function ThemesIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden fill="none">
-      <rect x="1" y="1" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="13" y="1" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="1" y="13" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-      <rect x="13" y="13" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  );
-}
-
-function CountdownIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden fill="none">
-      <circle cx="11" cy="12" r="9" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M11 6.5V12L14.5 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-      <path d="M8 1.5H14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function GalleryIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden fill="none">
-      <rect x="4" y="5" width="14" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
-      <path d="M4 15L8 11L11 14L15 10L18 13" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="8.5" cy="8.5" r="1.25" stroke="currentColor" strokeWidth="1.2" />
-    </svg>
-  );
-}
-
-function MapIcon() {
-  return (
-    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden fill="none">
-      <path
-        d="M11 20C11 20 18 13.8 18 9.2C18 5.2 14.9 2 11 2C7.1 2 4 5.2 4 9.2C4 13.8 11 20 11 20Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
-      <circle cx="11" cy="9.2" r="2.4" stroke="currentColor" strokeWidth="1.4" />
-    </svg>
-  );
-}
-
-const FEATURE_ICONS = [ThemesIcon, CountdownIcon, GalleryIcon, MapIcon] as const;
-
-const TEMPLATE_THEMES: ThemeKey[] = ["elegant", "minimalist", "floral", "modern", "romantic", "garden", "newspaper", "candlelight", "neon", "seal"];
 
 // A thin antique-gold foil rule — the recurring editorial divider under section headings.
 function FoilRule({ className = "" }: { className?: string }) {
@@ -239,43 +194,35 @@ export const SHOWCASE_ENTRIES: ShowcaseEntry[] = [
 ];
 
 export async function HomeLanding() {
-  const locale = await getLocale();
   const t = await getTranslations("landing");
   const eventTypeT = await getTranslations("eventTypes");
-  const themeNameT = await getTranslations("templateThemeNames");
-  const countdownT = await getTranslations("countdown");
   const eventTypeLabels = getEventTypeLabels(eventTypeT);
 
-  const features = t.raw("features") as { title: string; body: string }[];
-  const steps = t.raw("howItWorks.steps") as { title: string; body: string }[];
   const faqItems = t.raw("faq.items") as { question: string; answer: string }[];
   const proof = t.raw("hero.proof") as string[];
-  // PLACEHOLDER — mock/example testimonials, not real customer quotes. See TestimonialMarquee.tsx.
-  const testimonials = t.raw("socialProof.testimonials") as Testimonial[];
   // Deliberately not derived from EVENT_TYPES — these are display-only groupings for the hero
   // (e.g. baby shower + gender reveal merged into one pill, plus a "Corporate Events" pill that
   // has no backing EventType yet — see Sprints/sprint19.md).
   const heroPills = t.raw("hero.pills") as string[];
   const eventTypesJoined = EVENT_TYPES.map((type) => eventTypeLabels[type]).join(", ");
-  const miniCountdownLabels = [countdownT("days"), countdownT("hours"), countdownT("min")];
 
   return (
     <div className="flex flex-1 flex-col bg-[var(--porcelain)]">
       <SiteHeader />
 
       <main className="flex-1">
-        {/* Hero — deep Ink anchor band */}
-        <section className="bg-[var(--ink)] px-6 py-16 sm:py-24">
+        {/* 1. Hero — soft Porcelain luxury open with wash-a gradient accents */}
+        <section className="wash-a px-6 py-16 sm:py-24">
           <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
             <div className="min-w-0 text-center lg:text-left">
               <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--gold)]">
                 {t("hero.eyebrow")}
               </p>
               <FoilRule className="mx-auto mt-5 lg:mx-0" />
-              <h1 className="mt-6 text-balance font-display text-[2.6rem] font-light leading-[1.05] tracking-tight text-[var(--porcelain)] sm:text-6xl lg:text-7xl">
+              <h1 className="mt-6 text-balance font-display text-[2.6rem] font-light leading-[1.05] tracking-tight text-[var(--ink)] sm:text-6xl lg:text-7xl">
                 {t("hero.title")}
               </h1>
-              <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-[#D9CFBD] lg:mx-0">
+              <p className="mx-auto mt-6 max-w-md text-base leading-relaxed text-[var(--muted-foreground)] lg:mx-0">
                 {t("hero.subtitle")}
               </p>
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
@@ -287,13 +234,13 @@ export async function HomeLanding() {
                 </Link>
                 <Link
                   href="/templates"
-                  className="rounded-full border border-[color-mix(in_srgb,var(--champagne)_38%,transparent)] px-7 py-3 text-sm font-medium text-[var(--porcelain)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-white/5 hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
+                  className="rounded-full border border-[var(--gold)] px-7 py-3 text-sm font-medium text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[var(--champagne)] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.15)]"
                 >
                   {t("hero.ctaBrowse")}
                 </Link>
               </div>
 
-              <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[#B9AF9C] lg:justify-start">
+              <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs text-[var(--muted-foreground)] lg:justify-start">
                 {proof.map((item, i) => (
                   <li key={item} className="flex items-center gap-3">
                     {i > 0 && <span className="text-[var(--gold)]">&middot;</span>}
@@ -306,7 +253,7 @@ export async function HomeLanding() {
                 {heroPills.map((pill) => (
                   <span
                     key={pill}
-                    className="rounded-full border border-[color-mix(in_srgb,var(--gold)_32%,transparent)] px-3 py-1 text-xs text-[#C9BFA9]"
+                    className="rounded-full border border-[var(--border)] px-3 py-1 text-xs text-[var(--muted-foreground)]"
                   >
                     {pill}
                   </span>
@@ -328,185 +275,69 @@ export async function HomeLanding() {
           </div>
         </section>
 
-        {/* Social proof — muted (placeholder testimonials, see TestimonialMarquee.tsx) */}
-        <TestimonialMarquee
-          eyebrow={t("socialProof.eyebrow")}
-          heading={t("socialProof.heading")}
-          testimonials={testimonials}
-        />
-
-        {/* Features — porcelain */}
-        <section className="px-6 py-16 sm:py-24">
-          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
-            {features.map(({ title, body }, i) => {
-              const Icon = FEATURE_ICONS[i];
-              return (
-                <Reveal key={title} delay={i * 0.06}>
-                  <div className="h-full rounded-sm border border-[var(--border)] bg-white/70 p-6 shadow-[0_14px_36px_-26px_rgba(22,19,14,0.4)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]">
-                    <div className="mb-4 text-[var(--pinewood)]">
-                      {i === 1 ? (
-                        <div className="flex items-center gap-2" aria-hidden>
-                          {["12", "08", "45"].map((value, j) => (
-                            <div
-                              key={j}
-                              className="flex flex-col items-center rounded border border-[var(--border)] px-2 py-1"
-                            >
-                              <span className="text-sm font-semibold tabular-nums text-[var(--pinewood)]">
-                                {value}
-                              </span>
-                              <span className="text-[8px] uppercase tracking-wide text-[var(--muted-foreground)]">
-                                {miniCountdownLabels[j]}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      ) : i === 3 ? (
-                        <div className="flex items-center gap-2" aria-hidden>
-                          <Icon />
-                          <span className="rounded-full border border-[var(--border)] px-2 py-0.5 text-[10px] text-[var(--muted-foreground)]">
-                            Google Maps
-                          </span>
-                          <span className="rounded-full border border-[var(--border)] px-2 py-0.5 text-[10px] text-[var(--muted-foreground)]">
-                            Waze
-                          </span>
-                        </div>
-                      ) : (
-                        <Icon />
-                      )}
-                    </div>
-                    <h3 className="mb-1.5 font-display text-xl text-[var(--ink)]">{title}</h3>
-                    <p className="text-sm leading-relaxed text-[var(--muted-foreground)]">{body}</p>
-                  </div>
-                </Reveal>
-              );
-            })}
-          </div>
+        {/* 2. How it works — three numbered steps with wash-b (smooth continuation from Hero) */}
+        <section className="wash-b">
+          <StepSection />
         </section>
 
-        {/* Choose your style — porcelain (muted) */}
-        <section id="templates" className="bg-[var(--muted)] px-6 py-16 sm:py-24">
-          <div className="mx-auto max-w-4xl">
-            <Reveal className="mb-12 text-center">
-              <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--pinewood)]">
-                {t("chooseYourStyle.eyebrow")}
-              </p>
-              <h2 className="mt-4 font-display text-4xl font-light text-[var(--ink)] sm:text-5xl">
-                {t("chooseYourStyle.heading")}
-              </h2>
-              <FoilRule className="mx-auto mt-5" />
-            </Reveal>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-              {TEMPLATE_THEMES.map((theme, i) => (
-                <Reveal key={theme} delay={i * 0.06}>
-                  <Link
-                    href={`/templates/${theme}`}
-                    className="group block h-full overflow-hidden rounded-sm border border-[var(--border)] transition-all duration-300 ease-[var(--ease-premium)] motion-reduce:transition-none hover:-translate-y-1.5 hover:scale-[1.02] hover:shadow-[0_22px_44px_-20px_rgba(22,19,14,0.4)]"
-                  >
-                    <TemplateCard theme={theme} name={themeNameT(theme)} showPeelback={["elegant", "floral", "candlelight"].includes(theme)} />
-                    <div className="border-t border-[var(--border)] bg-white px-3 py-2.5 text-center">
-                      <span className="font-display text-base text-[var(--ink)]">{themeNameT(theme)}</span>
-                    </div>
-                  </Link>
-                </Reveal>
-              ))}
-            </div>
-            <div className="mt-10 text-center">
-              <Link
-                href="/templates"
-                className="text-sm font-medium text-[var(--pinewood)] underline-offset-4 hover:underline"
-              >
-                {t("chooseYourStyle.seeAll")}
-              </Link>
-            </div>
-          </div>
+        {/* 3. What you get — 2×3 feature grid with wash-c */}
+        <section className="wash-c">
+          <ServicesGrid />
         </section>
 
-        {/* See it in action — deep Ink anchor band */}
-        <section className="bg-[var(--ink)] px-6 py-16 sm:py-24">
+        {/* 4. Admin dashboard preview — mockup + feature list with wash-c */}
+        <section className="wash-c">
+          <AdminPreview />
+        </section>
+
+        {/* 5. Choose your style — horizontal template strip with wash-b */}
+        <section className="wash-b">
+          <HorizontalTemplateCarousel />
+        </section>
+
+        {/* 6. Before / after comparison with wash-a */}
+        <section className="wash-a">
+          <ComparisonSection />
+        </section>
+
+        {/* 7. Social proof — testimonial grid with wash-a.
+            PLACEHOLDER quotes, not real customer testimonials. */}
+        <section className="wash-a">
+          <TestimonialGrid />
+        </section>
+
+        {/* 8. See it in action — light showcase section with wash-b (soft luxury continues) */}
+        <section className="wash-b px-6 py-16 sm:py-24">
           <div className="mx-auto max-w-5xl">
             <Reveal className="mb-12 text-center">
               <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--gold)]">
                 {t("showcase.eyebrow")}
               </p>
-              <h2 className="mt-4 font-display text-4xl font-light text-[var(--porcelain)] sm:text-5xl">
-                {t("showcase.heading")}
+              <h2 className="mt-4 font-display text-4xl font-light text-[var(--ink)] sm:text-5xl">
+                {t("veja.title")}
               </h2>
               <FoilRule className="mx-auto mt-5" />
-              <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-[#C9BFA9]">
-                {t("showcase.subtitle")}
+              <p className="mx-auto mt-6 max-w-lg text-sm leading-relaxed text-[var(--muted-foreground)]">
+                {t("veja.subtitle")}
               </p>
             </Reveal>
 
-            {/* Interactive carousel showcase */}
-            <Reveal className="mb-16">
+            {/* Interactive carousel showcase — the single demo surface for SHOWCASE_ENTRIES.
+                The static phone grid that used to sit below it was removed: it repeated the
+                same entries the carousel already rotates through. */}
+            <Reveal>
               <div className="flex justify-center rounded-2xl border border-[var(--border)] bg-gradient-to-b from-white/10 to-transparent p-8 sm:p-12 backdrop-blur-sm">
                 <TemplateCarousel autoRotate rotationIntervalMs={4000} />
               </div>
             </Reveal>
-
-            {/* Static grid gallery */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4">
-              {SHOWCASE_ENTRIES.map((entry, i) => {
-                const eventTypeLabel = eventTypeLabels[entry.eventType];
-                const dateLabel = formatEventDate(entry.dateIso, locale);
-                return (
-                  <Reveal key={entry.name} delay={(i % 4) * 0.07} className="flex flex-col items-center gap-3">
-                    <InvitationPhoneMockup
-                      theme={entry.theme}
-                      eventTypeLabel={eventTypeLabel}
-                      name={entry.name}
-                      dateLabel={dateLabel}
-                      screens={entry.screens}
-                      address={entry.address}
-                      dressCode={entry.dressCode}
-                      timelineItems={entry.timelineItems}
-                      photoUrl={entry.photoUrl}
-                      size="sm"
-                    />
-                    <div className="text-center">
-                      <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--gold)]">
-                        {eventTypeLabel}
-                      </p>
-                      <p className="text-xs font-medium text-[var(--porcelain)]">{entry.name}</p>
-                    </div>
-                  </Reveal>
-                );
-              })}
-            </div>
           </div>
         </section>
 
-        {/* How it works — porcelain */}
-        <section id="how-it-works" className="px-6 py-16 sm:py-24">
-          <div className="mx-auto max-w-4xl">
-            <Reveal className="mb-12 text-center">
-              <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--pinewood)]">
-                {t("howItWorks.eyebrow")}
-              </p>
-              <h2 className="mt-4 font-display text-4xl font-light text-[var(--ink)] sm:text-5xl">
-                {t("howItWorks.heading")}
-              </h2>
-              <FoilRule className="mx-auto mt-5" />
-            </Reveal>
-            <Reveal className="grid grid-cols-1 divide-y divide-[var(--border)] border-t border-b border-[var(--border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-              {steps.map(({ title, body }, i) => (
-                <div key={title} className="px-6 py-9 text-center sm:px-8">
-                  <span className="font-display text-4xl font-light text-[var(--gold)]">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-3 font-display text-xl text-[var(--ink)]">{title}</h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-[var(--muted-foreground)]">{body}</p>
-                </div>
-              ))}
-            </Reveal>
-          </div>
-        </section>
-
-        {/* FAQ — porcelain (muted) */}
-        <section id="faq" className="bg-[var(--muted)] px-6 py-16 sm:py-24">
+        {/* 9. FAQ — uniform light background (wash-b) for clean content readability */}
+        <section id="faq" className="wash-b px-6 py-16 sm:py-24">
           <div className="mx-auto max-w-2xl">
             <Reveal className="mb-12 text-center">
-              <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--pinewood)]">
+              <p className="text-xs font-medium uppercase tracking-[0.35em] text-[var(--gold)]">
                 {t("faq.eyebrow")}
               </p>
               <h2 className="mt-4 font-display text-4xl font-light text-[var(--ink)] sm:text-5xl">
@@ -549,8 +380,14 @@ export async function HomeLanding() {
           </div>
         </section>
 
-        {/* Final CTA — deep Ink anchor band, gold foil frame */}
-        <section className="bg-[var(--ink)] px-6 py-20 sm:py-28">
+        {/* Final CTA — gradient from porcelain-2 → champagne → ink (deep anchor band) */}
+        <section
+          className="px-6 py-20 sm:py-28"
+          style={{
+            background:
+              "linear-gradient(to bottom, var(--porcelain-2) 0%, var(--champagne) 22%, var(--ink) 62%, var(--ink) 100%)",
+          }}
+        >
           <Reveal className="mx-auto max-w-xl">
             <div className="rounded-sm border border-[color-mix(in_srgb,var(--gold)_40%,transparent)] px-8 py-14 text-center">
               <h2 className="font-display text-4xl font-light text-[var(--porcelain)] sm:text-5xl">
@@ -571,6 +408,7 @@ export async function HomeLanding() {
         </section>
       </main>
 
+      <MobileCtaBar />
       <SiteFooter />
     </div>
   );

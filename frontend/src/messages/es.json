@@ -502,8 +502,8 @@
     },
     "services": {
       "eyebrow": "MUCHO MÁS QUE UNA INVITACIÓN",
-      "heading": "el sitio de tu boda",
-      "subtitle": "No es solo una tarjeta bonita — es el sitio de tu boda. Responde las preguntas de siempre, organiza confirmaciones y guarda todos los recuerdos en un lugar.",
+      "heading": "el sitio de tu evento",
+      "subtitle": "No es solo una tarjeta bonita — es el sitio de tu evento. Responde las preguntas de siempre, organiza confirmaciones y guarda todos los recuerdos en un lugar.",
       "features": [
         {
           "title": "Deja de perseguir RSVPs",
@@ -515,11 +515,11 @@
         },
         {
           "title": "Todas tus fotos en un lugar",
-          "description": "Los invitados suben fotos y videos a tu galería — con código QR para imprimir en las mesas — y luego el álbum completo se archiva para que ningún recuerdo se pierda."
+          "description": "Subes las fotos de tu evento a la galería — con código QR para imprimir en las mesas — y luego el álbum completo se archiva para que ningún recuerdo se pierda."
         },
         {
           "title": "Cada invitado saludado por su nombre",
-          "description": "Escribe \"Marcelo y familia\" y esa persona abre una invitación que les saluda por su nombre, con sobre lacrado, tu música y una apertura de cine."
+          "description": "Escribe \"Marcelo y familia\" y esa persona abre una invitación que les saluda por su nombre, con sobre lacrado y una apertura personalizada."
         },
         {
           "title": "Cuenta regresiva en vivo",
@@ -546,7 +546,7 @@
         },
         {
           "title": "Galería de fotos centralizada",
-          "description": "Recopila fotos de todos los invitados en un lugar — ningún recuerdo del gran día se pierde en el camino."
+          "description": "Almacena y organiza las fotos de tu evento en un lugar — los recuerdos del gran día siempre a mano."
         },
         {
           "title": "Ediciones en vivo",
@@ -563,6 +563,8 @@
     "comparison": {
       "title": "¿Por qué empezar de cero?",
       "subtitle": "Compara la forma antigua con la magia de AppEvents",
+      "beforeTitle": "La invitación de siempre",
+      "afterTitle": "Con AppEvents",
       "before": [
         "Invitación de papel cara",
         "Lista de invitados dispersa en grupos de WhatsApp",
@@ -591,9 +593,44 @@
           "location": "Curitiba, PR"
         },
         {
+          "quote": "Agregué el mapa y el código de vestimenta en dos minutos. Los invitados solo tuvieron que tocar un botón para confirmar.",
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, MG"
+        },
+        {
           "quote": "La cuenta regresiva entusiasmó a todos antes de que llegara el gran día. Se la recomendamos a todos los que se van a casar.",
           "name": "Beatriz & Lucas",
           "location": "Porto Alegre, RS"
+        },
+        {
+          "quote": "La invitación de nuestro baby shower quedó preciosa en el tema floral. Fue rápido publicarla y el enlace fue fácil de compartir.",
+          "name": "Fernanda Alves",
+          "location": "Recife, PE"
+        },
+        {
+          "quote": "Mi cumpleaños número 40 fue impecable. El tema moderno fue perfecto para mí, y todos confirmaron con un clic — sin grupos de WhatsApp desorganizados.",
+          "name": "Daniel Costa",
+          "location": "Rio de Janeiro, RJ"
+        },
+        {
+          "quote": "Organizamos un evento corporativo y el tema neón fue perfecto. Las confirmaciones llegaron automáticamente, y gestionamos todo sin complicaciones.",
+          "name": "Luiza Mendes",
+          "location": "Brasília, DF"
+        },
+        {
+          "quote": "Mi hija se graduó y quería una invitación especial. Con el tema elegante, quedó perfecto — la compartimos con toda la familia en segundos.",
+          "name": "Patricia Silva",
+          "location": "Salvador, BA"
+        },
+        {
+          "quote": "Una boda en la playa con tema minimalista. Los invitados tuvieron todo — mapa, horarios, fotos — sin confusiones.",
+          "name": "Felipe & Andréa",
+          "location": "Florianópolis, SC"
+        },
+        {
+          "quote": "Nuestro baby shower en el tema jardín fue hermoso. Compartimos la invitación con la familia y en minutos todos confirmaron — ¡fue mágico!",
+          "name": "Mariana & Gustavo",
+          "location": "Goiás, GO"
         }
       ]
     },

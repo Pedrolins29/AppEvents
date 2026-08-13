@@ -502,8 +502,8 @@
     },
     "services": {
       "eyebrow": "MUITO MAIS QUE UM CONVITE",
-      "heading": "o site de casamento de vocês",
-      "subtitle": "Não é um cartão bonito: é o site do casamento de vocês. Responde as perguntas de sempre, organiza as confirmações e junta as lembranças.",
+      "heading": "seu site de evento",
+      "subtitle": "Não é um cartão bonito: é o site do seu evento. Responde as perguntas de sempre, organiza as confirmações e junta as lembranças.",
       "features": [
         {
           "title": "Chegue de correr atrás de convidado",
@@ -515,11 +515,11 @@
         },
         {
           "title": "As fotos de todo mundo, num lugar só",
-          "description": "Os convidados sabem fotos e vídeos na galeria da festa — com um QR para imprimir nas mesas — e no seguinte a lista fica toda arquivada, as fotos não se perdem."
+          "description": "Você carrega as fotos do evento na galeria — com um QR para imprimir nas mesas — e depois elas ficam todas arquivadas num lugar só, as lembranças não se perdem."
         },
         {
           "title": "Cada convidado, recebido pelo nome",
-          "description": "Escrevam \"Marcelo e família\" e essa pessoa abre um convite que a cumprimenta pelo nome, com envelope lacrado, a música de vocês e uma abertura de cinema."
+          "description": "Escrevam \"Marcelo e família\" e essa pessoa abre um convite que a cumprimenta pelo nome, com envelope lacrado e uma abertura personalizada."
         },
         {
           "title": "Contagem regressiva ao vivo",
@@ -546,7 +546,7 @@
         },
         {
           "title": "Galeria centralizada",
-          "description": "Colete fotos de todos os convidados em um só lugar — sem perder nenhuma memória do grande dia."
+          "description": "Armazene e organize as fotos do seu evento em um só lugar — as lembranças do grande dia sempre à mão."
         },
         {
           "title": "Edições ao vivo",
@@ -563,6 +563,8 @@
     "comparison": {
       "title": "Por que começar do zero?",
       "subtitle": "Compare a forma antiga com a magia do AppEvents",
+      "beforeTitle": "O convite de sempre",
+      "afterTitle": "Com o AppEvents",
       "before": [
         "Convite em papel caro",
         "Lista de convidados em grupo de WhatsApp",
@@ -591,9 +593,44 @@
           "location": "Curitiba, PR"
         },
         {
+          "quote": "Adicionei o mapa e o traje em dois minutos. Os convidados só precisaram tocar em um botão pra confirmar presença.",
+          "name": "Rafael Nogueira",
+          "location": "Belo Horizonte, MG"
+        },
+        {
           "quote": "A contagem regressiva deixou todo mundo animado antes mesmo do grande dia chegar. Recomendamos pra todo mundo que vai casar.",
           "name": "Beatriz & Lucas",
           "location": "Porto Alegre, RS"
+        },
+        {
+          "quote": "O chá de bebê ficou uma fofura no tema floral. Foi rápido publicar e o link ficou fácil de compartilhar.",
+          "name": "Fernanda Alves",
+          "location": "Recife, PE"
+        },
+        {
+          "quote": "Meu aniversário de 40 anos ficou impecável. O tema moderno combinou comigo, e todos confirmaram com um clique — sem aquele grupo de WhatsApp desorganizado.",
+          "name": "Daniel Costa",
+          "location": "Rio de Janeiro, RJ"
+        },
+        {
+          "quote": "Organizamos um evento corporativo e o tema neon foi perfeito. As confirmações chegaram automáticas, e conseguimos acompanhar tudo sem complicações.",
+          "name": "Luiza Mendes",
+          "location": "Brasília, DF"
+        },
+        {
+          "quote": "Minha filha se formou e queria um convite especial. Com o tema elegante, saiu perfeito — compartilhamos com toda a família em segundos.",
+          "name": "Patricia Silva",
+          "location": "Salvador, BA"
+        },
+        {
+          "quote": "Casamento na praia com tema minimalista. Os convidados tiveram tudo — mapa, horários, fotos — sem nenhuma confusão.",
+          "name": "Felipe & Andréa",
+          "location": "Florianópolis, SC"
+        },
+        {
+          "quote": "O chá revelação no tema jardim foi lindo. Enviamos o convite para a família e em minutos todos confirmaram — foi mágico!",
+          "name": "Mariana & Gustavo",
+          "location": "Goiás, GO"
         }
       ]
     },

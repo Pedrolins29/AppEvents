@@ -7,7 +7,7 @@ export function SiteFooter() {
   const t = useTranslations("siteFooter");
 
   return (
-    <footer className="border-t border-[color-mix(in_srgb,var(--gold)_35%,transparent)] bg-[var(--ink)] px-6 py-10">
+    <footer className="border-t border-[color-mix(in_srgb,var(--gold)_35%,transparent)] bg-[var(--charcoal)] px-6 py-10">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-sm text-[#B9AF9C] sm:flex-row">
         <Link href="/" className="flex items-center gap-2">
           <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden className="text-[var(--gold)]">

@@ -2,11 +2,15 @@
 
 :root {
   /* Brand palette — elevated editorial luxury.
-     Porcelain = warm paper base; Ink = warm near-black (text + deep anchor bands);
-     Pinewood = deepened teal; Gold = antique/foil gold (rules + accents, never big fills);
+     Porcelain = warm paper base; Porcelain-2 = slightly warmer secondary light;
+     Ink = warm near-black (text + deep anchor bands); Charcoal = softer dark for footer;
+     Pinewood = deepened teal;
+     Gold = antique/foil gold (rules + accents, never big fills);
      Champagne = pale-gold for hairlines/glow on dark sections. */
   --porcelain: #fbf8f2;
+  --porcelain-2: #f6efe1;
   --ink: #16130e;
+  --charcoal: #3a3530;
   --pinewood: #0e5c54;
   --gold: #b08d4c;
   --champagne: #e8d9bc;
@@ -109,7 +113,9 @@
   --color-border: var(--border);
 
   --color-porcelain: var(--porcelain);
+  --color-porcelain-2: var(--porcelain-2);
   --color-ink: var(--ink);
+  --color-charcoal: var(--charcoal);
   --color-pinewood: var(--pinewood);
   --color-gold: var(--gold);
   --color-champagne: var(--champagne);
@@ -182,6 +188,49 @@ html {
   }
 }
 
+/* WASH BACKGROUNDS — Radial gradient washes for editorial sections.
+   Porcelain-2 is slightly warmer than Porcelain for subtle depth in light sections. */
+
+/* wash-a: Top-left champagne + bottom-right porcelain-2 (used in Hero, Comparison, Testimonials) */
+.wash-a {
+  background:
+    radial-gradient(circle at 12% -10%, rgba(232, 217, 188, 0.65), transparent 40%),
+    radial-gradient(circle at 100% 110%, rgba(246, 239, 225, 0.8), transparent 60%),
+    var(--porcelain);
+}
+
+/* wash-b: Solid warm base (used in Steps, Templates, FAQ) */
+.wash-b {
+  background: var(--porcelain-2);
+}
+
+/* wash-c: Top-right champagne + bottom-left porcelain (used in Features, Admin) */
+.wash-c {
+  background:
+    radial-gradient(circle at 95% 0%, rgba(232, 217, 188, 0.6), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(251, 248, 242, 0.85), transparent 60%),
+    var(--porcelain-2);
+}
+
+/* GRADIENT BRIDGES — Smooth transitions between major color zones for luxury cohesion.
+   Dark-to-light bridges ease readers from anchor bands into content zones.
+   Light-to-dark bridges prepare readers for final CTA / footer zones. */
+
+/* Bridge from dark anchor (Ink) to light wash base (Porcelain) — used after dark hero */
+.gradient-bridge-ink-to-porcelain {
+  background: linear-gradient(to bottom, var(--ink), var(--porcelain));
+}
+
+/* Bridge from dark anchor (Ink) to light wash base (Porcelain-2) — used in FAQ transition from Veja */
+.gradient-bridge-ink-to-porcelain-2 {
+  background: linear-gradient(to bottom, var(--ink), var(--porcelain-2));
+}
+
+/* Bridge from light wash (Porcelain) through warm transition to dark (Ink) — used in Veja section */
+.gradient-bridge-porcelain-to-ink {
+  background: linear-gradient(to bottom, var(--porcelain), rgba(42, 42, 42, 1), var(--ink));
+}
+
 .seal-sheen {
   animation: seal-sheen 4s ease-in-out infinite;
 }
@@ -208,4 +257,59 @@ html {
 }
 .photo-strip::-webkit-scrollbar {
   display: none;
+}
+
+/* Mini-stat bars for feature cards — progress-style indicators with optional usage text. */
+.mini-stat {
+  margin-top: 16px;
+}
+
+.mini-stat-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.mini-stat-bar span {
+  display: block;
+  height: 100%;
+  background: var(--pinewood);
+  border-radius: 999px;
+}
+
+.mini-stat-label {
+  display: block;
+  margin-top: 7px;
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}
+
+.mini-stat-label b {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Mobile CTA bar — fixed bottom bar hidden on desktop, shown on mobile. */
+.mobile-cta-bar {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--porcelain) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+}
+
+@media (max-width: 640px) {
+  .mobile-cta-bar {
+    display: block;
+  }
+
+  body {
+    padding-bottom: 76px;
+  }
 }

@@ -16,8 +16,9 @@ export function StepSection() {
     { number: 3, title: t("step3Title"), body: t("step3Body") },
   ];
 
+  // The `how-it-works` id is kept in sync with SiteHeader's "/#how-it-works" nav link.
   return (
-    <section className="px-6 py-16 sm:py-24 bg-[var(--porcelain)]">
+    <section id="how-it-works" className="px-6 py-16 sm:py-24 bg-[var(--porcelain)]">
       <div className="mx-auto max-w-4xl">
         {/* Heading */}
         <Reveal className="mb-12 text-center">
