@@ -33,6 +33,10 @@ const SAMPLE_NAMES: Record<ThemeKey, string> = {
   modern: "Alex's 30th Birthday",
   romantic: "Sofia & Rafael",
   garden: "Baby Aria's Reveal",
+  newspaper: "Vintage Times Event",
+  candlelight: "Candlelit Celebration",
+  neon: "Electric Night Bash",
+  seal: "Sealed with Love",
 };
 
 const SAMPLE_EVENT_TYPES: Record<ThemeKey, EventType> = {
@@ -42,6 +46,10 @@ const SAMPLE_EVENT_TYPES: Record<ThemeKey, EventType> = {
   modern: "Birthday",
   romantic: "Wedding",
   garden: "GenderReveal",
+  newspaper: "FifteenYearsParty",
+  candlelight: "Wedding",
+  neon: "Birthday",
+  seal: "Wedding",
 };
 
 const SAMPLE_ADDRESSES: Record<ThemeKey, string> = {
@@ -51,6 +59,10 @@ const SAMPLE_ADDRESSES: Record<ThemeKey, string> = {
   modern: "Skyline Loft, Chicago",
   romantic: "Quinta das Oliveiras, Sintra",
   garden: "Botanical Garden, Curitiba",
+  newspaper: "Historic Theatre, Boston",
+  candlelight: "Candlelit Manor, London",
+  neon: "Rooftop Club, New York",
+  seal: "Elegant Estate, Paris",
 };
 
 const SAMPLE_COVER_IMAGES: Record<ThemeKey, string | null> = {

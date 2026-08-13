@@ -228,13 +228,13 @@ export async function HomeLanding() {
               <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
                   href="/criar-convite"
-                  className="rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
+                  className="h-12 rounded-full bg-[var(--gold)] px-7 py-2.5 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] focus-ring"
                 >
                   {t("hero.ctaCreate")}
                 </Link>
                 <Link
                   href="/templates"
-                  className="rounded-full border border-[var(--gold)] px-7 py-3 text-sm font-medium text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[var(--champagne)] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.15)]"
+                  className="h-12 rounded-full border border-[var(--gold)] px-7 py-2.5 text-sm font-medium text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[var(--champagne)] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.15)] focus-ring"
                 >
                   {t("hero.ctaBrowse")}
                 </Link>
@@ -380,12 +380,12 @@ export async function HomeLanding() {
           </div>
         </section>
 
-        {/* Final CTA — gradient from porcelain-2 → champagne → ink (deep anchor band) */}
+        {/* Final CTA — gradient from porcelain-2 → champagne → charcoal (softer anchor band) */}
         <section
           className="px-6 py-20 sm:py-28"
           style={{
             background:
-              "linear-gradient(to bottom, var(--porcelain-2) 0%, var(--champagne) 22%, var(--ink) 62%, var(--ink) 100%)",
+              "linear-gradient(to bottom, var(--porcelain-2) 0%, var(--champagne) 18%, var(--charcoal) 75%, var(--charcoal) 100%)",
           }}
         >
           <Reveal className="mx-auto max-w-xl">
@@ -399,7 +399,7 @@ export async function HomeLanding() {
               </p>
               <Link
                 href="/criar-convite"
-                className="mt-8 inline-block rounded-full bg-[var(--gold)] px-7 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
+                className="mt-8 inline-block h-12 rounded-full bg-[var(--gold)] px-7 py-2.5 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:bg-[#C6A05E] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] focus-ring"
               >
                 {t("hero.ctaCreate")}
               </Link>

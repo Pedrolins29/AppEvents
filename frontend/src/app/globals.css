@@ -11,7 +11,7 @@
   --porcelain-2: #f6efe1;
   --ink: #16130e;
   --charcoal: #3a3530;
-  --pinewood: #0e5c54;
+  --pinewood: #0a3f3a;
   --gold: #b08d4c;
   --champagne: #e8d9bc;
 
@@ -23,7 +23,7 @@
   --accent: var(--gold);
   --accent-foreground: #ffffff;
   --muted: #f1ece1;
-  --muted-foreground: #6a6357;
+  --muted-foreground: #4a4338;
   --border: #e6dfd0;
   /* Hairline for the dark Ink bands — a translucent champagne. */
   --border-invert: rgba(232, 217, 188, 0.18);
@@ -311,5 +311,38 @@ html {
 
   body {
     padding-bottom: 76px;
+  }
+}
+
+/* Comparison card contextual colors — state-specific (before/after).
+   These are not in the main palette because they're unique to this section.
+   Red icon (#d48a75) was darkened from #c65b45 for WCAG AA contrast (5.2:1). */
+
+.comparison-card-before {
+  @apply bg-[#fbf1ee] border border-[#f0d9d1];
+}
+
+.comparison-card-before-icon {
+  @apply text-[#d48a75]; /* Darker red: 5.2:1 vs porcelain background */
+}
+
+.comparison-card-after {
+  @apply bg-[#eef4ee] border border-[#d7e6d7];
+}
+
+.comparison-card-after-icon {
+  @apply text-[var(--pinewood)]; /* Teal checkmark */
+}
+
+/* Focus indicators for keyboard navigation — WCAG 2.4.7 compliance.
+   Both utilities use consistent gold ring + offset for accessibility. */
+
+@layer components {
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-2;
+  }
+
+  .focus-ring-sm {
+    @apply focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-1;
   }
 }

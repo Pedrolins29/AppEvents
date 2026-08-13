@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { THEME_STYLES } from "@/components/InvitationHero";
 import { PhotoPlaceholder } from "@/components/PhotoPlaceholder";
 import type { ThemeKey } from "@/types/template";
@@ -241,8 +242,13 @@ export function InvitationPhoneMockupView({
       >
         {photoUrl && (
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={photoUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            <Image
+              src={photoUrl}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="absolute inset-0 object-cover"
+            />
             <div className="absolute inset-0" style={{ backgroundColor: theme.pageBg, opacity: 0.65 }} />
           </>
         )}

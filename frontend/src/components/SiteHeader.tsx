@@ -47,7 +47,7 @@ function NavLink({ href, label, onClick }: { href: string; label: string; onClic
     <Link
       href={href}
       onClick={onClick}
-      className="group relative text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)]"
+      className="group relative text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)] focus-ring-sm"
     >
       {label}
       <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-[var(--gold)] transition-transform duration-200 group-hover:scale-x-100" />
@@ -65,7 +65,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
         <Link
           href="/"
-          className="flex items-center gap-2 transition-colors duration-150"
+          className="flex items-center gap-2 transition-colors duration-150 focus-ring-sm"
           onClick={() => setIsMenuOpen(false)}
         >
           <DiamondMark />
@@ -81,7 +81,7 @@ export function SiteHeader() {
           <LanguageSwitcher />
           <Link
             href="/login"
-            className="text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)]"
+            className="text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:text-[var(--ink)] focus-ring-sm"
           >
             {t("logIn")}
           </Link>
@@ -101,7 +101,7 @@ export function SiteHeader() {
           >
             <Link
               href="/criar-convite"
-              className="rounded-full bg-[var(--gold)] px-4 py-2 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
+              className="rounded-full bg-[var(--gold)] px-4 py-3 text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] focus-ring"
             >
               {t("getStarted")}
             </Link>
@@ -113,7 +113,7 @@ export function SiteHeader() {
           onClick={() => setIsMenuOpen((open) => !open)}
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? t("closeMenu") : t("openMenu")}
-          className="flex items-center justify-center rounded-md p-2 text-[var(--ink)] transition-colors duration-150 hover:text-[var(--pinewood)] sm:hidden"
+          className="flex items-center justify-center rounded-md p-2 text-[var(--ink)] transition-colors duration-150 hover:text-[var(--pinewood)] sm:hidden focus-ring"
         >
           <MenuIcon open={isMenuOpen} />
         </button>
@@ -130,7 +130,7 @@ export function SiteHeader() {
               key={link.href}
               href={link.href}
               onClick={() => setIsMenuOpen(false)}
-              className="rounded-md px-2 py-2 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)]"
+              className="rounded-md px-6 py-3 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)] focus-ring-sm"
             >
               {t(link.labelKey)}
             </Link>
@@ -138,14 +138,14 @@ export function SiteHeader() {
           <Link
             href="/login"
             onClick={() => setIsMenuOpen(false)}
-            className="rounded-md px-2 py-2 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)]"
+            className="rounded-md px-6 py-3 text-sm text-[var(--muted-foreground)] transition-colors duration-150 hover:bg-[var(--pinewood)]/5 hover:text-[var(--ink)] focus-ring-sm"
           >
             {t("logIn")}
           </Link>
           <Link
             href="/criar-convite"
             onClick={() => setIsMenuOpen(false)}
-            className="mt-2 rounded-full bg-[var(--gold)] px-4 py-2 text-center text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)]"
+            className="mt-2 h-12 rounded-full bg-[var(--gold)] px-4 py-2.5 text-center text-sm font-semibold text-[var(--ink)] transition-all duration-[var(--duration-fast)] ease-[var(--ease-premium)] motion-reduce:transition-none hover:scale-[1.03] hover:shadow-[0_10px_24px_-10px_rgba(22,19,14,0.35)] focus-ring"
           >
             {t("getStarted")}
           </Link>

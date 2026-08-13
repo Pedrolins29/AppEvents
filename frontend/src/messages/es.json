@@ -504,6 +504,14 @@
       "eyebrow": "MUCHO MÁS QUE UNA INVITACIÓN",
       "heading": "el sitio de tu evento",
       "subtitle": "No es solo una tarjeta bonita — es el sitio de tu evento. Responde las preguntas de siempre, organiza confirmaciones y guarda todos los recuerdos en un lugar.",
+      "miniStats": [
+        "La mayoría de los invitados confirman directamente por enlace",
+        "Comparte fotos en un solo lugar",
+        "Cronograma integrado en la descripción",
+        "Mapa y dirección en la invitación",
+        "Galería de fotos del evento",
+        "Registro de regalos con enlaces"
+      ],
       "features": [
         {
           "title": "Deja de perseguir RSVPs",

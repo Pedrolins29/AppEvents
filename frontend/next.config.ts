@@ -70,6 +70,11 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  // Image optimization: enable AVIF (better compression) and WebP formats for modern browsers,
+  // responsive sizing with lazy loading, and LCP improvements for hero images.
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   async headers() {
     if (process.env.NODE_ENV !== "production") {
       return [];

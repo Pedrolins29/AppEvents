@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { SHOWCASE_ENTRIES } from "@/components/landing/HomeLanding";
 import { InvitationPhoneMockupView } from "@/components/InvitationPhoneMockupView";
@@ -61,10 +61,22 @@ export function TemplateCarousel({
   const eventTypeLabels = getEventTypeLabels(eventTypeT);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // Auto-rotate logic
   useEffect(() => {
     if (!autoRotate) return;
+
+    // Skip auto-rotation if user prefers reduced motion
+    if (reduceMotion) {
+      return;
+    }
+
+    // Skip auto-rotation if carousel is focused
+    if (isFocused) {
+      return;
+    }
 
     const interval = setInterval(() => {
       setDirection(1);
@@ -72,7 +84,7 @@ export function TemplateCarousel({
     }, rotationIntervalMs);
 
     return () => clearInterval(interval);
-  }, [autoRotate, rotationIntervalMs]);
+  }, [autoRotate, rotationIntervalMs, reduceMotion, isFocused]);
 
   const handleDotClick = (index: number) => {
     setDirection(index > currentIndex ? 1 : -1);
@@ -84,7 +96,11 @@ export function TemplateCarousel({
   const dateLabel = formatEventDate(currentEntry.dateIso, locale);
 
   return (
-    <div className="relative flex flex-col items-center gap-6">
+    <div
+      className="relative flex flex-col items-center gap-6"
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+    >
       {/* Carousel container */}
       <div className="relative w-full overflow-hidden">
         <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -145,9 +161,11 @@ export function TemplateCarousel({
             initial="inactive"
             animate={index === currentIndex ? "active" : "inactive"}
             onClick={() => handleDotClick(index)}
-            className="h-2 rounded-full bg-[var(--gold)] transition-all"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className="h-3 rounded-full bg-[var(--gold)] transition-all focus-ring-sm"
             style={{
-              width: index === currentIndex ? 24 : 8,
+              width: index === currentIndex ? 24 : 12,
             }}
             aria-label={`Go to template ${index + 1}`}
             aria-current={index === currentIndex}

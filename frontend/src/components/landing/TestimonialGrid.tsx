@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Reveal } from "@/components/Reveal";
 
@@ -52,16 +52,28 @@ export function TestimonialGrid() {
   const items = t.raw("items") as Testimonial[];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
+  const [isFocused, setIsFocused] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // Auto-rotate logic
   useEffect(() => {
+    // Skip auto-rotation if user prefers reduced motion
+    if (reduceMotion) {
+      return;
+    }
+
+    // Skip auto-rotation if carousel is focused
+    if (isFocused) {
+      return;
+    }
+
     const interval = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % items.length);
     }, 5500);
 
     return () => clearInterval(interval);
-  }, [items.length]);
+  }, [items.length, reduceMotion, isFocused]);
 
   const handleDotClick = (index: number) => {
     setDirection(index > currentIndex ? 1 : -1);
@@ -84,7 +96,11 @@ export function TestimonialGrid() {
         </Reveal>
 
         {/* Carousel container */}
-        <div className="relative flex flex-col items-center gap-8">
+        <div
+          className="relative flex flex-col items-center gap-8"
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        >
           {/* Testimonial carousel */}
           <div className="relative w-full overflow-hidden">
             <AnimatePresence initial={false} custom={direction} mode="wait">
@@ -120,9 +136,11 @@ export function TestimonialGrid() {
                 initial="inactive"
                 animate={index === currentIndex ? "active" : "inactive"}
                 onClick={() => handleDotClick(index)}
-                className="h-2 rounded-full bg-[var(--gold)] transition-all"
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                className="h-3 rounded-full bg-[var(--gold)] transition-all focus-ring-sm"
                 style={{
-                  width: index === currentIndex ? 24 : 8,
+                  width: index === currentIndex ? 24 : 12,
                 }}
                 aria-label={`Go to testimonial ${index + 1}`}
                 aria-current={index === currentIndex}

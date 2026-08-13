@@ -504,6 +504,14 @@
       "eyebrow": "MORE THAN AN INVITATION",
       "heading": "your event website",
       "subtitle": "It's not just a pretty card — it's your event website. It answers the usual questions, organizes confirmations, and keeps all the memories in one place.",
+      "miniStats": [
+        "Most guests confirm directly via link",
+        "Share photos in one place",
+        "Timeline integrated in description",
+        "Map and address on invitation",
+        "Photo gallery from the event",
+        "Gift registry with links"
+      ],
       "features": [
         {
           "title": "Stop chasing RSVPs",

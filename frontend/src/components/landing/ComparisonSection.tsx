@@ -54,14 +54,13 @@ export function ComparisonSection() {
           {/* Before card */}
           <Reveal>
             <div
-              className="h-full rounded-sm border p-6 sm:p-8"
-              style={{ backgroundColor: "#fbf1ee", borderColor: "#f0d9d1" }}
+              className="h-full rounded-sm border p-6 sm:p-8 comparison-card-before"
             >
               <h3 className="mb-5 font-display text-xl text-[var(--ink)]">{t("beforeTitle")}</h3>
               <ul className="flex flex-col gap-4">
                 {before.map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--muted-foreground)]">
-                    <span className="mt-0.5" style={{ color: "#c65b45" }}>
+                    <span className="mt-0.5 comparison-card-before-icon">
                       <IconX />
                     </span>
                     <span>{item}</span>
@@ -74,14 +73,13 @@ export function ComparisonSection() {
           {/* After card */}
           <Reveal delay={0.08}>
             <div
-              className="h-full rounded-sm border p-6 sm:p-8"
-              style={{ backgroundColor: "#eef4ee", borderColor: "#d7e6d7" }}
+              className="h-full rounded-sm border p-6 sm:p-8 comparison-card-after"
             >
               <h3 className="mb-5 font-display text-xl text-[var(--ink)]">{t("afterTitle")}</h3>
               <ul className="flex flex-col gap-4">
                 {after.map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-[var(--muted-foreground)]">
-                    <span className="mt-0.5" style={{ color: "var(--pinewood)" }}>
+                    <span className="mt-0.5 comparison-card-after-icon">
                       <IconCheck />
                     </span>
                     <span>{item}</span>

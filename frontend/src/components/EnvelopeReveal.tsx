@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 
@@ -65,8 +66,14 @@ export function EnvelopeReveal({ children, label, openLabel, photoUrl }: Envelop
             {/* Background photo (premium letter envelope style) */}
             {photoUrl && (
               <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photoUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <Image
+                  src={photoUrl}
+                  alt=""
+                  fill
+                  priority={true}
+                  sizes="(max-width: 768px) 90vw, 50vw"
+                  className="absolute inset-0 object-cover"
+                />
                 {/* Overlay to ensure text legibility on photo */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
               </>

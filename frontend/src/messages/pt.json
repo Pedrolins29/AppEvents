@@ -504,6 +504,14 @@
       "eyebrow": "MUITO MAIS QUE UM CONVITE",
       "heading": "seu site de evento",
       "subtitle": "Não é um cartão bonito: é o site do seu evento. Responde as perguntas de sempre, organiza as confirmações e junta as lembranças.",
+      "miniStats": [
+        "A maioria dos convidados confirma direto pelo link",
+        "Compartilhe fotos em um lugar só",
+        "Cronograma integrado na descrição",
+        "Mapa e endereço no convite",
+        "Galeria de fotos da festa",
+        "Lista de presentes com links"
+      ],
       "features": [
         {
           "title": "Chegue de correr atrás de convidado",
